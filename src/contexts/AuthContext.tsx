@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "@/types/userData";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 type FormData = {
     email: string

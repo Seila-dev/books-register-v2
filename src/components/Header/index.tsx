@@ -3,59 +3,61 @@
 import { useContext, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AuthContext } from '@/contexts/AuthContent';
-import { MenuBurguer } from '@/components/MenuBurguer';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const { isAuthenticated, user } = useContext(AuthContext);
 
   const handleOpenMenu = () => {
     setOpenMenu(!openMenu);
   };
 
-  const { isAuthenticated, user } = useContext(AuthContext);
-
   return (
-    <header className="flex justify-between items-center p-4 md:p-6 bg-gray-100 shadow-md relative">
-      <div className="flex items-center">
-        <button onClick={handleOpenMenu} className="mr-2 md:hidden">
-          <span className="material-symbols-outlined text-2xl text-gray-800">menu</span>
-        </button>
-        <span className="material-symbols-outlined text-2xl text-gray-800">menu_book</span>
-        <h1 className="ml-2 text-xl text-gray-800 font-semibold md:text-2xl">Books Register</h1>
-      </div>
+    <header className="w-full bg-gray-900 text-white shadow-lg relative">
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4 md:p-6">
+        <div className='flex'>
+          <button onClick={handleOpenMenu} className="mr-2 md:hidden">
+            <span className="material-symbols-outlined text-2xl text-white">menu</span>
+          </button>
+          <div className='flex items-center'>
+              <span className="material-symbols-outlined text-2xl text-blue-400">menu_book</span>
+              <h1 className="ml-2 text-xl font-semibold md:text-2xl text-white">Books Register</h1>
+          </div>
+        </div>
 
-      <nav className="hidden md:flex gap-6 items-center">
-        <Link href="/todos" className="flex items-center text-gray-700 hover:text-blue-600 transition">
-          <span className="material-symbols-outlined text-base mr-1">menu_book</span>
-          Todos
-        </Link>
-        <Link href="/livros" className="flex items-center text-gray-700 hover:text-blue-600 transition">
-          <span className="material-symbols-outlined text-base mr-1">menu_book</span>
-          Livros
-        </Link>
-        <Link href="/filmes" className="flex items-center text-gray-700 hover:text-blue-600 transition">
-          <span className="material-symbols-outlined text-base mr-1">movie</span>
-          Filmes
-        </Link>
-        <Link href="/series" className="flex items-center text-gray-700 hover:text-blue-600 transition">
-          <span className="material-symbols-outlined text-base mr-1">tv</span>
-          Séries
-        </Link>
-        <Link href="/categorias" className="flex items-center text-gray-700 hover:text-blue-600 transition">
-          <span className="material-symbols-outlined text-base mr-1">search</span>
-          Categorias
-        </Link>
-        {isAuthenticated && user?.username ? (
-          <Link href="/user" className="text-gray-800 font-medium hover:text-blue-600">
-            {user.username}
-          </Link>
-        ) : (
-          <Link href="/login" className="text-gray-800 font-medium hover:text-blue-600">
-            Sign In
-          </Link>
-        )}
-      </nav>
+        <nav className="hidden md:flex gap-6 items-center">
+          {[
+            { href: '/todos', icon: 'menu_book', label: 'Todos' },
+            { href: '/livros', icon: 'menu_book', label: 'Livros' },
+            { href: '/filmes', icon: 'movie', label: 'Filmes' },
+            { href: '/series', icon: 'tv', label: 'Séries' },
+            { href: '/categorias', icon: 'search', label: 'Categorias' },
+          ].map(({ href, icon, label }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center text-white hover:text-blue-400 transition"
+            >
+              <span className="material-symbols-outlined text-base mr-1">{icon}</span>
+              {label}
+            </Link>
+          ))}
+
+          {isAuthenticated && user?.username ? (
+            <Link href="/user" className="text-white font-medium hover:text-blue-400">
+              {user.username}
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="text-white border-2 border-blue-400 px-3.5 py-1.5 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition"
+            >
+              Sign In
+            </Link>
+          )}
+        </nav>
+      </div>
 
       <AnimatePresence>
         {openMenu && (
@@ -64,17 +66,21 @@ export const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-16 right-4 bg-white shadow-lg rounded-md p-4 flex flex-col gap-3 w-56 z-50 md:hidden"
+            className="absolute top-20 right-4 bg-gray-800 border border-gray-700 text-white shadow-lg rounded-md p-4 flex flex-col gap-3 w-56 z-50 md:hidden"
           >
-            <Link href="/todos" className="text-gray-700 hover:text-blue-600">Todos</Link>
-            <Link href="/livros" className="text-gray-700 hover:text-blue-600">Livros</Link>
-            <Link href="/filmes" className="text-gray-700 hover:text-blue-600">Filmes</Link>
-            <Link href="/series" className="text-gray-700 hover:text-blue-600">Séries</Link>
-            <Link href="/categorias" className="text-gray-700 hover:text-blue-600">Categorias</Link>
+            {['/todos', '/livros', '/filmes', '/series', '/categorias'].map((href) => (
+              <Link key={href} href={href} className="hover:text-blue-400">
+                {href.replace('/', '').charAt(0).toUpperCase() + href.slice(2)}
+              </Link>
+            ))}
             {isAuthenticated && user?.username ? (
-              <Link href="/user" className="text-gray-800 hover:text-blue-600">{user.username}</Link>
+              <Link href="/user" className="hover:text-blue-400">
+                {user.username}
+              </Link>
             ) : (
-              <Link href="/login" className="text-gray-800 hover:text-blue-600">Sign In</Link>
+              <Link href="/login" className="hover:text-blue-400">
+                Sign In
+              </Link>
             )}
           </motion.div>
         )}

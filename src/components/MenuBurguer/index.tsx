@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContext } from 'react';
-import { AuthContext } from '@/contexts/AuthContent'
+import { AuthContext } from '@/contexts/AuthContext'
 
 interface MenuBurguerProps {
   active: boolean;
