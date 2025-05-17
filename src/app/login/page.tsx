@@ -82,7 +82,7 @@ export default function SignIn() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="mt-8 flex cursor-pointer items-center justify-center gap-2 rounded bg-secondary px-4 py-2 font-bold text-white disabled:opacity-50"
+                        className="mt-8 flex cursor-pointer items-center justify-center gap-2 rounded bg-secondary px-4 py-2 font-bold text-white bg-cyan-800 disabled:opacity-50"
                     >
                         <span className="material-symbols-outlined">login</span> Entrar
                     </button>

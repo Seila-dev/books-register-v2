@@ -24,33 +24,43 @@ type authContextType = {
 
 export const AuthContext = createContext({} as authContextType)
 
-export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null)
 
     const isAuthenticated = !!user
 
     useEffect(() => {
-        const { 'books-register.token': token } = parseCookies()
+        const { 'books-register.token': token } = parseCookies();
 
-        if(token) {
-            fetch('https://books-register-api-production.up.railway.app/users', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    authorization: `Bearer ${token}`
-                },
-            }).then((response) => response.json())
-            .then((userData) => setUser(userData))
-            .catch((error) => {
-                console.error('Error during user data', error)
-            })
-        }
-    }, [])
+        if (!token) return;
+
+        const fetchUser = async () => {
+            try {
+                const response = await fetch('https://books-register-api-production.up.railway.app/users', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) throw new Error();
+
+                const userData = await response.json();
+                setUser(userData);
+            } catch {
+                destroyCookie(null, 'books-register.token'); // limpa token inválido
+                setUser(null);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     const router = useRouter()
 
     const signIn = async ({ email, password }: FormData) => {
         const url = 'https://books-register-api-production.up.railway.app/users/login'
- 
+
         try {
             const request = await fetch(url, {
                 method: 'POST',
@@ -59,24 +69,23 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
                 },
                 body: JSON.stringify({ email, password })
             })
-    
-            if(!request.ok) {
+
+            if (!request.ok) {
                 const error = await request.json()
                 throw new Error(error.message || "Invalid email or password")
             }
-    
+
             const response = await request.json()
-    
+
             setCookie(response, 'books-register.token', response.token, {
-                maxAge: 60 * 60 * 12 // 12h
+                maxAge: 60 * 60 * 12, // 12h
+                path: '/',
             })
-    
+
             setUser(response.user)
-    
+
             router.push('/')
 
-            window.location.reload()
-    
         } catch (error: any) {
             console.error('Something went wrong on sign up', error)
             throw error;
@@ -94,22 +103,22 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
                 },
                 body: JSON.stringify({ email, password, username })
             })
-    
-            if(!request.ok) {
+
+            if (!request.ok) {
                 const error = await request.json()
                 throw new Error(error)
             }
-    
+
             const response = await request.json()
-    
+
             setCookie(response, 'books-register.token', response.token, {
                 maxAge: 60 * 60 * 4 // 4h
             })
-    
+
             setUser(response.user)
-    
+
             router.push('/login')
-    
+
         } catch (error: any) {
             console.error('Error on sign up', error)
         }
