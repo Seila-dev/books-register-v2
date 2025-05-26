@@ -8,13 +8,7 @@ import { useBooks } from '@/contexts/useBooks';
 import { BookRating } from '@/components/BookRating';
 import { Metadata, ResolvingMetadata } from 'next';
 
-type PageParams = {
-  params: {
-    id: string;
-  };
-};
-
-export default async function BookDetailPage({ params }: PageParams) {
+export default async function BookDetailPage({ params }: any) {
     const { id } = params
 
     const headersList = await headers();
