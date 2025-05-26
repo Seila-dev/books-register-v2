@@ -28,7 +28,7 @@ export const Header = () => {
 
         <nav className="hidden md:flex gap-6 items-center">
           {[
-            { href: '/todos', icon: 'menu_book', label: 'Todos' },
+            { href: '/', icon: 'menu_book', label: 'Todos' },
             { href: '/livros', icon: 'menu_book', label: 'Livros' },
             { href: '/filmes', icon: 'movie', label: 'Filmes' },
             { href: '/series', icon: 'tv', label: 'Séries' },
@@ -69,7 +69,7 @@ export const Header = () => {
             transition={{ duration: 0.2 }}
             className="absolute top-20 right-4 bg-gray-800 border border-gray-700 text-white shadow-lg rounded-md p-4 flex flex-col gap-3 w-56 z-50 md:hidden"
           >
-            {['/todos', '/livros', '/filmes', '/series', '/categorias'].map((href) => (
+            {['/', '/livros', '/filmes', '/series', '/categorias'].map((href) => (
               <Link key={href} href={href} className="hover:text-blue-400">
                 {href.replace('/', '').charAt(0).toUpperCase() + href.slice(2)}
               </Link>
