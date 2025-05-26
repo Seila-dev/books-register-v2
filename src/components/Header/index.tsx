@@ -15,14 +15,14 @@ export const Header = () => {
 
   return (
     <header className="w-full bg-gray-900 text-white shadow-lg relative">
-      <div className="max-w-screen-xl mx-auto flex justify-between items-center p-4 md:p-6">
-        <div className='flex'>
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-0.5 md:p-4">
+        <div className='flex justify-between w-full'>
           <button onClick={handleOpenMenu} className="mr-2 md:hidden">
-            <span className="material-symbols-outlined text-2xl text-white">menu</span>
+            <span className="material-symbols-outlined text-xs text-white">menu</span>
           </button>
           <div className='flex items-center'>
-              <span className="material-symbols-outlined text-2xl text-blue-400">menu_book</span>
-              <h1 className="ml-2 text-xl font-semibold md:text-2xl text-white">Books Register</h1>
+              <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
+              <h1 className="ml-2 font-semibold text-base text-white">Books Register</h1>
           </div>
         </div>
 
@@ -37,23 +37,24 @@ export const Header = () => {
             <Link
               key={href}
               href={href}
-              className="flex items-center text-white hover:text-blue-400 transition"
+              onClick={() => setOpenMenu(false)}
+              className="flex items-center text-white hover:text-blue-400 text-xs transition"
             >
-              <span className="material-symbols-outlined text-base mr-1">{icon}</span>
+              <span className="material-symbols-outlined mr-1 text-[0.2rem]">{icon}</span>
               {label}
             </Link>
           ))}
 
           {isAuthenticated && user?.username ? (
-            <Link href="/user" className="text-white font-medium hover:text-blue-400">
+            <Link href="/user" className="text-white text-base hover:text-blue-400">
               {user.username}
             </Link>
           ) : (
             <Link
               href="/login"
-              className="text-white border-2 border-blue-400 px-3.5 py-1.5 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition"
+              className="text-white border-2 border-blue-400 px-3.5 py-1.5 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[1rem]"
             >
-              Sign In
+              Login
             </Link>
           )}
         </nav>
@@ -78,7 +79,7 @@ export const Header = () => {
                 {user.username}
               </Link>
             ) : (
-              <Link href="/login" className="hover:text-blue-400">
+              <Link href="/login" className="hover:text-blue-400" onClick={() => setOpenMenu(false)}>
                 Sign In
               </Link>
             )}

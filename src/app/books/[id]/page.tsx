@@ -12,7 +12,7 @@ interface BookDetailPageProps {
 }
 
 export default async function BookDetailPage({ params }: BookDetailPageProps) {
-    const { id } = params;
+    const { id } = await params
 
     const headersList = await headers();
     const cookie = headersList.get('cookie') ?? '';
@@ -69,30 +69,46 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
             </div> */}
 
             {/* Main Content */}
-            <div className="max-w-screen-xl mx-auto py-8">
-                {/* Back button */}
-                <div className="mb-6">
-                    <Link
-                        href="/"
-                        className="inline-flex items-center text-gray-300 hover:text-white transition-colors bg-gray-900 bg-opacity-80 backdrop-blur-sm px-4 py-2 rounded-lg"
-                    >
-                        <ArrowLeft size={18} className="mr-2" />
-                        Voltar para Biblioteca
-                    </Link>
+            <div className="max-w-screen-xl mx-auto lg:py-8 md:py-0">
+
+                {/* Mobile: botão sobre a imagem da capa */}
+                <div className="sm:hidden relative">
+                    <div className="absolute top-4 left-4 z-10">
+                        <Link
+                            href="/"
+                            className="inline-flex items-center text-white bg-gray-900 bg-opacity-80 backdrop-blur-sm p-2 rounded-lg"
+                        >
+                            <ArrowLeft size={18} className="" />
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                     {/* Left Column - Cover & Actions */}
                     <div className="md:col-span-4">
                         <div className="sticky top-8 space-y-6">
-                            {/* Cover Image */}
-                            <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl">
+
+                            {/* Desktop: botão fora da imagem */}
+                            <div className="hidden sm:block">
+                                <Link
+                                    href="/"
+                                    className="inline-flex items-center text-gray-300 hover:text-white transition-colors bg-gray-900 bg-opacity-80 backdrop-blur-sm p-2 rounded-lg"
+                                >
+                                    <ArrowLeft size={18} className="mr:0" />
+                                </Link>
+                            </div>
+
+                            <div className="relative bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl">
                                 {book.coverImage ? (
-                                    <img
-                                        src={book.coverImage}
-                                        alt={`Capa de ${book.title}`}
-                                        className="w-full aspect-[2/3] object-cover"
-                                    />
+                                    <>
+                                        <img
+                                            src={book.coverImage}
+                                            alt={`Capa de ${book.title}`}
+                                            className="w-full aspect-[2/3] object-cover"
+                                        />
+                                        {/* Degradê na parte inferior da imagem */}
+                                        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-950/90 via-gray-950/60 to-transparent pointer-events-none" />
+                                    </>
                                 ) : (
                                     <div className="w-full aspect-[2/3] flex items-center justify-center bg-gray-800 text-gray-500">
                                         <BookOpen size={64} />
