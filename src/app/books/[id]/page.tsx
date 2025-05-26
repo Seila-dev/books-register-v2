@@ -6,13 +6,16 @@ import { Star, Clock, Calendar, ArrowLeft, BookOpen, Tag, Edit, Trash2 } from 'l
 import { StarRating } from '@/components/StarRating';
 import { useBooks } from '@/contexts/useBooks';
 import { BookRating } from '@/components/BookRating';
+import { Metadata, ResolvingMetadata } from 'next';
 
-interface BookDetailPageProps {
-    params: { id: string };
-}
+type Props = {
+  params: {
+    id: string;
+  };
+};
 
-export default async function BookDetailPage({ params }: BookDetailPageProps) {
-    const { id } = await params
+export default async function BookDetailPage({ params }: Props) {
+    const { id } = params
 
     const headersList = await headers();
     const cookie = headersList.get('cookie') ?? '';
