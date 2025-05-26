@@ -81,7 +81,7 @@ export const Books = () => {
                                 Excluir
                             </button>
                             <Link
-                                href={`/book/${book.id}`}
+                                href={`/books/${book.id}`}
                                 className="px-2 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition text-center flex-1"
                             >
                                 Visualizar
