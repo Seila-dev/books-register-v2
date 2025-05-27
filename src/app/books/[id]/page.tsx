@@ -95,7 +95,7 @@ export default async function BookDetailPage({ params }: any) {
                                 </Link>
                             </div>
 
-                            <div className="relative bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-xl">
+                            <div className="relative bg-gray-800 overflow-hidden shadow-xl">
                                 {book.coverImage ? (
                                     <>
                                         <img

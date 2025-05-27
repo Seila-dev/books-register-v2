@@ -15,7 +15,7 @@ export const Header = () => {
 
   return (
     <header className="w-full bg-gray-900 text-white shadow-lg relative">
-      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-0.5 md:p-4">
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-1 md:p-4">
         <div className="flex justify-between w-full items-center">
           {/* Botão do menu (mobile) */}
           <button onClick={handleOpenMenu} className="mr-2 md:hidden">
@@ -23,7 +23,7 @@ export const Header = () => {
           </button>
 
           {/* MOBILE: nome do usuário ou login */}
-          <div className="flex items-center md:hidden">
+          <div className="flex md:hidden">
             {/* <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span> */}
             {isAuthenticated ? (
               <Link href="/user" className="ml-2 font-semibold text-base text-white">

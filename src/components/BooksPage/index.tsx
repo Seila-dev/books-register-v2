@@ -101,7 +101,7 @@ export default function BooksPage() {
             className="flex flex-col border border-gray-800 rounded-md shadow-md overflow-hidden max-h-[400px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
           >
 
-            <div className="h-32 md:h-[40rem] w-full bg-gray-800 relative">
+            <div className="h-36 md:h-[40rem] w-full bg-gray-800 relative">
               {book.coverImage ? (
                 <div
                   className="h-full w-full bg-cover bg-center"
