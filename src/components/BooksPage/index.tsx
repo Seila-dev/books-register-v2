@@ -7,14 +7,29 @@ import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { StarRating } from '../StarRating';
 import { useBooks } from '@/contexts/useBooks';
+import { useSearch } from '@/contexts/SearchContext';
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { searchTerm } = useSearch();
   const { updateBookRating } = useBooks();
   const router = useRouter();
+  const [starSize, setStarSize] = useState(20);
+
+  useEffect(() => {
+    const updateSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) setStarSize(20);     
+      else if (width < 1024) setStarSize(28); 
+      else setStarSize(36);                   
+    };
+
+    updateSize()
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -39,23 +54,23 @@ export default function BooksPage() {
     fetchBooks();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    const confirm = window.confirm('Deseja realmente excluir este livro?');
-    if (!confirm) return;
+  // const handleDelete = async (id: string) => {
+  //   const confirm = window.confirm('Deseja realmente excluir este livro?');
+  //   if (!confirm) return;
 
-    try {
-      const { 'books-register.token': token } = parseCookies();
-      await api.delete(`/books/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //   try {
+  //     const { 'books-register.token': token } = parseCookies();
+  //     await api.delete(`/books/${id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      setBooks((prev) => prev.filter((book) => book.id !== id));
-    } catch (err: any) {
-      alert('Erro ao deletar livro.');
-    }
-  };
+  //     setBooks((prev) => prev.filter((book) => book.id !== id));
+  //   } catch (err: any) {
+  //     alert('Erro ao deletar livro.');
+  //   }
+  // };
 
   const handleRatingChange = async (bookId: string, newRating: number) => {
     const bookToUpdate = books.find((b) => b.id === bookId);
@@ -77,15 +92,7 @@ export default function BooksPage() {
 
   return (
     <div className="p-4 my-4 text-white w-full max-w-screen-xl">
-      <h1 className="lg:text-3xl md:text-2xl text-base font-bold mb-6">Meus Livros</h1>
-
-      <input
-        type="text"
-        placeholder="Buscar livro por título..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-6 p-2 w-full max-w-md border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 text-xs"
-      />
+      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Meus Livros</h1>
 
       {isLoading && <p className="text-gray-400">Carregando livros...</p>}
       {!isLoading && filteredBooks.length === 0 && (
@@ -98,7 +105,7 @@ export default function BooksPage() {
           <div
             key={book.id}
             onClick={() => router.push(`/books/${book.id}`)}
-            className="flex flex-col border border-gray-800 rounded-md shadow-md overflow-hidden max-h-[400px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
+            className="flex flex-col rounded-md shadow-md overflow-hidden max-h-[450px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-102"
           >
 
             <div className="h-36 md:h-[40rem] w-full bg-gray-800 relative">
@@ -119,6 +126,7 @@ export default function BooksPage() {
                 <StarRating
                   rating={book.rating || 0}
                   onRate={(newRating) => handleRatingChange(book.id, newRating)}
+                  size={starSize}
                 />
               </div>
             </div>
@@ -126,12 +134,12 @@ export default function BooksPage() {
         ))}
         <div
           onClick={() => router.push('/books/create')}
-          className="flex flex-col items-center justify-center border border-dashed border-gray-600 rounded-md shadow-md max-h-[400px] h-full cursor-pointer hover:border-white hover:scale-105 transition-transform"
+          className="flex flex-col items-center justify-center border border-dashed border-gray-600 rounded-md shadow-md max-h-[450px] h-full cursor-pointer hover:border-white hover:scale-105 transition-transform"
         >
           <div className="h-36 md:h-[40rem] w-full bg-gray-800 flex items-center justify-center">
             <span className="md:text-5xl text-3xl text-gray-500">+</span>
           </div>
-          <div className="p-2 text-center md:text-sm text-xs text-gray-400">
+          <div className="p-2 text-center md:text-sm text-xs text-white">
             Adicionar Livro
           </div>
         </div>

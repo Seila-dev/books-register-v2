@@ -4,10 +4,12 @@ import { useContext, useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '@/contexts/AuthContext';
+import { useSearch } from '@/contexts/SearchContext';
 
 export const Header = () => {
-  const [openMenu, setOpenMenu] = useState(false);
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
   const { isAuthenticated, user } = useContext(AuthContext);
+  const { searchTerm, setSearchTerm } = useSearch();
 
   const handleOpenMenu = () => {
     setOpenMenu(!openMenu);
@@ -15,10 +17,10 @@ export const Header = () => {
 
   return (
     <header className="w-full bg-gray-900 text-white shadow-lg relative">
-      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-1 md:p-4">
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-2 md:p-4">
         <div className="flex justify-between w-full items-center">
           {/* Botão do menu (mobile) */}
-          <button onClick={handleOpenMenu} className="mr-2 md:hidden">
+          <button onClick={handleOpenMenu} className="mr-2 mt-1 md:hidden">
             <span className="material-symbols-outlined text-xs text-white">menu</span>
           </button>
 
@@ -37,9 +39,21 @@ export const Header = () => {
           </div>
 
           {/* DESKTOP: título */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center w-full">
             <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
-            <h1 className="ml-2 font-semibold text-base text-white">Books Register</h1>
+            <h1 className="ml-2 font-semibold text-base text-white w-full">Books Register</h1>
+          </div>
+          <div className="px-2.5 mx-3 md:mx-4 rounded-md bg-gray-800 border border-gray-600 flex items-center text-white w-full max-w-[25rem]">
+            <span className="material-symbols-outlined mr-2 text-gray-400 !text-[14px] !md:text-base">
+              search
+            </span>
+            <input
+              type="text"
+              placeholder="Buscar livro por título..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-transparent p-1 md:p-2 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none"
+            />
           </div>
         </div>
 

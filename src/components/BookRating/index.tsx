@@ -6,9 +6,10 @@ import { useBooks } from '@/contexts/useBooks';
 interface BookRatingProps {
   bookId: string;
   initialRating: number;
+  size?: number | string;
 }
 
-export const BookRating = ({ bookId, initialRating }: BookRatingProps) => {
+export const BookRating = ({ bookId, initialRating, size }: BookRatingProps) => {
   const { updateBookRating, books } = useBooks();
   const bookToUpdate = books.find((b) => b.id === bookId);
   const currentRating = bookToUpdate?.rating ?? initialRating;
@@ -27,6 +28,6 @@ export const BookRating = ({ bookId, initialRating }: BookRatingProps) => {
   };
 
   return (
-    <StarRating rating={currentRating} onRate={handleRatingChange} />
+    <StarRating rating={currentRating} onRate={handleRatingChange} size={size} />
   );
 };
