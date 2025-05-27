@@ -89,7 +89,7 @@ export default function BooksPage() {
 
       {isLoading && <p className="text-gray-400">Carregando livros...</p>}
       {!isLoading && filteredBooks.length === 0 && (
-        <p className="text-gray-500">Nenhum livro encontrado.</p>
+        <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>
       )}
 
       {/* Aqui: sempre 3 colunas, sem responsividade */}
@@ -124,6 +124,17 @@ export default function BooksPage() {
             </div>
           </div>
         ))}
+        <div
+          onClick={() => router.push('/books/create')}
+          className="flex flex-col items-center justify-center border border-dashed border-gray-600 rounded-md shadow-md max-h-[400px] h-full cursor-pointer hover:border-white hover:scale-105 transition-transform"
+        >
+          <div className="h-36 md:h-[40rem] w-full bg-gray-800 flex items-center justify-center">
+            <span className="md:text-5xl text-3xl text-gray-500">+</span>
+          </div>
+          <div className="p-2 text-center md:text-sm text-xs text-gray-400">
+            Adicionar Livro
+          </div>
+        </div>
       </div>
     </div>
   );
