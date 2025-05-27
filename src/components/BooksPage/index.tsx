@@ -77,14 +77,14 @@ export default function BooksPage() {
 
   return (
     <div className="p-4 my-4 text-white w-full max-w-screen-xl">
-      <h1 className="text-3xl font-bold mb-6">📚 Todos os Livros</h1>
+      <h1 className="lg:text-3xl md:text-2xl text-base font-bold mb-6">Meus Livros</h1>
 
       <input
         type="text"
         placeholder="Buscar livro por título..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="mb-6 p-2 w-full max-w-md border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400"
+        className="mb-6 p-2 w-full max-w-md border border-gray-700 bg-gray-800 rounded-md text-white placeholder-gray-400 text-xs"
       />
 
       {isLoading && <p className="text-gray-400">Carregando livros...</p>}
@@ -93,7 +93,7 @@ export default function BooksPage() {
       )}
 
       {/* Aqui: sempre 3 colunas, sem responsividade */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
         {filteredBooks.map((book) => (
           <div
             key={book.id}
@@ -114,7 +114,7 @@ export default function BooksPage() {
               )}
             </div>
 
-            <div className="p-4 flex flex-col gap-2 border-t text-center items-center border-gray-800">
+            <div className="p-1 flex flex-col gap-2 border-t text-center items-center border-gray-800">
               <div onClick={(e) => e.stopPropagation()}>
                 <StarRating
                   rating={book.rating || 0}

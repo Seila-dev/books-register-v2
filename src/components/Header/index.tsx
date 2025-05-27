@@ -16,16 +16,34 @@ export const Header = () => {
   return (
     <header className="w-full bg-gray-900 text-white shadow-lg relative">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-0.5 md:p-4">
-        <div className='flex justify-between w-full'>
+        <div className="flex justify-between w-full items-center">
+          {/* Botão do menu (mobile) */}
           <button onClick={handleOpenMenu} className="mr-2 md:hidden">
             <span className="material-symbols-outlined text-xs text-white">menu</span>
           </button>
-          <div className='flex items-center'>
-              <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
-              <h1 className="ml-2 font-semibold text-base text-white">Books Register</h1>
+
+          {/* MOBILE: nome do usuário ou login */}
+          <div className="flex items-center md:hidden">
+            {/* <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span> */}
+            {isAuthenticated ? (
+              <Link href="/user" className="ml-2 font-semibold text-base text-white">
+                {user?.username}
+              </Link>
+            ) : (
+              <Link href="/login" className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2">
+                Login
+              </Link>
+            )}
+          </div>
+
+          {/* DESKTOP: título */}
+          <div className="hidden md:flex items-center">
+            <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
+            <h1 className="ml-2 font-semibold text-base text-white">Books Register</h1>
           </div>
         </div>
 
+        {/* MENU DESKTOP */}
         <nav className="hidden md:flex gap-6 items-center">
           {[
             { href: '/', icon: 'menu_book', label: 'Todos' },
@@ -60,6 +78,7 @@ export const Header = () => {
         </nav>
       </div>
 
+      {/* MENU MOBILE */}
       <AnimatePresence>
         {openMenu && (
           <motion.div
@@ -69,13 +88,20 @@ export const Header = () => {
             transition={{ duration: 0.2 }}
             className="absolute top-20 right-4 bg-gray-800 border border-gray-700 text-white shadow-lg rounded-md p-4 flex flex-col gap-3 w-56 z-50 md:hidden"
           >
-            {['/', '/livros', '/filmes', '/series', '/categorias'].map((href) => (
-              <Link key={href} href={href} className="hover:text-blue-400">
-                {href.replace('/', '').charAt(0).toUpperCase() + href.slice(2)}
+            {[
+              { href: '/', label: 'Todos' },
+              { href: '/livros', label: 'Livros' },
+              { href: '/filmes', label: 'Filmes' },
+              { href: '/series', label: 'Séries' },
+              { href: '/categorias', label: 'Categorias' },
+            ].map(({ href, label }) => (
+              <Link key={href} href={href} onClick={() => setOpenMenu(false)} className="hover:text-blue-400">
+                {label}
               </Link>
             ))}
+
             {isAuthenticated && user?.username ? (
-              <Link href="/user" className="hover:text-blue-400">
+              <Link href="/user" className="hover:text-blue-400" onClick={() => setOpenMenu(false)}>
                 {user.username}
               </Link>
             ) : (
