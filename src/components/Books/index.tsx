@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useBooks } from '../../contexts/useBooks';
 import { StarRating } from '@/components/StarRating';
-// import { useRouter } from 'next/router';
 
 export const Books = () => {
     const { books, error, deleteBook, updateBookRating } = useBooks();
@@ -31,26 +30,26 @@ export const Books = () => {
             bookToUpdate.rating = originalRating;
         }
     };
-    //   if (loading)
-    //     return <div className="p-5 text-base text-gray-300">Carregando livros...</div>;
-    //   if (error)
-    //     return <div className="p-5 text-base text-red-500">Erro: {error}</div>;
-    //   if (books.length === 0)
-    //     return <div className="p-5 text-base text-gray-300">Nenhum livro encontrado. Adicione seu primeiro livro!</div>;
 
     return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' }}>
+        <div
+            style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '1.25rem',
+                width: '100%',
+                minHeight: '500px'
+            }}
+        >
             {books.map((book: any) => (
                 <div
                     key={book.id}
                     className="flex flex-col bg-gray-900 border border-gray-800 rounded-md shadow-md overflow-hidden h-[500px]"
                 >
-                    {/* Título */}
                     <div className="p-4 border-b border-gray-800">
                         <h3 className="text-lg font-semibold truncate">{book.title}</h3>
                     </div>
 
-                    {/* Imagem com altura completa - SOLUÇÃO REVISADA */}
                     <div className="flex-1 relative bg-gray-800">
                         {book.coverImage ? (
                             <div className="absolute inset-0 flex items-center justify-center p-2">
@@ -67,7 +66,6 @@ export const Books = () => {
                         )}
                     </div>
 
-                    {/* Rating + Ações */}
                     <div className="p-4 flex flex-col gap-2 border-t border-gray-800">
                         <StarRating
                             rating={book.rating || 0}
@@ -81,7 +79,7 @@ export const Books = () => {
                                 Excluir
                             </button>
                             <Link
-                                href={`/books/${book.id}`}
+                                href={`/book/${book.id}`}
                                 className="px-2 py-1 bg-blue-600 text-white rounded-md text-sm hover:bg-blue-700 transition text-center flex-1"
                             >
                                 Visualizar
@@ -91,6 +89,5 @@ export const Books = () => {
                 </div>
             ))}
         </div>
-
     );
 };
