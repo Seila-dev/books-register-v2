@@ -50,7 +50,9 @@ async function createBook(data: CreateBookData): Promise<Book> {
   if (data.rating !== undefined) formData.append('rating', String(data.rating));
   if (data.startDate) formData.append('startDate', data.startDate);
   if (data.finishDate) formData.append('finishDate', data.finishDate);
-  if (data.coverImage) formData.append('coverImage', data.coverImage);
+if (data.coverImage) {
+  formData.append('coverImage', data.coverImage);
+}
   if (data.categoryIds && data.categoryIds.length > 0)
     formData.append('categoryIds', JSON.stringify(data.categoryIds));
 

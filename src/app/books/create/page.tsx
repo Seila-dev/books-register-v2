@@ -17,8 +17,8 @@ const createBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
   description: z.string().optional(),
   coverImage: z
-    .any()
-    .optional(),
+  .instanceof(File)
+  .optional(),
   startDate: z.string().optional(),
   finishDate: z.string().optional(),
   categoryIds: z.array(z.string()).optional(),
@@ -28,7 +28,7 @@ type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 export default function CreateBookPage() {
   const router = useRouter();
-  const { createBook, isLoading: loading } = useBooks();
+  const { createBook, isLoading } = useBooks();
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -37,32 +37,35 @@ export default function CreateBookPage() {
     handleSubmit,
     control,
     watch,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<CreateBookFormData>({
     resolver: zodResolver(createBookSchema),
   });
 
-  // Pega o arquivo do input para preview
-  const coverImageFile = watch('coverImage');
+  const coverImageFileList = watch('coverImage');
 
-  useEffect(() => {
-    if (coverImageFile && coverImageFile instanceof File) {
-      const url = URL.createObjectURL(coverImageFile);
-      setPreviewUrl(url);
+useEffect(() => {
+  if (coverImageFileList) {
+    const url = URL.createObjectURL(coverImageFileList);
+    setPreviewUrl(url);
 
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [coverImageFile]);
+    return () => URL.revokeObjectURL(url);
+  } else {
+    setPreviewUrl(null);
+  }
+}, [coverImageFileList]);
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const { 'books-register.token': token } = parseCookies();
-      const res = await api.get(`/categories`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(res.data);
+      try {
+        const { 'books-register.token': token } = parseCookies();
+        const res = await api.get<Category[]>('/categories', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCategories(res.data);
+      } catch (error) {
+        toast.error('Erro ao carregar categorias');
+      }
     };
 
     fetchCategories();
@@ -97,8 +100,9 @@ export default function CreateBookPage() {
           <input
             type="text"
             {...register('title')}
-            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-              }`}
+            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${
+              errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+            }`}
           />
           {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
         </div>
@@ -117,17 +121,50 @@ export default function CreateBookPage() {
 
         <div>
           <label className="block mb-1 text-sm">Capa (imagem)</label>
-          <input
-            type="file"
-            accept="image/*"
-            {...register('coverImage')}
-            className="text-white text-xs border-y-indigo-900"
+
+          <Controller
+  name="coverImage"
+  control={control}
+  render={({ field }) => (
+    <>
+      <label
+        htmlFor="coverImage"
+        className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-500 hover:border-blue-500 rounded-md p-6 cursor-pointer transition hover:bg-gray-800"
+      >
+        {previewUrl ? (
+          <img
+            src={previewUrl}
+            alt="Prévia da capa"
+            className="object-contain max-h-60 rounded-md"
           />
+        ) : (
+          <div className="text-center text-gray-400">
+            <span className="material-symbols-outlined text-5xl mb-2">image</span>
+            <p className="text-sm">Clique para adicionar capa</p>
+            <p className="text-xs text-gray-500">Formatos aceitos: .jpg, .png, .webp</p>
+          </div>
+        )}
+      </label>
+
+      <input
+  id="coverImage"
+  type="file"
+  accept="image/*"
+  className="hidden"
+  onChange={(e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setPreviewUrl(URL.createObjectURL(file));
+      field.onChange(file); // passa só o arquivo, não a FileList
+    }
+  }}
+/>
+    </>
+  )}
+/>
           {errors.coverImage?.message && (
             <p className="text-red-500 text-xs mt-1">{String(errors.coverImage.message)}</p>
-          )}
-          {previewUrl && (
-            <img src={previewUrl} alt="Preview" className="mt-2 max-h-40 object-contain rounded-md" />
           )}
         </div>
 
@@ -183,10 +220,7 @@ export default function CreateBookPage() {
               )}
             />
           </div>
-
-
         </div>
-
 
         <button
           type="submit"
