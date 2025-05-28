@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useSearch } from '@/contexts/SearchContext';
 import { ButtonSkeleton } from '../loaders/ButtonSkeleton';
+import { MobileMenu } from '../mobile/MobileMenu';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
@@ -27,12 +28,8 @@ export const Header = () => {
 
           {/* MOBILE: nome do usuário ou login */}
           <div className="flex md:hidden">
-            { loading ? (
-              <ButtonSkeleton />
-            ) : isAuthenticated ? (
-              <Link href="/user" className="ml-2 font-semibold text-base text-white">
-                {user?.username}
-              </Link>
+            {isAuthenticated ? (
+              <></>
             ) : (
               <Link
                 href="/login"
@@ -44,10 +41,10 @@ export const Header = () => {
           </div>
 
           {/* DESKTOP: título */}
-          <div className="hidden md:flex items-center w-full">
+          <Link href="/" className="hidden md:flex items-center w-fit">
             <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
-            <h1 className="ml-2 font-semibold text-base text-white w-full">Books Register</h1>
-          </div>
+            <h1 className="ml-2 font-semibold text-base text-white w-full">BooksRegister</h1>
+          </Link>
           <div className="px-2.5 mx-3 md:mx-4 rounded-md bg-gray-800 border border-gray-600 flex items-center text-white w-full max-w-[25rem]">
             <span className="material-symbols-outlined mr-2 text-gray-400 !text-[14px] !md:text-base">
               search
@@ -85,7 +82,7 @@ export const Header = () => {
           {loading ? (
             <ButtonSkeleton />
           ) : isAuthenticated ? (
-            <Link href="/user" className="text-white text-base hover:text-blue-400">
+            <Link href="/user" className="text-white text-xs hover:text-blue-400">
               {user?.username}
             </Link>
           ) : (
@@ -99,40 +96,8 @@ export const Header = () => {
         </nav>
       </div>
 
-      {/* MENU MOBILE */}
-      <AnimatePresence>
-        {openMenu && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="absolute top-20 right-4 bg-gray-800 border border-gray-700 text-white shadow-lg rounded-md p-4 flex flex-col gap-3 w-56 z-50 md:hidden"
-          >
-            {[
-              { href: '/', label: 'Todos' },
-              { href: '/livros', label: 'Livros' },
-              { href: '/filmes', label: 'Filmes' },
-              { href: '/series', label: 'Séries' },
-              { href: '/categorias', label: 'Categorias' },
-            ].map(({ href, label }) => (
-              <Link key={href} href={href} onClick={() => setOpenMenu(false)} className="hover:text-blue-400">
-                {label}
-              </Link>
-            ))}
 
-            {isAuthenticated && user?.username ? (
-              <Link href="/user" className="hover:text-blue-400" onClick={() => setOpenMenu(false)}>
-                {user.username}
-              </Link>
-            ) : (
-              <Link href="/login" className="hover:text-blue-400" onClick={() => setOpenMenu(false)}>
-                Sign In
-              </Link>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <MobileMenu isOpen={openMenu} onClose={() => setOpenMenu(false)} />
     </header>
   );
 };
