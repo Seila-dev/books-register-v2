@@ -1,4 +1,3 @@
-import { BooksComponent } from "@/components/BooksComponent";
 import BooksPage from "@/components/BooksPage";
 import { Header } from "@/components/Header";
 import Image from "next/image";

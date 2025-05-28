@@ -11,13 +11,17 @@ import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 
 export default function BooksPage() {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { books, isLoading, error, updateBookRating } = useBooks();
   const { searchTerm } = useSearch();
-  const { updateBookRating } = useBooks();
   const router = useRouter();
   const [starSize, setStarSize] = useState(20);
+  // const [books, setBooks] = useState<Book[]>([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
+  // const { searchTerm } = useSearch();
+  // const { updateBookRating } = useBooks();
+  // const router = useRouter();
+  // const [starSize, setStarSize] = useState(20);
 
   useEffect(() => {
     const updateSize = () => {
@@ -30,36 +34,6 @@ export default function BooksPage() {
     updateSize()
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
-  }, []);
-
-  useEffect(() => {
-    const fetchBooks = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      const { 'books-register.token': token } = parseCookies();
-
-      if (!token) {
-        setIsLoading(false);
-        router.push('/login');
-        return;
-      }
-
-      try {
-        const response = await api.get<Book[]>('/books', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setBooks(response.data);
-      } catch (err: any) {
-        setError(err.response?.data?.message || 'Erro ao buscar livros');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchBooks();
   }, []);
 
   // const handleDelete = async (id: string) => {
@@ -106,7 +80,7 @@ export default function BooksPage() {
         <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>
       )}
       {error && (
-        <p className="text-red-400 mb-4">{error}</p>
+        <p className="text-red-400 mb-4">{error.message}</p>
       )}
 
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
@@ -117,7 +91,7 @@ export default function BooksPage() {
             <div
               key={book.id}
               onClick={() => router.push(`/books/${book.id}`)}
-              className="flex flex-col overflow-hidden shadow-md hover:shadow-blue-400/30 transform hover:scale-[1.03] transition duration-300 cursor-pointer bg-gray-900 border border-gray-800"
+              className="flex flex-col overflow-hidden shadow-md hover:shadow-blue-400/30 transform hover:scale-[1.03] transition duration-300 cursor-pointer bg-gray-900"
             >
               {/* Imagem com aspect-ratio */}
               <div className="w-full rounded-xl aspect-[2/3] relative bg-gray-800">

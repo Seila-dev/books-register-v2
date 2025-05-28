@@ -28,14 +28,16 @@ export const Header = () => {
 
           {/* MOBILE: nome do usuário ou login */}
           <div className="flex md:hidden">
-            {isAuthenticated ? (
+            {loading ? (
+              <ButtonSkeleton />
+            ) : isAuthenticated ? (
               <></>
             ) : (
               <Link
-                href="/login"
-                className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
+              href="/login"
+              className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
               >
-                Login
+              Login
               </Link>
             )}
           </div>

@@ -73,7 +73,9 @@ async function updateBook(data: UpdateBookData): Promise<Book> {
   if (data.startDate !== undefined) formData.append('startDate', data.startDate || '');
   if (data.finishDate !== undefined) formData.append('finishDate', data.finishDate || '');
   if (data.coverImage) formData.append('coverImage', data.coverImage);
-  if (data.categoryIds) formData.append('categoryIds', JSON.stringify(data.categoryIds));
+  if (data.categoryIds && data.categoryIds.length > 0) {
+    formData.append('categoryIds', JSON.stringify(data.categoryIds));
+  }
 
   const res = await api.put<Book>(`/books/${data.id}`, formData, {
     headers: {
@@ -168,6 +170,22 @@ export function useBooks() {
     return getBookById(id);
   }
 
+  function useBookById(id: string) {
+    const token = getToken(); // você pode colocar isso dentro do fetcher também
+
+    return useQuery<Book, Error>({
+      queryKey: ['book', id],
+      queryFn: async () => {
+        const res = await api.get<Book>(`/books/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        return res.data;
+      },
+      enabled: !!id,
+    });
+  }
+
+
   return {
     books,
     isLoading,
@@ -179,5 +197,6 @@ export function useBooks() {
     updateBookRating: updateRatingMutation.mutateAsync,
     fetchBooksByCategory: fetchByCategory,
     getBookById: getById,
+    useBookById
   };
 }
