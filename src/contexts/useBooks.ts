@@ -14,6 +14,8 @@ function getToken() {
 // Fetcher para pegar todos os livros
 async function fetchBooks(): Promise<Book[]> {
   const token = getToken();
+  if (!token) throw new Error('Usuário não autenticado');
+  
   const res = await api.get<Book[]>('/books', {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -113,10 +115,12 @@ async function updateBookRating(bookId: string, newRating: number): Promise<Book
 
 export function useBooks() {
   const queryClient = useQueryClient();
+  const token = getToken();
 
   const booksQuery = useQuery<Book[], Error>({
     queryKey: ['books'],
     queryFn: fetchBooks,
+    enabled: !!token, // Só roda a query se tiver token
   });
 
   const { data: books = [], isLoading, error, refetch } = booksQuery;

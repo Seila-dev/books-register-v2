@@ -36,6 +36,11 @@ export default function BooksPage() {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
+  useEffect(() => {
+    const { 'books-register.token': token } = parseCookies();
+    if (!token) router.push('/login');
+  }, []);
+
   // const handleDelete = async (id: string) => {
   //   const confirm = window.confirm('Deseja realmente excluir este livro?');
   //   if (!confirm) return;
