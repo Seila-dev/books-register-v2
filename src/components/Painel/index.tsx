@@ -31,8 +31,8 @@ export default function DashboardPanel({
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white flex items-center justify-between shadow-md w-full">
         <div>
-          <h2 className="text-2xl font-bold">Bem-vindo de volta, {userName}! 👋</h2>
-          <p className="text-sm mt-1">Continue sua jornada literária. Você está indo muito bem!</p>
+          <h2 className="text-lg md:text-2xl font-bold">Bem-vindo de volta, {userName}! 👋</h2>
+          <p className="text-xs md:text-sm mt-1">Continue sua jornada literária. Você está indo muito bem!</p>
         </div>
         <Link className="bg-white text-purple-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-gray-100 hidden md:flex cursor-pointer" href={'/books/create'}>
           + Adicionar Livro

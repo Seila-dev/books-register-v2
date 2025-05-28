@@ -35,11 +35,6 @@ export default async function BookDetailPage({ params }: any) {
 
     const book: Book = await response.json();
 
-    console.log(book.categories)
-
-
-    console.log(JSON.stringify(book, null, 2));
-
     function formatDate(dateString?: string | null): string {
         if (!dateString) return 'Não informado';
         const date = new Date(dateString);

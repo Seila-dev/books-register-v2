@@ -14,11 +14,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const createBookSchema = z.object({
-  title: z.string().min(1, 'Título é obrigatório'),
+  title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
   description: z.string().optional(),
   coverImage: z
     .any()
-    .refine((file) => file instanceof File || file === undefined, 'Arquivo inválido')
     .optional(),
   startDate: z.string().optional(),
   finishDate: z.string().optional(),
@@ -108,7 +107,7 @@ export default function CreateBookPage() {
           <label className="block mb-1 text-sm">Descrição</label>
           <textarea
             {...register('description')}
-            rows={3}
+            rows={5}
             className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white resize-none"
           />
           {errors.description && (

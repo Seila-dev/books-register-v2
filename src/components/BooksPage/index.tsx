@@ -11,10 +11,14 @@ import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 
 export default function BooksPage() {
+    const [mounted, setMounted] = useState(false);
+
+
   const { books, isLoading, error, updateBookRating } = useBooks();
   const { searchTerm } = useSearch();
   const router = useRouter();
   const [starSize, setStarSize] = useState(20);
+
   // const [books, setBooks] = useState<Book[]>([]);
   // const [isLoading, setIsLoading] = useState(true);
   // const [error, setError] = useState<string | null>(null);
@@ -39,6 +43,10 @@ export default function BooksPage() {
   useEffect(() => {
     const { 'books-register.token': token } = parseCookies();
     if (!token) router.push('/login');
+  }, []);
+
+  useEffect(() => {
+    setMounted(true);
   }, []);
 
   // const handleDelete = async (id: string) => {
@@ -77,9 +85,13 @@ export default function BooksPage() {
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+    if (!mounted) return null;
+
   return (
     <div className="text-white w-full">
-      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Meus Livros</h1>
+      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">
+        Meus Livros
+      </h1>
 
       {!isLoading && filteredBooks.length === 0 && (
         <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>
@@ -108,8 +120,8 @@ export default function BooksPage() {
                     loading="lazy"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center text-xs justify-center text-gray-400">
-                    Sem capa
+                  <div className="absolute inset-0 flex items-center md:text-xl text-xs justify-center text-gray-400 text-center">
+                    {book.title}
                   </div>
                 )}
               </div>
