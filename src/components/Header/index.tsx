@@ -77,9 +77,9 @@ export const Header = () => {
             </Link>
           ))}
 
-          {isAuthenticated && user?.username ? (
+          {isAuthenticated ? (
             <Link href="/user" className="text-white text-base hover:text-blue-400">
-              {user.username}
+              {user?.username}
             </Link>
           ) : (
             <Link
