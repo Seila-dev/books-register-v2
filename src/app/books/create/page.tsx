@@ -2,29 +2,66 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '@/services/api';
 import { parseCookies } from 'nookies';
 import { toast } from 'sonner';
 import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
+import { useBooks } from '@/contexts/useBooks';
+import api from '@/services/api';
+
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const createBookSchema = z.object({
+  title: z.string().min(1, 'Título é obrigatório'),
+  description: z.string().optional(),
+  coverImage: z
+    .any()
+    .refine((file) => file instanceof File || file === undefined, 'Arquivo inválido')
+    .optional(),
+  startDate: z.string().optional(),
+  finishDate: z.string().optional(),
+  categoryIds: z.array(z.string()).optional(),
+});
+
+type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 export default function CreateBookPage() {
   const router = useRouter();
+  const { createBook, isLoading } = useBooks();
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [startDate, setStartDate] = useState('');
-  const [finishDate, setFinishDate] = useState('');
-  const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<CreateBookFormData>({
+    resolver: zodResolver(createBookSchema),
+  });
+
+  // Pega o arquivo do input para preview
+  const coverImageFile = watch('coverImage');
+
+  useEffect(() => {
+    if (coverImageFile && coverImageFile instanceof File) {
+      const url = URL.createObjectURL(coverImageFile);
+      setPreviewUrl(url);
+
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [coverImageFile]);
 
   useEffect(() => {
     const fetchCategories = async () => {
       const { 'books-register.token': token } = parseCookies();
-      const res = await api.get('/categories', {
+      const res = await api.get(`/categories`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCategories(res.data);
@@ -33,50 +70,18 @@ export default function CreateBookPage() {
     fetchCategories();
   }, []);
 
-  
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setCoverImage(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const onSubmit = async (data: CreateBookFormData) => {
     try {
-      const { 'books-register.token': token } = parseCookies();
-
-      const formData = new FormData();
-      formData.append('title', title);
-      if (description) formData.append('description', description);
-      if (coverImage) formData.append('coverImage', coverImage);
-      if (startDate) formData.append('startDate', startDate);
-      if (finishDate) formData.append('finishDate', finishDate);
-      categoryIds.forEach((id) => formData.append('categoryIds', id));
-
-      await api.post('/books', formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      toast.success('Livro adicionado para a biblioteca')
+      await createBook(data);
+      toast.success('Livro adicionado para a biblioteca');
       router.push('/');
-    } catch (err: any) {
+    } catch (err) {
       toast.error('Erro ao criar livro.');
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="p-4 max-w-2xl mx-auto text-white">
-      {/* Botão de voltar */}
       <button
         type="button"
         onClick={() => router.back()}
@@ -88,76 +93,89 @@ export default function CreateBookPage() {
 
       <h1 className="text-xl md:text-3xl font-bold mb-6">Adicionar Novo Livro</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        {/* Título */}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div>
           <label className="block mb-1 text-sm">Título *</label>
           <input
             type="text"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white"
+            {...register('title')}
+            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+              }`}
           />
+          {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
         </div>
 
-        {/* Descrição */}
         <div>
           <label className="block mb-1 text-sm">Descrição</label>
           <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white resize-none"
+            {...register('description')}
             rows={3}
+            className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white resize-none"
           />
+          {errors.description && (
+            <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
+          )}
         </div>
 
-        {/* Capa */}
         <div>
           <label className="block mb-1 text-sm">Capa (imagem)</label>
           <input
             type="file"
             accept="image/*"
-            onChange={handleImageChange}
-            className="text-white text-xs"
+            {...register('coverImage')}
+            className="text-white text-xs border-y-indigo-900"
           />
+          {errors.coverImage?.message && (
+            <p className="text-red-500 text-xs mt-1">{String(errors.coverImage.message)}</p>
+          )}
           {previewUrl && (
             <img src={previewUrl} alt="Preview" className="mt-2 max-h-40 object-contain rounded-md" />
           )}
         </div>
 
-        {/* Datas */}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block mb-1 text-sm">Início da leitura</label>
             <input
               type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              {...register('startDate')}
               className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white"
             />
+            {errors.startDate && (
+              <p className="text-red-500 text-xs mt-1">{errors.startDate.message}</p>
+            )}
           </div>
           <div>
             <label className="block mb-1 text-sm">Fim da leitura</label>
             <input
               type="date"
-              value={finishDate}
-              onChange={(e) => setFinishDate(e.target.value)}
+              {...register('finishDate')}
               className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white"
             />
+            {errors.finishDate && (
+              <p className="text-red-500 text-xs mt-1">{errors.finishDate.message}</p>
+            )}
           </div>
         </div>
 
-        {/* Categorias */}
-         <CategorySelector categories={categories} />
+        <Controller
+          control={control}
+          name="categoryIds"
+          render={({ field }) => (
+            <CategorySelector
+              categories={categories}
+              selectedCategoryIds={field.value || []}
+              onChange={field.onChange}
+            />
+          )}
+        />
 
-        {/* Submit */}
         <button
           type="submit"
-          disabled={loading}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50"
+          disabled={isLoading}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50 cursor-pointer"
         >
-          {loading ? 'Salvando...' : 'Salvar Livro'}
+          {isLoading ? 'Salvando...' : 'Salvar Livro'}
         </button>
       </form>
     </div>

@@ -4,10 +4,14 @@ import Link from 'next/link';
 import { BookOpen, ArrowLeft } from 'lucide-react';
 import { BookRating } from '@/components/BookRating';
 import { Book } from '@/types/bookData';
+import { Category } from '@/types/categoryData';
+import CategorySelector from '@/components/CategorySelector';
+import { CategoriesEditor } from '@/components/CategoryEditor';
 
 export default async function BookDetailPage({ params }: any) {
     const { id } = params;
-    
+
+
 
     const headersList = await headers();
     const cookie = headersList.get('cookie') ?? '';
@@ -30,6 +34,11 @@ export default async function BookDetailPage({ params }: any) {
     }
 
     const book: Book = await response.json();
+
+    console.log(book.categories)
+
+
+    console.log(JSON.stringify(book, null, 2));
 
     function formatDate(dateString?: string | null): string {
         if (!dateString) return 'Não informado';
@@ -89,14 +98,30 @@ export default async function BookDetailPage({ params }: any) {
                         {formatDate(book.startDate)} - {formatDate(book.finishDate)}
                     </p>
 
-                    <div className="flex gap-2 mt-4">
-                        <button className="bg-white text-gray-800 text-sm px-4 py-2 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-100">
-                            Assistir mais tarde
-                        </button>
-                        <button className="bg-gray-800 text-white text-xl px-4 py-2 rounded-lg flex items-center justify-center shadow-sm hover:bg-gray-700 cursor-pointer">
-                            +
-                        </button>
-                    </div>
+                    {/* <div className='flex flex-col items-start'>
+                        <h3 className="text-lg font-semibold text-white">Categorias</h3>
+                        <div className="flex gap-2 mt-4 flex-wrap">
+                            {(book.categories || []).map((cat) => (
+                                <span
+                                    key={cat.categoryId}
+                                    className="bg-white flex items-center text-gray-800 text-sm px-4 py-2 rounded-lg font-medium border border-gray-300 shadow-sm cursor-pointer"
+                                >
+                                    {cat.category.name}
+                                </span>
+                            ))}
+                            <CategorySelector
+                                categories={categories}
+                                selectedCategoryIds={categoryIds}
+                                onChange={setCategoryIds}
+                            />
+
+                            
+                        </div>
+                    </div> */}
+
+                    <CategoriesEditor book={book} />
+
+
 
                     <div className="mt-10 text-xs text-gray-400 flex flex-col md:flex-row md:justify-between gap-1">
                         <span>ID: {book.id}</span>

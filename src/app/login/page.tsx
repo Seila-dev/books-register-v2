@@ -47,8 +47,8 @@ export default function SignIn() {
     };
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-transparent  text-white">
-            <div className="flex md:max-w-md w-full flex-col md:bg-blue-950 bg-transparent p-8 rounded-lg shadow-lg md:my-8 ">
+        <main className="flex min-h-[90vh] items-center justify-center bg-transparent  text-white">
+            <div className="flex md:max-w-md w-full flex-col md:bg-blue-950 bg-transparent p-8 rounded-lg shadow-lg md:my-6 ">
                 <h1 className="mb-6 flex justify-center text-3xl font-semibold">
                     Login
                 </h1>
