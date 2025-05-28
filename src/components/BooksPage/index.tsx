@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { StarRating } from '../StarRating';
 import { useBooks } from '@/contexts/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
+import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -21,9 +22,9 @@ export default function BooksPage() {
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-      if (width < 640) setStarSize(20);     
-      else if (width < 1024) setStarSize(28); 
-      else setStarSize(36);                   
+      if (width < 640) setStarSize(20);
+      else if (width < 1024) setStarSize(28);
+      else setStarSize(36);
     };
 
     updateSize()
@@ -36,8 +37,15 @@ export default function BooksPage() {
       setIsLoading(true);
       setError(null);
 
+      const { 'books-register.token': token } = parseCookies();
+
+      if (!token) {
+        setIsLoading(false);
+        router.push('/login');
+        return;
+      }
+
       try {
-        const { 'books-register.token': token } = parseCookies();
         const response = await api.get<Book[]>('/books', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -94,44 +102,53 @@ export default function BooksPage() {
     <div className="p-4 my-4 text-white w-full max-w-screen-xl">
       <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Meus Livros</h1>
 
-      {isLoading && <p className="text-gray-400">Carregando livros...</p>}
       {!isLoading && filteredBooks.length === 0 && (
         <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>
+      )}
+      {error && (
+        <p className="text-red-400 mb-4">{error}</p>
       )}
 
       {/* Aqui: sempre 3 colunas, sem responsividade */}
       <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
-        {filteredBooks.map((book) => (
-          <div
-            key={book.id}
-            onClick={() => router.push(`/books/${book.id}`)}
-            className="flex flex-col rounded-md shadow-md overflow-hidden max-h-[450px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-102"
-          >
+        {isLoading ? (
+          <>
+            {Array.from({ length: 6 }).map((_, index) => (
+              <BookSkeleton key={index} />
+            ))}
+          </>
+        ) : (
+          filteredBooks.map((book) => (
+            <div
+              key={book.id}
+              onClick={() => router.push(`/books/${book.id}`)}
+              className="flex flex-col rounded-md shadow-md overflow-hidden max-h-[450px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
+            >
 
-            <div className="h-36 md:h-[40rem] w-full bg-gray-800 relative">
-              {book.coverImage ? (
-                <div
-                  className="h-full w-full bg-cover bg-center"
-                  style={{ backgroundImage: `url(${book.coverImage})` }}
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                  Sem capa
+              <div className="h-36 md:h-[40rem] w-full bg-gray-800 relative">
+                {book.coverImage ? (
+                  <div
+                    className="h-full w-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${book.coverImage})` }}
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    Sem capa
+                  </div>
+                )}
+              </div>
+
+              <div className="p-1 flex flex-col gap-2 border-t text-center items-center border-gray-800">
+                <div onClick={(e) => e.stopPropagation()}>
+                  <StarRating
+                    rating={book.rating || 0}
+                    onRate={(newRating) => handleRatingChange(book.id, newRating)}
+                    size={starSize}
+                  />
                 </div>
-              )}
-            </div>
-
-            <div className="p-1 flex flex-col gap-2 border-t text-center items-center border-gray-800">
-              <div onClick={(e) => e.stopPropagation()}>
-                <StarRating
-                  rating={book.rating || 0}
-                  onRate={(newRating) => handleRatingChange(book.id, newRating)}
-                  size={starSize}
-                />
               </div>
             </div>
-          </div>
-        ))}
+          )))}
         <div
           onClick={() => router.push('/books/create')}
           className="flex flex-col items-center justify-center border border-dashed border-gray-600 rounded-md shadow-md max-h-[450px] h-full cursor-pointer hover:border-white hover:scale-105 transition-transform"

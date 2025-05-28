@@ -17,6 +17,7 @@ type FormDataRegister = {
 type authContextType = {
   isAuthenticated: boolean;
   user: User | null;
+  loading: boolean;
   signIn: (data: FormData) => Promise<void>;
   registerAccount: (data: FormDataRegister) => Promise<void>;
   signOut: () => void;
@@ -26,6 +27,7 @@ export const AuthContext = createContext({} as authContextType);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   const isAuthenticated = !!user;
@@ -33,7 +35,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const { 'books-register.token': token } = parseCookies();
 
-    if (!token) return;
+    if (!token) {
+        setLoading(false);
+        return
+    }
 
     const fetchUser = async () => {
       try {
@@ -51,6 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } catch {
         destroyCookie(null, 'books-register.token');
         setUser(null);
+      } finally {
+         setLoading(false);
       }
     };
 
@@ -129,7 +136,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, registerAccount, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, signIn, registerAccount, signOut }}>
       {children}
     </AuthContext.Provider>
   );

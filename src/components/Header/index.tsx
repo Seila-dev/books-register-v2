@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useSearch } from '@/contexts/SearchContext';
+import { ButtonSkeleton } from '../loaders/ButtonSkeleton';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user, loading } = useContext(AuthContext);
   const { searchTerm, setSearchTerm } = useSearch();
 
   const handleOpenMenu = () => {
@@ -26,13 +27,17 @@ export const Header = () => {
 
           {/* MOBILE: nome do usuário ou login */}
           <div className="flex md:hidden">
-            {/* <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span> */}
-            {isAuthenticated ? (
+            { loading ? (
+              <ButtonSkeleton />
+            ) : isAuthenticated ? (
               <Link href="/user" className="ml-2 font-semibold text-base text-white">
                 {user?.username}
               </Link>
             ) : (
-              <Link href="/login" className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2">
+              <Link
+                href="/login"
+                className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
+              >
                 Login
               </Link>
             )}
@@ -72,12 +77,14 @@ export const Header = () => {
               onClick={() => setOpenMenu(false)}
               className="flex items-center text-white hover:text-blue-400 text-xs transition"
             >
-              <span className="material-symbols-outlined mr-1 text-[0.2rem]">{icon}</span>
+              <span className="material-symbols-outlined mr-1 !text-xs">{icon}</span>
               {label}
             </Link>
           ))}
 
-          {isAuthenticated ? (
+          {loading ? (
+            <ButtonSkeleton />
+          ) : isAuthenticated ? (
             <Link href="/user" className="text-white text-base hover:text-blue-400">
               {user?.username}
             </Link>
