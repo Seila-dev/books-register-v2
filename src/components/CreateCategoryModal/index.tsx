@@ -47,9 +47,9 @@ export function CreateCategoryModal() {
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="bg-gray-800 text-white text-xl px-4 py-2 rounded-lg flex items-center justify-center shadow-sm hover:bg-gray-700 cursor-pointer"
+        className="bg-gray-700 text-white border border-gray-600 text-xs px-4 py-2 rounded-lg transition duration-200 flex items-center justify-center shadow-sm hover:bg-gray-600 cursor-pointer w-full"
       >
-        +
+        Adicionar 
       </button>
 
       {isOpen && (
