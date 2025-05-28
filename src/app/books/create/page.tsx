@@ -29,8 +29,7 @@ type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 export default function CreateBookPage() {
   const router = useRouter();
-  const { createBook, isLoading } = useBooks();
-
+  const { createBook, isLoading: loading } = useBooks();
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -39,7 +38,7 @@ export default function CreateBookPage() {
     handleSubmit,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm<CreateBookFormData>({
     resolver: zodResolver(createBookSchema),
   });
@@ -158,17 +157,37 @@ export default function CreateBookPage() {
           </div>
         </div>
 
-        <Controller
-          control={control}
-          name="categoryIds"
-          render={({ field }) => (
-            <CategorySelector
-              categories={categories}
-              selectedCategoryIds={field.value || []}
-              onChange={field.onChange}
+        <div>
+          <label className="mb-2 text-sm w-full flex">Categorias</label>
+
+          <div className="flex flex-wrap w-full gap-2 mb-2">
+            {(watch('categoryIds') || [])
+              .map((id) => categories.find((c) => c.id === id))
+              .filter(Boolean)
+              .map((cat) => (
+                <span
+                  key={cat!.id}
+                  className="bg-white flex items-center text-gray-800 text-sm px-4 py-2 rounded-lg font-medium border border-gray-300 shadow-sm cursor-pointer"
+                >
+                  {cat!.name}
+                </span>
+              ))}
+            <Controller
+              control={control}
+              name="categoryIds"
+              render={({ field }) => (
+                <CategorySelector
+                  categories={categories}
+                  selectedCategoryIds={field.value || []}
+                  onChange={field.onChange}
+                />
+              )}
             />
-          )}
-        />
+          </div>
+
+
+        </div>
+
 
         <button
           type="submit"

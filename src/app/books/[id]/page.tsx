@@ -98,7 +98,7 @@ export default async function BookDetailPage({ params }: any) {
                         {formatDate(book.startDate)} - {formatDate(book.finishDate)}
                     </p>
 
-                    {/* <div className='flex flex-col items-start'>
+                    <div className='flex flex-col items-start'>
                         <h3 className="text-lg font-semibold text-white">Categorias</h3>
                         <div className="flex gap-2 mt-4 flex-wrap">
                             {(book.categories || []).map((cat) => (
@@ -109,17 +109,14 @@ export default async function BookDetailPage({ params }: any) {
                                     {cat.category.name}
                                 </span>
                             ))}
-                            <CategorySelector
-                                categories={categories}
-                                selectedCategoryIds={categoryIds}
-                                onChange={setCategoryIds}
-                            />
 
+ <CategoriesEditor book={book} />
                             
                         </div>
-                    </div> */}
+                    </div>
 
-                    <CategoriesEditor book={book} />
+
+                   
 
 
 

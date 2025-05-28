@@ -78,7 +78,7 @@ export default function BooksPage() {
   );
 
   return (
-    <div className="p-4 my-4 text-white w-full max-w-screen-xl">
+    <div className="text-white w-full">
       <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Meus Livros</h1>
 
       {!isLoading && filteredBooks.length === 0 && (
