@@ -109,36 +109,34 @@ export default function BooksPage() {
         <p className="text-red-400 mb-4">{error}</p>
       )}
 
-      {/* Aqui: sempre 3 colunas, sem responsividade */}
-      <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
         {isLoading ? (
-          <>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <BookSkeleton key={index} />
-            ))}
-          </>
+          Array.from({ length: 6 }).map((_, index) => <BookSkeleton key={index} />)
         ) : (
           filteredBooks.map((book) => (
             <div
               key={book.id}
               onClick={() => router.push(`/books/${book.id}`)}
-              className="flex flex-col rounded-md shadow-md overflow-hidden max-h-[450px] h-full cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
+              className="flex flex-col overflow-hidden shadow-md hover:shadow-blue-400/30 transform hover:scale-[1.03] transition duration-300 cursor-pointer bg-gray-900 border border-gray-800"
             >
-
-              <div className="h-36 md:h-[40rem] w-full bg-gray-800 relative">
+              {/* Imagem com aspect-ratio */}
+              <div className="w-full rounded-xl aspect-[2/3] relative bg-gray-800">
                 {book.coverImage ? (
-                  <div
-                    className="h-full w-full bg-cover bg-center"
-                    style={{ backgroundImage: `url(${book.coverImage})` }}
+                  <img
+                    src={book.coverImage}
+                    alt={book.title}
+                    className="w-full rounded-xl h-full object-cover"
+                    loading="lazy"
                   />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                  <div className="absolute inset-0 flex items-center text-xs justify-center text-gray-400">
                     Sem capa
                   </div>
                 )}
               </div>
 
-              <div className="p-1 flex flex-col gap-2 border-t text-center items-center border-gray-800">
+              {/* Conteúdo (estrelas, etc) */}
+              <div className="p-1 flex flex-col gap-2 text-center w-full items-center backdrop-blur-sm">
                 <div onClick={(e) => e.stopPropagation()}>
                   <StarRating
                     rating={book.rating || 0}
@@ -148,17 +146,21 @@ export default function BooksPage() {
                 </div>
               </div>
             </div>
-          )))}
+          ))
+        )}
+
         <div
           onClick={() => router.push('/books/create')}
-          className="flex flex-col items-center justify-center border border-dashed border-gray-600 rounded-md shadow-md max-h-[450px] h-full cursor-pointer hover:border-white hover:scale-105 transition-transform"
+          className="flex flex-col items-center justify-center border-2 border-solid border-blue-500 rounded-md shadow-lg max-h-[300px] h-full cursor-pointer
+    bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 hover:from-blue-900 hover:to-blue-700
+    transition-transform hover:scale-105 hover:shadow-2xl group relative overflow-hidden"
         >
-          <div className="h-36 md:h-[40rem] w-full bg-gray-800 flex items-center justify-center">
-            <span className="md:text-5xl text-3xl text-gray-500">+</span>
+          <div className="h-20 md:h-[40rem] w-full flex items-center justify-center">
+            <span className="md:text-6xl text-4xl text-blue-400 group-hover:animate-bounce transition-all">+</span>
           </div>
-          <div className="p-2 text-center md:text-sm text-xs text-white">
-            Adicionar Livro
-          </div>
+
+          {/* Glow efeito no fundo */}
+          <div className="absolute -inset-1 bg-blue-500 opacity-20 blur-lg rounded-xl z-[-1] group-hover:opacity-30 transition-opacity duration-400" />
         </div>
       </div>
     </div>

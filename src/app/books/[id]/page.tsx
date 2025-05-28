@@ -45,9 +45,9 @@ export default async function BookDetailPage({ params }: any) {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-bg-gray-800 to-black text-gray-900 px-4  md:py-15">
-            <div className="md:hidden flex pt-6 pb-2">
-                <Link href="/" className="inline-flex items-center text-white">
-                    <ArrowLeft size={18} className="mr-2 text-white" />
+            <div className="max-w-4xl mx-auto flex pt-6 pb-2">
+                <Link href="/" className="inline-flex items-center text-white hover:text-blue-400 transition duration-100">
+                    <ArrowLeft size={18} className="mr-2" />
                     Voltar
                 </Link>
             </div>
