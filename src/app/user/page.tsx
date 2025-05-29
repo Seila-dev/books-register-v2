@@ -33,11 +33,11 @@ export default function UserSettings() {
           </button>
         </div>
         {/* Título */}
-        <h1 className="text-2xl font-bold mb-4">Minha Conta</h1>
+        <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Minha Conta</h1>
         {/* Cartões de informação */}
         <div className="space-y-4">
           <section className="bg-gray-900 rounded-xl">
-            <h2 className="text-lg font-semibold text-white mb-2">Perfil</h2>
+            <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Perfil</h2>
             <p className="text-sm text-gray-400">Usuário:</p>
             <p className="text-base font-medium">{user.username}</p>
             <div className="mt-3">
@@ -46,7 +46,7 @@ export default function UserSettings() {
             </div>
           </section>
           <section className="bg-gray-900 rounded-xl">
-            <h2 className="text-lg font-semibold text-white mb-2">Preferências</h2>
+            <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Preferências</h2>
             <div className="flex flex-col gap-2 text-base">
               <div className="flex justify-between">
                 <span className="text-gray-400">Tema</span>
@@ -60,7 +60,7 @@ export default function UserSettings() {
           </section>
           {/* Espaço reservado para futuras configurações */}
           <section className="bg-gray-900 rounded-xl">
-            <h2 className="text-lg font-semibold text-white mb-2">Notificações</h2>
+            <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Notificações</h2>
             <p className="text-sm text-gray-400">Funcionalidade em desenvolvimento</p>
           </section>
         </div>

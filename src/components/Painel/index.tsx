@@ -27,8 +27,8 @@ export default function DashboardPanel({
   const remaining = monthlyGoal - booksRead;
 
   return (
-    <div className="space-y-6 w-full my-6">
-      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">
+    <div className="space-y-6 w-full mt-2 mb-10">
+      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
         Painel do usuário
       </h1>
       {/* Header */}

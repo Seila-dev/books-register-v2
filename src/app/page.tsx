@@ -2,6 +2,7 @@ import BooksPage from "@/components/BooksPage";
 import { Header } from "@/components/Header";
 import DashboardPanel from "@/components/Painel";
 import DashboardIntro from "@/components/Painel";
+import TopCategories from "@/components/TopCategories";
 import Image from "next/image";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
         ]}
       />
       <BooksPage />
+      <TopCategories />
     </div>
   )
 }

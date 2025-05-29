@@ -1,39 +1,36 @@
-// StarRating.tsx
-
 'use client';
 
 import React from 'react';
+import { Star } from 'lucide-react';
 
 interface StarRatingProps {
   rating: number;
   onRate: (rating: number) => void;
-  size?: number | string; // novo
+  size?: number | string;
 }
 
-export const StarRating: React.FC<StarRatingProps> = ({ rating, onRate, size = '1.75rem' }) => {
-  const fontSize = typeof size === 'number' ? `${size}px` : size;
+export const StarRating: React.FC<StarRatingProps> = ({ rating, onRate, size = 16 }) => {
+  const sizeNumber = typeof size === 'number' ? size : parseInt(size.replace('px', ''));
 
   return (
-    <div className="flex gap-0 md:gap-1">
+    <div className="flex gap-0 md:gap-1 my-2">
       {[1, 2, 3, 4, 5].map((star) => (
-        <span
+        <Star
           key={star}
-          onClick={() => onRate(star)}
-          className={`select-none transition-colors cursor-pointer ${
-            star <= rating ? 'text-yellow-400' : 'text-gray-500'
-          }`}
-          style={{ fontSize }}
+          size={sizeNumber}
+          onClick={() => {
+            onRate(star);
+          }}
+          className={`transition-colors select-none   cursor-pointer ${star <= rating ? 'text-yellow-400 fill-amber-300' : 'text-gray-600 fill-gray-600'
+            }`}
           role="button"
-          aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               onRate(star);
             }
           }}
-        >
-          ★
-        </span>
+        />
       ))}
     </div>
   );

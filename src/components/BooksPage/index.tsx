@@ -10,6 +10,8 @@ import { useBooks } from '@/contexts/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
+import { QuickAddCard } from '../QuickAddComponent';
 
 export default function BooksPage() {
   const [mounted, setMounted] = useState(false);
@@ -18,7 +20,7 @@ export default function BooksPage() {
   const { books, isLoading, error, updateBookRating } = useBooks();
   const { searchTerm } = useSearch();
   const router = useRouter();
-  const [starSize, setStarSize] = useState(20);
+  const [starSize, setStarSize] = useState(10);
 
   // const [books, setBooks] = useState<Book[]>([]);
   // const [isLoading, setIsLoading] = useState(true);
@@ -31,10 +33,12 @@ export default function BooksPage() {
   useEffect(() => {
     const updateSize = () => {
       const width = window.innerWidth;
-      if (width < 640) setStarSize(20);
-      else if (width < 1024) setStarSize(28);
+      if (width < 640) setStarSize(16);
+      else if (width < 1024) setStarSize(26);
       else setStarSize(36);
     };
+
+
 
     updateSize()
     window.addEventListener('resize', updateSize);
@@ -50,7 +54,9 @@ export default function BooksPage() {
     setMounted(true);
   }, []);
 
-
+  const handleAddBook = () => {
+    console.log('Add book manually');
+  };
 
   // const handleDelete = async (id: string) => {
   //   const confirm = window.confirm('Deseja realmente excluir este livro?');
@@ -99,7 +105,7 @@ export default function BooksPage() {
 
   return (
     <div className="text-white w-full">
-      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">
+      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
         Livros recentes
       </h1>
 
@@ -115,14 +121,16 @@ export default function BooksPage() {
           Array.from({ length: 6 }).map((_, index) => <BookSkeleton key={index} />)
         ) : (
           filteredBooks.map((book) => (
-            <Link
-              onClick={handleClick}
+            <div
               key={book.id}
-              href={`/books/${book.id}`}
-              className={`flex flex-col overflow-hidden shadow-md transform cursor-pointer bg-gray-900 transition-all duration-300 ease-in-out rounded-xl ${isAnimating ? 'scale-95 opacity-80' : 'hover:scale-[1.03] hover:shadow-blue-400/30'
+              className={`flex flex-col overflow-hidden shadow-md transform bg-gray-900 transition-all duration-300 ease-in-out rounded-xl ${isAnimating ? 'scale-95 opacity-80' : 'hover:scale-[1.03] hover:shadow-blue-400/30'
                 }`}
             >
-              <div className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800">
+              <Link
+                onClick={handleClick}
+                href={`/books/${book.id}`}
+                className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800"
+              >
                 {book.coverImage ? (
                   <img
                     src={book.coverImage}
@@ -135,36 +143,31 @@ export default function BooksPage() {
                     {book.title}
                   </div>
                 )}
-              </div>
+              </Link>
 
-              {/* Conteúdo */}
-              <div
-                className="p-1 flex flex-col gap-2 text-center w-full items-center backdrop-blur-sm"
-                onClick={(e) => e.stopPropagation()}
-              >
+              <div className="p-1 flex flex-col gap-2 text-center w-full items-center">
                 <StarRating
                   rating={book.rating || 0}
                   onRate={(newRating) => handleRatingChange(book.id, newRating)}
                   size={starSize}
                 />
               </div>
-            </Link>
+            </div>
           ))
         )}
 
-        <div
-          onClick={() => router.push('/books/create')}
-          className="flex flex-col items-center justify-center border-2 border-solid border-blue-500 rounded-md shadow-lg max-h-[300px] h-full cursor-pointer
-    bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 hover:from-blue-900 hover:to-blue-700
-    transition-transform hover:scale-105 hover:shadow-2xl group relative overflow-hidden"
-        >
-          <div className="h-20 md:h-[40rem] w-full flex items-center justify-center">
-            <span className="md:text-6xl text-4xl text-blue-400 group-hover:animate-bounce transition-all">+</span>
-          </div>
+        <QuickAddCard />
 
-          {/* Glow efeito no fundo */}
-          <div className="absolute -inset-1 bg-blue-500 opacity-20 blur-lg rounded-xl z-[-1] group-hover:opacity-30 transition-opacity duration-400" />
-        </div>
+        <Link
+          href={`/books/create`}
+          className={`
+            fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg hover:shadow-xl 
+            bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700
+            border-0 transition-all duration-300 ease-out z-50 flex justify-center items-center
+          `}
+        >
+          <Plus className={`h-6 w-6 transition-transform duration-300`} />
+        </Link>
       </div>
     </div>
   );
