@@ -8,12 +8,10 @@ import { Category } from '@/types/categoryData';
 import CategorySelector from '@/components/CategorySelector';
 import { CategoriesEditor } from '@/components/CategoryEditor';
 import ComponentArrowBack from '@/components/ArrowBack';
+import EditBookPage from '@/components/BookEditor';
 
 export default async function BookDetailPage({ params }: any) {
     const { id } = params;
-
-
-
     const headersList = await headers();
     const cookie = headersList.get('cookie') ?? '';
     const token = cookie
@@ -50,8 +48,15 @@ export default async function BookDetailPage({ params }: any) {
 
     return (
         <div className='w-full'>
-            <div className="flex pt-6 pb-2">
+            <div className="flex w-full justify-between items-center gap-2 pt-6 pb-2">
                 <ComponentArrowBack />
+                <Link
+                    href={`/books/${book.id}/edit`}
+                    className="w-10 h-10 flex items-center justify-center rounded-md bg-gray-700 hover:bg-blue-600 transition"
+                    title="Editar livro"
+                >
+                    <span className="material-symbols-outlined text-white text-xl">edit</span>
+                </Link>
             </div>
             <div className="  flex flex-col md:flex-row items-center md:items-start pt-4">
                 <div className="flex flex-col items-center md:items-start w-full md:w-1/3">
