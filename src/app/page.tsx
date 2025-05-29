@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="bg-gray-900 text-white flex flex-col items-center min-h-full w-full p-4 max-w-screen-xl justify-center m-auto gap-8">
+    <div className="w-full">
       <DashboardPanel
         userName="Erick"
         booksRead={12}

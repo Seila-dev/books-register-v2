@@ -42,7 +42,7 @@ export default function RootLayout({
           <Providers>
             <Header />
             <Toaster />
-            {children}
+            <div className="bg-gray-900 text-white flex flex-col items-center min-h-full w-full p-4 max-w-screen-xl justify-center m-auto gap-8 transation duration-200">{children}</div>
           </Providers>
         </ClientAuthProvider>
       </body>
