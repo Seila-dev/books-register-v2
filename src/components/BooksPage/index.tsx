@@ -9,9 +9,10 @@ import { StarRating } from '../StarRating';
 import { useBooks } from '@/contexts/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
+import Link from 'next/link';
 
 export default function BooksPage() {
-    const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
 
   const { books, isLoading, error, updateBookRating } = useBooks();
@@ -49,6 +50,8 @@ export default function BooksPage() {
     setMounted(true);
   }, []);
 
+
+
   // const handleDelete = async (id: string) => {
   //   const confirm = window.confirm('Deseja realmente excluir este livro?');
   //   if (!confirm) return;
@@ -85,8 +88,14 @@ export default function BooksPage() {
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-    if (!mounted) return null;
-    if (error) router.push('/login')
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleClick = () => {
+    setIsAnimating(true);
+  };
+
+  if (!mounted) return null;
+  if (error) router.push('/login')
 
   return (
     <div className="text-white w-full">
@@ -106,10 +115,12 @@ export default function BooksPage() {
           Array.from({ length: 6 }).map((_, index) => <BookSkeleton key={index} />)
         ) : (
           filteredBooks.map((book) => (
-            <div
+            <Link
+              onClick={handleClick}
               key={book.id}
-              onClick={() => router.push(`/books/${book.id}`)}
-              className="flex flex-col overflow-hidden shadow-md hover:shadow-blue-400/30 transform hover:scale-[1.03] transition duration-300 cursor-pointer bg-gray-900"
+              href={`/books/${book.id}`}
+              className={`flex flex-col overflow-hidden shadow-md transform cursor-pointer bg-gray-900 transition-all duration-300 ease-in-out rounded-xl ${isAnimating ? 'scale-95 opacity-80' : 'hover:scale-[1.03] hover:shadow-blue-400/30'
+                }`}
             >
               {/* Imagem com aspect-ratio */}
               <div className="w-full rounded-xl aspect-[2/3] relative bg-gray-800">
@@ -127,17 +138,18 @@ export default function BooksPage() {
                 )}
               </div>
 
-              {/* Conteúdo (estrelas, etc) */}
-              <div className="p-1 flex flex-col gap-2 text-center w-full items-center backdrop-blur-sm">
-                <div onClick={(e) => e.stopPropagation()}>
-                  <StarRating
-                    rating={book.rating || 0}
-                    onRate={(newRating) => handleRatingChange(book.id, newRating)}
-                    size={starSize}
-                  />
-                </div>
+              {/* Conteúdo */}
+              <div
+                className="p-1 flex flex-col gap-2 text-center w-full items-center backdrop-blur-sm"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <StarRating
+                  rating={book.rating || 0}
+                  onRate={(newRating) => handleRatingChange(book.id, newRating)}
+                  size={starSize}
+                />
               </div>
-            </div>
+            </Link>
           ))
         )}
 

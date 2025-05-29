@@ -29,7 +29,7 @@ type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 export default function CreateBookPage() {
   const router = useRouter();
-  const { createBook, isLoading } = useBooks();
+  const { createBook } = useBooks();
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -38,19 +38,22 @@ export default function CreateBookPage() {
     handleSubmit,
     control,
     watch,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm<CreateBookFormData>({
     resolver: zodResolver(createBookSchema),
+    mode: 'onBlur'
   });
 
   const coverImageFileList = watch('coverImage');
 
   useEffect(() => {
-    if (coverImageFileList) {
+    if (typeof window !== 'undefined' && coverImageFileList instanceof File) {
       const url = URL.createObjectURL(coverImageFileList);
       setPreviewUrl(url);
 
-      return () => URL.revokeObjectURL(url);
+      return () => {
+        URL.revokeObjectURL(url);
+      };
     } else {
       setPreviewUrl(null);
     }
