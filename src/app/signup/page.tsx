@@ -45,8 +45,8 @@ export default function SignUp() {
     };
 
     return (
-        <main className="flex min-h-screen items-center justify-center bg-transparent  text-white px-4">
-            <div className="flex max-w-md w-full flex-col bg-blue-950 p-8 rounded-lg shadow-lg border-t-[10px] border-2">
+        <main className="flex w-full min-h-full h-full mt-1 md:mt-4 justify-center bg-transparent  text-white md:px-4">
+            <div className="flex max-w-md w-full flex-col h-fit p-4 bg-transparent md:p-8 rounded-lg shadow-lg">
                 <h1 className="mb-6 flex justify-center text-3xl font-semibold">
                     Criar conta
                 </h1>
