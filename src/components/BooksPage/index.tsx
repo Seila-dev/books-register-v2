@@ -86,11 +86,12 @@ export default function BooksPage() {
   );
 
     if (!mounted) return null;
+    if (error) router.push('/login')
 
   return (
     <div className="text-white w-full">
       <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">
-        Meus Livros
+        Livros recentes
       </h1>
 
       {!isLoading && filteredBooks.length === 0 && (

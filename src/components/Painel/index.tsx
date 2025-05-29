@@ -28,13 +28,16 @@ export default function DashboardPanel({
 
   return (
     <div className="space-y-6 w-full mt-4">
+      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">
+        Painel do usuário
+      </h1>
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white flex items-center justify-between shadow-md w-full">
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white flex items-center justify-between shadow-md w-full">
         <div>
-          <h2 className="text-lg md:text-2xl font-bold">Bem-vindo de volta, {userName}! 👋</h2>
+          <p className="text-base md:text-2xl font-bold ">Bem-vindo de volta, {userName}! 👋</p>
           <p className="text-xs md:text-sm mt-1">Continue sua jornada literária. Você está indo muito bem!</p>
         </div>
-        <Link className="bg-white text-purple-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-gray-100 hidden md:flex cursor-pointer" href={'/books/create'}>
+        <Link href={'/books/create'} className="bg-white text-purple-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-gray-100 hidden md:flex cursor-pointer">
           + Adicionar Livro
         </Link>
       </div>
@@ -44,7 +47,7 @@ export default function DashboardPanel({
         <StatCard title={booksRead} subtitle="Livros lidos este mês" />
         <StatCard title={`${progressPercent.toFixed(0)}%`} subtitle="Meta mensal" />
         <StatCard title={currentStreak} subtitle="Dias consecutivos" />
-        <StatCard title={readingNow} subtitle="Lendo agora" />
+        <StatCard title={readingNow} subtitle="Lendo agora"  />
       </div>
 
       {/* Progresso + Atividades */}
@@ -87,7 +90,7 @@ function StatCard({ title, subtitle }: { title: string | number; subtitle: strin
   return (
     <div className="bg-gray-800 p-4 rounded-xl shadow text-white">
       <h4 className="text-2xl font-bold">{title}</h4>
-      <p className="text-sm text-gray-400">{subtitle}</p>
+      <p className="text-xs md:text-sm text-gray-400">{subtitle}</p>
     </div>
   );
 }
