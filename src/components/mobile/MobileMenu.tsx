@@ -3,7 +3,7 @@
 import { useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { X, List, Book, Film, Tv, LayoutGrid } from 'lucide-react';
+import { X, List, Book, Film, Tv, LayoutGrid, UserIcon } from 'lucide-react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 
@@ -87,8 +87,8 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   key={href}
                   href={href}
                   onClick={onClose}
-                  className={`py-2 rounded-md text-gray-200 hover:bg-blue-600 transition flex items-center gap-3 text-xs px-2 
-                  ${pathname === href ? 'text-white font-bold bg-blue-600' : 'text-white'}
+                  className={`py-2 rounded-md text-gray-200 hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
+                  ${pathname === href ? 'text-white font-bold bg-purple-500' : 'text-white'}
                   `}
                 >
                   <Icon size={16} className="text-white" />
@@ -98,24 +98,26 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </nav>
 
             <div className="border-t border-gray-700 mt-auto pt-4">
-              {isAuthenticated ? (
-                <Link
-                  href="/user"
-                  onClick={onClose}
-                  className="block px-4 py-2 text-blue-400 hover:text-white hover:bg-blue-600 rounded-lg transition"
-                >
-                  {user?.username}
-                </Link>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={onClose}
-                  className="block px-4 py-2 text-white hover:text-white hover:bg-blue-600 rounded-lg transition"
-                >
-                  Login
-                </Link>
-              )}
-            </div>
+  {isAuthenticated ? (
+    <Link
+      href="/user"
+      onClick={onClose}
+      className="flex items-center gap-3 px-4 py-2 text-white font-bold hover:text-white hover:bg-purple-600 rounded-lg transition"
+    >
+      <UserIcon size={18} className="text-white" />
+      {user?.username}
+    </Link>
+  ) : (
+    <Link
+      href="/login"
+      onClick={onClose}
+      className="flex items-center gap-3 px-4 py-2 text-white hover:text-white hover:bg-purple-600 rounded-lg transition"
+    >
+      <UserIcon size={18} className="text-white" />
+      Login
+    </Link>
+  )}
+</div>
           </motion.div>
         </>
       )}
