@@ -122,13 +122,12 @@ export default function BooksPage() {
               className={`flex flex-col overflow-hidden shadow-md transform cursor-pointer bg-gray-900 transition-all duration-300 ease-in-out rounded-xl ${isAnimating ? 'scale-95 opacity-80' : 'hover:scale-[1.03] hover:shadow-blue-400/30'
                 }`}
             >
-              {/* Imagem com aspect-ratio */}
-              <div className="w-full rounded-xl aspect-[2/3] relative bg-gray-800">
+              <div className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800">
                 {book.coverImage ? (
                   <img
                     src={book.coverImage}
                     alt={book.title}
-                    className="w-full rounded-xl h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover"
                     loading="lazy"
                   />
                 ) : (
