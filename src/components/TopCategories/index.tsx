@@ -69,11 +69,11 @@ export default function TopCategories() {
             <div
               key={category.id}
               onClick={() => router.push(`/categories/${category.id}`)}
-              className="flex flex-col items-center justify-center border-2 border-solid border-blue-500 rounded-md shadow-lg h-50 cursor-pointer
+              className="flex flex-col items-center justify-center border-2 border-solid border-blue-500 rounded-md shadow-lg h-50 cursor-pointer text-center
               bg-black hover:from-blue-900 hover:to-blue-700
               transition-transform hover:scale-105 hover:shadow-2xl group relative overflow-hidden"
             >
-              <span className="text-xl font-semibold text-blue-400 group-hover:text-blue-200">
+              <span className="text-base md:text-xl font-semibold text-blue-400 group-hover:text-blue-200">
                 {category.name}
               </span>
               <span className="text-sm text-gray-400 mt-1">
