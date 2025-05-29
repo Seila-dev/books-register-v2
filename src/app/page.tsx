@@ -9,14 +9,14 @@ export default function Home() {
     <div className="w-full">
       <DashboardPanel
         userName="Erick"
-        booksRead={12}
-        monthlyGoal={20}
-        currentStreak={7}
-        readingNow={3}
+        booksRead={4}
+        monthlyGoal={10}
+        currentStreak={3}
+        readingNow={1}
         recentActivities={[
-          { title: "O Alquimista", status: "Finalizado", date: "2 dias atrás" },
-          { title: "1984", status: "Adicionado aos favoritos", date: "3 dias atrás" },
-          { title: "Sapiens", status: "Iniciado", date: "1 semana atrás" }
+          { title: "Blue Lock", status: "Finalizado", date: "2 dias atrás" },
+          { title: "Bungou Stray Dogs", status: "Adicionado aos favoritos", date: "3 dias atrás" },
+          { title: "Re zero", status: "Iniciado", date: "1 semana atrás" }
         ]}
       />
       <BooksPage />
