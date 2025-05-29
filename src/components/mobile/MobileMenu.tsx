@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { X, List, Book, Film, Tv, LayoutGrid } from 'lucide-react';
 import { AuthContext } from '@/contexts/AuthContext';
+import { usePathname } from 'next/navigation';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -13,6 +14,7 @@ type MobileMenuProps = {
 
 export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   const { isAuthenticated, user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -40,11 +42,11 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   }, [isOpen, onClose]);
 
   const menuItems = [
-    { href: '/', label: 'Todos', icon: List },
-    { href: '/livros', label: 'Livros', icon: Book },
+    { href: '/', label: 'Biblioteca', icon: List },
+    { href: '/books', label: 'Livros', icon: Book },
     { href: '/filmes', label: 'Filmes', icon: Film },
     { href: '/series', label: 'Séries', icon: Tv },
-    { href: '/categorias', label: 'Categorias', icon: LayoutGrid },
+    { href: '/categories', label: 'Categorias', icon: LayoutGrid },
   ];
 
   return (
@@ -85,7 +87,9 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   key={href}
                   href={href}
                   onClick={onClose}
-                  className=" py-2 rounded-lg text-gray-200 hover:bg-blue-600 transition flex items-center gap-3 text-xs"
+                  className={`py-2 rounded-md text-gray-200 hover:bg-blue-600 transition flex items-center gap-3 text-xs px-2 
+                  ${pathname === href ? 'text-white font-bold bg-blue-600' : 'text-white'}
+                  `}
                 >
                   <Icon size={16} className="text-white" />
                   <span>{label}</span>
