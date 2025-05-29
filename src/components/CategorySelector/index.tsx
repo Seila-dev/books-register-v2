@@ -44,7 +44,8 @@ export default function CategorySelector({
       <button
         type="button"
         onClick={openModal}
-        className="px-4 py-1.5 text-white bg-gray-700 hover:bg-gray-800 cursor-pointer rounded-md transition flex items-center gap-1 text-xs w-fit"
+        // className="px-4 py-1.5 text-white bg-gray-700 hover:bg-gray-800 cursor-pointer rounded-md transition flex items-center gap-1 text-xs w-fit"
+        className="bg-gray-700 hover:bg-gray-800 flex items-center text-white text-sm gap-1 transition px-4 py-2 rounded-lg font-medium cursor-pointer"
       >
         <Plus size={14} />
         Adicionar

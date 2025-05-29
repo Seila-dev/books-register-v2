@@ -93,6 +93,7 @@ async function updateBook(data: UpdateBookData): Promise<Book> {
 
 // Deletar livro
 async function deleteBook(id: string): Promise<void> {
+  
   const token = getToken();
   await api.delete(`/books/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
