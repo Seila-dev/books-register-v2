@@ -78,12 +78,12 @@ cd backend
 npx prisma migrate dev
 npm run dev
 
-# Frontend
+## Frontend
 cd ../frontend
 npm run dev
 
-## 📌 Futuras Melhorias
-### 🔍 Filtro e busca por obras
+### 📌 Futuras Melhorias
+🔍 Filtro e busca por obras
 
 📈 Estatísticas detalhadas de leitura/visualização
 
