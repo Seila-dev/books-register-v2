@@ -16,6 +16,8 @@ import {
 import { AuthContext } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import { Category } from '@/types/categoryData';
+import { parseCookies } from 'nookies';
+import api from '@/services/api';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -25,8 +27,17 @@ type MobileMenuProps = {
 export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { isAuthenticated, user } = useContext(AuthContext);
+  const { isAuthenticated, user, reloadUser } = useContext(AuthContext);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const { 'books-register.token': token } = parseCookies();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchCategories();
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -52,28 +63,19 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     };
   }, [isOpen, onClose]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const token = document.cookie
-        .split('; ')
-        .find(c => c.startsWith('books-register.token='))?.split('=')[1] ?? '';
-
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          setCategories(data);
-        }
-      } catch (err) {
-        console.error('Erro ao buscar categorias:', err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const fetchCategories = async () => {
+    setLoading(true)
+    try {
+      const res = await api.get('/categories', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCategories(res.data);
+    } catch (err) {
+      console.error('Erro ao buscar categorias:', err);
+    } finally {
+      setLoading(false)
+    }
+  };
 
   return (
     <AnimatePresence>
