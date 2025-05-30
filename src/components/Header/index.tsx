@@ -133,7 +133,7 @@ export const Header = () => {
                     <li>
                       <Link
                         href="/user"
-                        className="block px-2 py-2 rounded-md my-1 hover:bg-gray-700 transition"
+                        className="block px-2 py-2 rounded-md my-2 hover:bg-gray-700 transition"
                         onClick={() => setShowMenu(false)}
                       >
                         Configurações
@@ -145,7 +145,7 @@ export const Header = () => {
                           setShowMenu(false);
                           signOut();
                         }}
-                        className="w-full text-left block rounded-md my-1 px-2 py-2 text-red-500 cursor-pointer hover:bg-gray-700 transition"
+                        className="w-full text-left block rounded-md my-2 px-2 py-2 text-red-500 cursor-pointer hover:bg-gray-700 transition"
                       >
                         Sair
                       </button>

@@ -30,11 +30,12 @@ export default function SignIn() {
         mode: 'onBlur'
     })
 
-    const { signIn } = useContext(AuthContext)
+    const { signIn, reloadUser } = useContext(AuthContext)
 
     const onSubmit: SubmitHandler<signInUserFormData> = async (data) => {
         try {
             await signIn(data);
+            await reloadUser()
         } catch (error: any) {
             setError("email", {
                 type: "manual",
