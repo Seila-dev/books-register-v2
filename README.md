@@ -57,6 +57,7 @@ Ideal para quem gosta de manter um histórico cultural organizado.
 ```bash
 git clone https://github.com/seu-usuario/books-register-v2.git
 cd books-register-v2
+```
 
 2. **Instale as dependências**
 
@@ -64,6 +65,7 @@ cd books-register-v2
 npm install
 # ou
 yarn install
+```
 
 3. **Configure variáveis de ambiente**
 
