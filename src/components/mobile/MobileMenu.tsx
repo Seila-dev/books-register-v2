@@ -1,11 +1,21 @@
 'use client';
 
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef, useContext, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { X, List, Book, Film, Tv, LayoutGrid, UserIcon } from 'lucide-react';
+import {
+  X,
+  List,
+  Book,
+  Film,
+  Tv,
+  LayoutGrid,
+  UserIcon,
+  Tag
+} from 'lucide-react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
+import { Category } from '@/types/categoryData';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -16,6 +26,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { isAuthenticated, user } = useContext(AuthContext);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -25,8 +36,8 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     };
 
     if (isOpen) {
-      document.body.style.overflow = 'hidden';        // Impede scroll
-      document.body.style.touchAction = 'none';       // Impede toque em mobile
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.body.style.overflow = '';
@@ -41,13 +52,28 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
     };
   }, [isOpen, onClose]);
 
-  const menuItems = [
-    { href: '/', label: 'Biblioteca', icon: List },
-    { href: '/books', label: 'Livros', icon: Book },
-    { href: '/filmes', label: 'Filmes', icon: Film },
-    { href: '/series', label: 'Séries', icon: Tv },
-    { href: '/categories', label: 'Categorias', icon: LayoutGrid },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const token = document.cookie
+        .split('; ')
+        .find(c => c.startsWith('books-register.token='))?.split('=')[1] ?? '';
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <AnimatePresence>
@@ -82,42 +108,52 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             </div>
 
             <nav className="flex flex-col gap-2">
-              {menuItems.map(({ href, label, icon: Icon }) => (
+              <Link
+                href="/"
+                onClick={onClose}
+                className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
+                ${pathname === '/' ? 'font-bold bg-purple-500' : ''}`}
+              >
+                <List size={16} />
+                Biblioteca
+              </Link>
+
+              {/* Categorias dinâmicas */}
+              {categories.map(category => (
                 <Link
-                  key={href}
-                  href={href}
+                  key={category.id}
+                  href={`/categories/${category.id}`}
                   onClick={onClose}
-                  className={`py-2 rounded-md text-gray-200 hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
-                  ${pathname === href ? 'text-white font-bold bg-purple-500' : 'text-white'}
-                  `}
+                  className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
+                  ${pathname === `/categories/${category.id}` ? 'font-bold bg-purple-500' : ''}`}
                 >
-                  <Icon size={16} className="text-white" />
-                  <span>{label}</span>
+                  <Tag size={16} />
+                  {category.name}
                 </Link>
               ))}
             </nav>
 
             <div className="border-t border-gray-700 mt-auto pt-4">
-  {isAuthenticated ? (
-    <Link
-      href="/user"
-      onClick={onClose}
-      className="flex items-center gap-3 px-4 py-2 text-white font-bold hover:text-white hover:bg-purple-600 rounded-lg transition"
-    >
-      <UserIcon size={18} className="text-white" />
-      {user?.username}
-    </Link>
-  ) : (
-    <Link
-      href="/login"
-      onClick={onClose}
-      className="flex items-center gap-3 px-4 py-2 text-white hover:text-white hover:bg-purple-600 rounded-lg transition"
-    >
-      <UserIcon size={18} className="text-white" />
-      Login
-    </Link>
-  )}
-</div>
+              {isAuthenticated ? (
+                <Link
+                  href="/user"
+                  onClick={onClose}
+                  className="flex items-center gap-3 px-4 py-2 text-white font-bold hover:text-white hover:bg-purple-600 rounded-lg transition"
+                >
+                  <UserIcon size={18} className="text-white" />
+                  {user?.username}
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  onClick={onClose}
+                  className="flex items-center gap-3 px-4 py-2 text-white hover:text-white hover:bg-purple-600 rounded-lg transition"
+                >
+                  <UserIcon size={18} className="text-white" />
+                  Login
+                </Link>
+              )}
+            </div>
           </motion.div>
         </>
       )}

@@ -52,7 +52,7 @@ export default function TopCategories() {
     <div className="text-white w-full mt-10">
       <h2 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
         Categorias mais usadas
-      </h2>
+      </h2> 
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {isLoading ? (
