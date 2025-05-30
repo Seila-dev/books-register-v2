@@ -10,8 +10,14 @@ import { useBooks } from '@/contexts/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { QuickAddCard } from '../QuickAddComponent';
+import {
+  BookOpen,
+  TrendingUp,
+  Crown,
+  Trophy,
+} from 'lucide-react'
 
 export default function BooksPage() {
   const [mounted, setMounted] = useState(false);
@@ -105,9 +111,29 @@ export default function BooksPage() {
 
   return (
     <div className="text-white w-full">
-      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
-        Livros recentes
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+            <BookOpen size={24} className="text-white" />
+          </div>
+          <div>
+            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+              Livros Recentes
+            </h2>
+            <p className="text-gray-400 text-sm">
+              Últimos livros adicionados
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={() => router.push('/categories')}
+          className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm"
+        >
+          Ver todas
+          <ArrowRight size={16} />
+        </button>
+      </div>
 
       {!isLoading && filteredBooks.length === 0 && (
         <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>

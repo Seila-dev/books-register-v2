@@ -4,11 +4,22 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { parseCookies } from 'nookies'
 import api from '@/services/api'
+import {
+  BookOpen,
+  TrendingUp,
+  Star,
+  ArrowRight,
+  Crown,
+  Trophy,
+  Award
+} from 'lucide-react'
 
 type Category = {
   id: string
   name: string
-  books: any[] // ou tipo Book[], se você tiver tipado
+  books: any[]
+  color?: string
+  rank?: number
 }
 
 export default function TopCategories() {
@@ -30,6 +41,11 @@ export default function TopCategories() {
         const sorted = res.data
           .sort((a: Category, b: Category) => b.books.length - a.books.length)
           .slice(0, 3)
+          .map((category: Category, index: number) => ({
+            ...category,
+            rank: index + 1,
+            color: ['from-amber-500 to-orange-600', 'from-gray-400 to-gray-600', 'from-amber-600 to-yellow-700'][index] || 'from-purple-500 to-blue-600'
+          }))
 
         setCategories(sorted)
       } catch (error) {
@@ -48,42 +64,165 @@ export default function TopCategories() {
 
   if (!mounted) return null
 
+  const getRankIcon = (rank: number) => {
+    switch (rank) {
+      case 1:
+        return <Crown className="text-yellow-400" size={20} fill="currentColor" />
+      case 2:
+        return <Trophy className="text-gray-300" size={20} />
+      case 3:
+        return <Award className="text-amber-600" size={20} />
+      default:
+        return <Star className="text-purple-400" size={20} />
+    }
+  }
+
+  const getRankColor = (rank: number) => {
+    switch (rank) {
+      case 1:
+        return 'border-yellow-400/50 hover:border-yellow-400'
+      case 2:
+        return 'border-gray-400/50 hover:border-gray-400'
+      case 3:
+        return 'border-amber-600/50 hover:border-amber-600'
+      default:
+        return 'border-purple-500/50 hover:border-purple-500'
+    }
+  }
+
   return (
     <div className="text-white w-full mt-10">
-      <h2 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
-        Categorias mais usadas
-      </h2> 
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+            <TrendingUp size={24} className="text-white" />
+          </div>
+          <div>
+            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+              Categorias em destaque
+            </h2>
+            <p className="text-gray-400 text-sm">
+              Suas categorias mais utilizadas
+            </p>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <button
+          onClick={() => router.push('/categories')}
+          className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm"
+        >
+          Ver todas
+          <ArrowRight size={16} />
+        </button>
+      </div>
+
+      {/* Categories Grid */}
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}
-              className="h-28 bg-gray-800 animate-pulse rounded-xl"
-            />
+              className="relative overflow-hidden rounded-xl border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm"
+            >
+              <div className="p-6 animate-pulse">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
+                  <div className="w-12 h-6 bg-gray-700 rounded-full"></div>
+                </div>
+                <div className="w-3/4 h-6 bg-gray-700 rounded mb-2"></div>
+                <div className="w-1/2 h-4 bg-gray-700 rounded"></div>
+              </div>
+            </div>
           ))
         ) : categories.length === 0 ? (
-          <p className="text-gray-500 col-span-3">Nenhuma categoria encontrada.</p>
+          <div className="col-span-full text-center py-12">
+            <BookOpen className="mx-auto mb-4 text-gray-400" size={48} />
+            <p className="text-gray-400 text-lg">Nenhuma categoria encontrada.</p>
+            <p className="text-gray-500 text-sm mt-1">Adicione alguns livros para ver suas categorias populares.</p>
+          </div>
         ) : (
-          categories.map((category) => (
+          categories.map((category, index) => (
             <div
               key={category.id}
               onClick={() => router.push(`/categories/${category.id}`)}
-              className="flex flex-col items-center justify-center border-2 border-solid border-blue-500 rounded-md shadow-lg h-50 cursor-pointer text-center
-              bg-black hover:from-blue-900 hover:to-blue-700
-              transition-transform hover:scale-105 hover:shadow-2xl group relative overflow-hidden"
+              className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 ${getRankColor(category.rank!)} bg-gray-800/30 backdrop-blur-sm hover:bg-gray-700/40`}
             >
-              <span className="text-base md:text-xl font-semibold text-blue-400 group-hover:text-blue-200">
-                {category.name}
-              </span>
-              <span className="text-sm text-gray-400 mt-1">
-                Usada {category.books.length}x
-              </span>
+              {/* Background Gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
 
-              <div className="absolute -inset-1 bg-blue-500 opacity-20 blur-lg rounded-xl z-[-1] group-hover:opacity-30 transition-opacity duration-400" />
+              {/* Rank Badge */}
+              <div className="absolute top-3 right-3 z-10 hidden md:flex">
+                <div
+                  className={`flex items-center justify-center w-8 h-8 rounded-full ${category.rank === 1
+                      ? 'bg-yellow-400/20'
+                      : category.rank === 2
+                        ? 'bg-gray-400/20'
+                        : 'bg-amber-600/20'
+                    } backdrop-blur-sm`}
+                >
+                  {getRankIcon(category.rank!)}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10 p-2 sm:p-5 sm:block flex items-center justify-center text-center sm:text-left w-full h-full">
+                {/* Top Section */}
+                {/* <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-lg bg-gradient-to-br ${category.color} shadow-lg`}>
+                    <BookOpen className="text-white" size={10} />
+                  </div>
+                </div> */}
+
+                <h3 className="text-white font-bold text-[0.5rem] sm:text-[0.8rem] md:text-lg mb-0 md:mb-14 mr-0  md:mr-10 group-hover:text-yellow-300 transition-colors text-center sm:text-left">
+                  {category.name}
+                </h3>
+
+                {/* Stats */}
+                <div className="hidden sm:flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-1 text-gray-400">
+                    <span>#{category.rank} mais usada - </span>
+                    <div className="text-xs text-orange-400">{category.books.length}</div>
+                    <div className="text-xs text-gray-400">
+                      {category.books.length === 1 ? 'Livro' : 'Livros'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="flex mt-4 relative">
+                  <div className="w-full bg-gray-700/50 rounded-full h-1.5">
+                    <div
+                      className={`bg-gradient-to-r ${category.color} h-1.5 rounded-full transition-all duration-500 group-hover:shadow-lg`}
+                      style={{
+                        width: `${Math.min(
+                          (category.books.length /
+                            Math.max(...categories.map((c) => c.books.length))) *
+                          100,
+                          100,
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Glow Effect */}
+              <div className={`absolute -inset-1 bg-gradient-to-r ${category.color} opacity-0 group-hover:opacity-20 blur-lg rounded-xl transition-opacity duration-400 -z-10`}></div>
             </div>
           ))
         )}
+      </div>
+
+      {/* Mobile "Ver todas" Button */}
+      <div className="md:hidden mt-6 text-center">
+        <button
+          onClick={() => router.push('/categories')}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200"
+        >
+          Ver todas as categorias
+          <ArrowRight size={16} />
+        </button>
       </div>
     </div>
   )

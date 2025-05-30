@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { headers } from 'next/headers';
 
-export function CreateCategoryModal() {
+export function CreateCategoryModal({ onCategoryCreated }: { onCategoryCreated?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState('');
   const [name, setName] = useState('');
@@ -40,6 +40,7 @@ export function CreateCategoryModal() {
     setName('');
     setError('');
     router.refresh();
+    onCategoryCreated?.();
   }
 
   return (

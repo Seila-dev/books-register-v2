@@ -59,19 +59,19 @@ export default function CreateBookPage() {
     }
   }, [coverImageFileList]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { 'books-register.token': token } = parseCookies();
-        const res = await api.get<Category[]>('/categories', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCategories(res.data);
-      } catch (error) {
-        toast.error('Erro ao carregar categorias');
-      }
-    };
+  const fetchCategories = async () => {
+    try {
+      const { 'books-register.token': token } = parseCookies();
+      const res = await api.get<Category[]>('/categories', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCategories(res.data);
+    } catch (error) {
+      toast.error('Erro ao carregar categorias');
+    }
+  };
 
+  useEffect(() => {
     fetchCategories();
   }, []);
 
@@ -212,6 +212,7 @@ export default function CreateBookPage() {
                   categories={categories}
                   selectedCategoryIds={field.value || []}
                   onChange={field.onChange}
+                  onCategoryCreated={fetchCategories}
                 />
               )}
             />

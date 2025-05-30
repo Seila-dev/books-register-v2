@@ -10,12 +10,14 @@ interface CategorySelectorProps {
   categories: Category[];
   selectedCategoryIds?: string[];
   onChange?: (ids: string[]) => void;
+  onCategoryCreated?: () => void;
 }
 
 export default function CategorySelector({
   categories,
   selectedCategoryIds = [],
   onChange,
+  onCategoryCreated,
 }: CategorySelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempSelected, setTempSelected] = useState<string[]>(selectedCategoryIds);
@@ -71,7 +73,7 @@ export default function CategorySelector({
             <div className="overflow-y-auto px-4 py-3 space-y-2 flex-1">
                             {/* Modal de criação dentro da área scrollável */}
               <div className="pb-2 w-full">
-                <CreateCategoryModal />
+                <CreateCategoryModal onCategoryCreated={onCategoryCreated} />
               </div>
               {categories.map((cat) => {
                 const isSelected = tempSelected.includes(cat.id);

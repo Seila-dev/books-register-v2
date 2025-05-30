@@ -43,6 +43,20 @@ export function CategoriesEditor({ book }: { book: Book }) {
       categories={allCategories}
       selectedCategoryIds={selected}
       onChange={onChange}
+      onCategoryCreated={async () => {
+        const token = document.cookie
+          .split('; ')
+          .find(c => c.startsWith('books-register.token='))?.split('=')[1] ?? '';
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setAllCategories(data); // ✅ atualiza categorias
+        }
+      }}
     />
   );
 }
