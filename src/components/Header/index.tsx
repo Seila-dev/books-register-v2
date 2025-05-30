@@ -79,14 +79,14 @@ export const Header = () => {
           </Link>
 
           {/* Search input + resultados */}
-          <div className="relative px-2.5 mx-3 md:mx-4 rounded-md bg-gray-800 border border-gray-600 flex items-center text-white w-full max-w-[25rem]">
+          <div className="relative px-2.5 mx-3 md:mx-4 rounded-2xl md:rounded-md bg-gray-800 flex items-center text-white w-full max-w-[25rem]">
             <span className="material-symbols-outlined mr-2 text-gray-400 !text-[14px] !md:text-base">search</span>
             <input
               type="text"
               placeholder="Buscar livro por título..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-transparent p-1 md:p-2 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none"
+              className="w-full bg-transparent p-2 md:p-2 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none"
             />
 
             {/* Dropdown resultados */}
