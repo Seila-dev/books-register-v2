@@ -21,6 +21,7 @@ type authContextType = {
   signIn: (data: FormData) => Promise<void>;
   registerAccount: (data: FormDataRegister) => Promise<void>;
   signOut: () => void;
+  reloadUser: () => Promise<void>;
 };
 
 export const AuthContext = createContext({} as authContextType);
@@ -32,37 +33,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const isAuthenticated = !!user;
 
-  useEffect(() => {
-    const { 'books-register.token': token } = parseCookies();
+  // useEffect(() => {
+  //   const { 'books-register.token': token } = parseCookies();
 
-    if (!token) {
-        setLoading(false);
-        return
-    }
+  //   if (!token) {
+  //       setLoading(false);
+  //       return
+  //   }
 
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('https://books-register-api-production.up.railway.app/users', {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await fetch('https://books-register-api-production.up.railway.app/users', {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
 
-        if (!response.ok) throw new Error();
+  //       if (!response.ok) throw new Error();
 
-        const userData = await response.json();
-        setUser(userData);
-      } catch {
-        destroyCookie(null, 'books-register.token');
-        setUser(null);
-      } finally {
-         setLoading(false);
-      }
-    };
+  //       const userData = await response.json();
+  //       setUser(userData);
+  //     } catch {
+  //       destroyCookie(null, 'books-register.token');
+  //       setUser(null);
+  //     } finally {
+  //        setLoading(false);
+  //     }
+  //   };
 
-    fetchUser();
-  }, [typeof window !== 'undefined' && document.cookie]); 
+  //   fetchUser();
+  // }, [typeof window !== 'undefined' && document.cookie]); 
 
   const signIn = async ({ email, password }: FormData) => {
     const url = 'https://books-register-api-production.up.railway.app/users/login';
@@ -123,7 +124,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(response.user);
 
-      router.push('/login'); 
+      router.push('/login');
     } catch (error: any) {
       console.error('Error on sign up', error);
     }
@@ -135,8 +136,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     router.push("/login");
   }, []);
 
+  const loadUserFromCookies = async () => {
+    const { 'books-register.token': token } = parseCookies();
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('https://books-register-api-production.up.railway.app/users/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
+      } else {
+        destroyCookie(null, 'books-register.token');
+      }
+    } catch (err) {
+      console.error('Erro ao carregar usuário', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUserFromCookies()
+  }, [])
+
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated, signIn, registerAccount, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, signIn, registerAccount, signOut, reloadUser: loadUserFromCookies, }}>
       {children}
     </AuthContext.Provider>
   );
