@@ -73,7 +73,7 @@ Crie um .env.local no frontend e .env no backend com base nos arquivos .env.exam
 
 4. **Inicie os serviços**
 
-# Backend
+## Backend
 cd backend
 npx prisma migrate dev
 npm run dev
@@ -82,7 +82,7 @@ npm run dev
 cd ../frontend
 npm run dev
 
-### 📌 Futuras Melhorias
+## 📌 Futuras Melhorias
 🔍 Filtro e busca por obras
 
 📈 Estatísticas detalhadas de leitura/visualização
