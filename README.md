@@ -82,6 +82,8 @@ npm run dev
 cd ../frontend
 npm run dev
 
+---
+
 ## 📌 Futuras Melhorias
 🔍 Filtro e busca por obras
 
@@ -93,11 +95,15 @@ npm run dev
 
 🔔 Notificações e lembretes
 
+---
+
 ## 🧑‍💻 Autor
 Desenvolvido por Erick Rodrigues
 
 https://www.linkedin.com/in/erickrodrigues-dev
 https://github.com/Seila-dev/
+
+---
 
 ## 📄 Licença
 Este projeto está sob a licença MIT.
