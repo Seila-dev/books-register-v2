@@ -216,7 +216,7 @@ export default function EditBookPage({ params }: Props) {
   }
 
   return (
-    <div className="w-full mt-8">
+    <div className="w-full mt-0 md:mt-6">
       <ComponentArrowBack />
       <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Editar Livro</h1>
 

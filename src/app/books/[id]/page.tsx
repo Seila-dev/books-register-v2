@@ -48,7 +48,7 @@ export default async function BookDetailPage({ params }: any) {
 
     return (
         <div className='w-full'>
-            <div className="flex w-full justify-between items-center gap-2 pt-6 pb-2">
+            <div className="flex w-full justify-between items-center gap-2 mt-0 md:mt-6">
                 <ComponentArrowBack />
                 <Link
                     href={`/books/${book.id}/edit`}

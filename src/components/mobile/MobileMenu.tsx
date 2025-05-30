@@ -114,8 +114,17 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                 className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
                 ${pathname === '/' ? 'font-bold bg-purple-500' : ''}`}
               >
-                <List size={16} />
+                <Book size={16} />
                 Biblioteca
+              </Link>
+              <Link
+                href="/categories"
+                onClick={onClose}
+                className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
+                ${pathname === '/categories' ? 'font-bold bg-purple-500' : ''}`}
+              >
+                <LayoutGrid size={16} />
+                Categorias
               </Link>
 
               {/* Categorias dinâmicas */}
@@ -124,7 +133,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                   key={category.id}
                   href={`/categories/${category.id}`}
                   onClick={onClose}
-                  className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
+                  className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-4  
                   ${pathname === `/categories/${category.id}` ? 'font-bold bg-purple-500' : ''}`}
                 >
                   <Tag size={16} />
