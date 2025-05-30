@@ -7,7 +7,7 @@ import { BookOpen } from 'lucide-react'
 import { Book } from '@/types/bookData'
 import ComponentArrowBack from '@/components/ArrowBack'
 
-export default async function CategoryPage({ params }: { params: { id: string } }) {
+export default async function CategoryPage({ params }: any) {
   const { id } = params
 
   const headersList = headers()
