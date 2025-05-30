@@ -114,7 +114,10 @@ export const Header = () => {
                     </li>
                     <li>
                       <button
-                        onClick={signOut}
+                        onClick={() => {
+                          setShowMenu(false);
+                          signOut();
+                        }}
                         className="w-full text-left block rounded-md my-1 px-2 py-2 text-red-500 cursor-pointer hover:bg-gray-700 transition"
                       >
                         Sair
