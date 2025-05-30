@@ -45,5 +45,5 @@ export function GoogleLoginButton() {
     }
   };
 
-  return <GoogleLogin onSuccess={handleSuccess} onError={() => console.log('Login Failed')} />;
+  return <GoogleLogin useOneTap={true} onSuccess={handleSuccess} onError={() => console.log('Login Failed')} />;
 }
