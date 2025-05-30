@@ -1,3 +1,4 @@
+import { ArrowRight, BookOpenIcon, Settings2 } from "lucide-react";
 import Link from "next/link";
 
 interface Activity {
@@ -7,7 +8,7 @@ interface Activity {
 }
 
 interface DashboardPanelProps {
-  userName: string;
+  userName: string | undefined;
   booksRead: number;
   monthlyGoal: number;
   currentStreak: number;
@@ -27,10 +28,7 @@ export default function DashboardPanel({
   const remaining = monthlyGoal - booksRead;
 
   return (
-    <div className="space-y-6 w-full mt-2 mb-10">
-      <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-6">
-        Painel do usuário
-      </h1>
+    <div className="space-y-6 w-full mt-1 mb-3">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white flex items-center justify-between shadow-md w-full">
         <div>
@@ -43,16 +41,16 @@ export default function DashboardPanel({
       </div>
 
       {/* Estatísticas principais */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-center md:text-start">
+      {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-center md:text-start">
         <StatCard title={booksRead} subtitle="Livros lidos este mês" />
         <StatCard title={`${progressPercent.toFixed(0)}%`} subtitle="Meta mensal" />
         <StatCard title={currentStreak} subtitle="Dias consecutivos" />
         <StatCard title={readingNow} subtitle="Lendo agora"  />
-      </div>
+      </div> */}
 
       {/* Progresso + Atividades */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
+        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
           <h3 className="text-lg font-semibold mb-2">Meta Mensal</h3>
           <p className="text-sm mb-1 text-gray-300">{booksRead} de {monthlyGoal} livros</p>
           <div className="w-full bg-gray-700 rounded-full h-3 mb-2">
@@ -62,9 +60,9 @@ export default function DashboardPanel({
             />
           </div>
           <p className="text-sm text-gray-400">Faltam {remaining > 0 ? remaining : 0} livros para atingir sua meta!</p>
-        </div>
+        </div> */}
 
-        <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
+        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
           <ul className="space-y-3">
             {recentActivities.map((a, i) => (
@@ -80,7 +78,7 @@ export default function DashboardPanel({
           <div className="text-right mt-4">
             <button className="text-sm text-purple-400 hover:underline">Ver todas as atividades</button>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

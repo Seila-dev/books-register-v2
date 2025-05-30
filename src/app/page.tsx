@@ -1,15 +1,20 @@
+"use client"
+
 import BooksPage from "@/components/BooksPage";
 import { Header } from "@/components/Header";
 import DashboardPanel from "@/components/Painel";
 import DashboardIntro from "@/components/Painel";
 import TopCategories from "@/components/TopCategories";
+import { AuthContext } from "@/contexts/AuthContext";
 import Image from "next/image";
+import { useContext } from "react";
 
 export default function Home() {
+  const  { user } = useContext(AuthContext)
   return (
     <div className="w-full">
       <DashboardPanel
-        userName="Erick"
+        userName={user?.username}
         booksRead={4}
         monthlyGoal={10}
         currentStreak={3}
