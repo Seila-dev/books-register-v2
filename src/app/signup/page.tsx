@@ -111,7 +111,9 @@ export default function SignUp() {
                     <hr className="flex-grow border border-gray-300" />
                 </div>
 
-                <GoogleLoginButton />
+                <div className="w-full flex justify-center items-center">
+                    <GoogleLoginButton />
+                </div>
             </div>
         </main>
     )
