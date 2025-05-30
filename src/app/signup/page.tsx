@@ -9,6 +9,7 @@ import { useContext } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
 import api from "../../services/api"
 import Link from 'next/link'
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 const signUpUserFormSchema = z.object({
     username: z.string().nonempty("O nome é obrigatório"),
@@ -37,10 +38,10 @@ export default function SignUp() {
     const onSubmit: SubmitHandler<signUpUserFormData> = async (data) => {
         try {
             await registerAccount(data);  // só isso
-    router.push('/login');       
+            router.push('/login');
         } catch (error: any) {
-                console.error('Error on sign up', error);
-    throw error;  
+            console.error('Error on sign up', error);
+            throw error;
         }
     };
 
@@ -97,18 +98,20 @@ export default function SignUp() {
                     </button>
                 </form>
 
-                <div className="my-8 flex items-center gap-3">
-                    <hr className="flex-grow border border-gray-300" />
-                    <span className="text-gray-500">ou</span>
-                    <hr className="flex-grow border border-gray-300" />
-                </div>
-
-                <p className="text-center text-sm">
+                <p className="text-center text-sm mt-6">
                     Já tem uma conta?{" "}
                     <Link href="/login" className="font-semibold text-secondary hover:underline">
                         Fazer login
                     </Link>
                 </p>
+
+                <div className="my-4 flex items-center gap-3">
+                    <hr className="flex-grow border border-gray-300" />
+                    <span className="text-gray-500">ou</span>
+                    <hr className="flex-grow border border-gray-300" />
+                </div>
+
+                <GoogleLoginButton />
             </div>
         </main>
     )

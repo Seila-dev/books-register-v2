@@ -9,6 +9,7 @@ import { useContext } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
 import api from "../../services/api"
 import Link from 'next/link'
+import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 
 const signInUserFormSchema = z.object({
     email: z.string().email("Email Inválido").nonempty("Email é obrigatório"),
@@ -88,18 +89,20 @@ export default function SignIn() {
                     </button>
                 </form>
 
-                <div className="my-8 flex items-center gap-3">
-                    <hr className="flex-grow border border-gray-300" />
-                    <span className="text-gray-500">ou</span>
-                    <hr className="flex-grow border border-gray-300" />
-                </div>
-
-                <p className="text-center text-sm">
+                <p className="text-center text-sm mt-6">
                     Não tem uma conta?{" "}
                     <Link href="/signup" className="font-semibold text-secondary hover:underline">
                         Fazer cadastro
                     </Link>
                 </p>
+
+                <div className="my-4 flex items-center gap-3">
+                    <hr className="flex-grow border border-gray-300" />
+                    <span className="text-gray-500">ou</span>
+                    <hr className="flex-grow border border-gray-300" />
+                </div>
+
+                <GoogleLoginButton />
             </div>
         </main>
     )

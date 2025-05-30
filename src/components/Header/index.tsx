@@ -10,11 +10,12 @@ import { MobileMenu } from '../mobile/MobileMenu';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
-  const { isAuthenticated, user, loading } = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
+  const { isAuthenticated, user, loading, signOut } = useContext(AuthContext);
   const { searchTerm, setSearchTerm } = useSearch();
 
   const handleOpenMenu = () => {
-    setOpenMenu(!openMenu);
+    setOpenMenu(!openMenu); 
   };
 
   return (
@@ -34,10 +35,10 @@ export const Header = () => {
               <></>
             ) : (
               <Link
-              href="/login"
-              className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
+                href="/login"
+                className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
               >
-              Login
+                Login
               </Link>
             )}
           </div>
@@ -62,7 +63,7 @@ export const Header = () => {
         </div>
 
         {/* MENU DESKTOP */}
-        <nav className="hidden md:flex gap-6 items-center">
+        <nav className="flex gap-6 items-center">
           {[
             { href: '/', icon: 'menu_book', label: 'Todos' },
             { href: '/livros', icon: 'menu_book', label: 'Livros' },
@@ -74,7 +75,7 @@ export const Header = () => {
               key={href}
               href={href}
               onClick={() => setOpenMenu(false)}
-              className="flex items-center text-white hover:text-blue-400 text-xs transition"
+              className="items-center md:flex hidden text-white hover:text-blue-400 text-xs transition"
             >
               <span className="material-symbols-outlined mr-1 !text-xs">{icon}</span>
               {label}
@@ -84,9 +85,45 @@ export const Header = () => {
           {loading ? (
             <ButtonSkeleton />
           ) : isAuthenticated ? (
-            <Link href="/user" className="text-white text-xs hover:text-blue-400">
-              {user?.username}
-            </Link>
+            <div className="relative">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-bold focus:outline-none cursor-pointer"
+              >
+                {user?.username?.charAt(0).toUpperCase()}
+              </button>
+
+              {showMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 p-2">
+                  <ul className="text-sm text-white">
+                    <li className='px-2 pt-4 text-xs md:text-sm'>
+                      {user?.username}
+                    </li>
+                    <li className='px-2 pb-4 text-[0.7rem] md:text-xs opacity-50'>
+                      {user?.email}
+                    </li>
+                    <hr className='text-gray-500' />
+                    <li>
+                      <Link
+                        href="/user"
+                        className="block px-2 py-2 rounded-md my-1 hover:bg-gray-700 transition"
+                        onClick={() => setShowMenu(false)}
+                      >
+                        Configurações
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={signOut}
+                        className="w-full text-left block rounded-md my-1 px-2 py-2 text-red-500 cursor-pointer hover:bg-gray-700 transition"
+                      >
+                        Sair
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               href="/login"
