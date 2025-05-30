@@ -28,7 +28,7 @@ export const Header = () => {
           </button>
 
           {/* MOBILE: nome do usuário ou login */}
-          <div className="flex md:hidden">
+          {/* <div className="flex md:hidden">
             {loading ? (
               <ButtonSkeleton />
             ) : isAuthenticated ? (
@@ -41,7 +41,7 @@ export const Header = () => {
                 Login
               </Link>
             )}
-          </div>
+          </div> */}
 
           {/* DESKTOP: título */}
           <Link href="/" className="hidden md:flex items-center w-fit">
@@ -130,7 +130,7 @@ export const Header = () => {
           ) : (
             <Link
               href="/login"
-              className="text-white border-2 border-blue-400 px-3.5 py-1.5 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[1rem]"
+              className="text-white border-2 border-blue-400 px-3.5 py-1 rounded-xl font-medium hover:bg-blue-400 hover:text-gray-900 transition w-fit text-[0.8rem] m-2"
             >
               Login
             </Link>
