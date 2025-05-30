@@ -56,7 +56,7 @@ export default function EditBookPage({ params }: Props) {
   // Fixed image preview with proper cleanup
   useEffect(() => {
     let objectUrl: string | null = null;
-    
+
     if (coverImageFile instanceof File) {
       objectUrl = URL.createObjectURL(coverImageFile);
       setPreviewUrl(objectUrl);
@@ -70,12 +70,24 @@ export default function EditBookPage({ params }: Props) {
     };
   }, [coverImageFile]);
 
+  const fetchCategories = async () => {
+    try {
+      const { 'books-register.token': token } = parseCookies();
+      const response = await api.get<Category[]>('/categories', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCategories(response.data);
+    } catch (error) {
+      toast.error('Erro ao carregar categorias.');
+    }
+  };
+
   // Fetch book data and categories with better error handling
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { 'books-register.token': token } = parseCookies();
-        
+
         if (!token) {
           toast.error('Token de autenticação não encontrado.');
           router.push('/login');
@@ -83,11 +95,11 @@ export default function EditBookPage({ params }: Props) {
         }
 
         const [bookRes, catRes] = await Promise.all([
-          api.get<Book>(`/books/${id}`, { 
-            headers: { Authorization: `Bearer ${token}` } 
+          api.get<Book>(`/books/${id}`, {
+            headers: { Authorization: `Bearer ${token}` }
           }),
-          api.get<Category[]>('/categories', { 
-            headers: { Authorization: `Bearer ${token}` } 
+          api.get<Category[]>('/categories', {
+            headers: { Authorization: `Bearer ${token}` }
           }),
         ]);
 
@@ -101,14 +113,14 @@ export default function EditBookPage({ params }: Props) {
         setValue('startDate', book.startDate || '');
         setValue('finishDate', book.finishDate || '');
         setValue('categoryIds', book.categories?.map(c => c.categoryId) || []);
-        
+
         // Set initial preview URL if book has cover image
         if (book.coverImage) {
           setPreviewUrl(book.coverImage);
         }
       } catch (error: any) {
         console.error('Error fetching book data:', error);
-        
+
         // More specific error handling
         if (error.response?.status === 404) {
           toast.error('Livro não encontrado.');
@@ -121,7 +133,7 @@ export default function EditBookPage({ params }: Props) {
         } else {
           toast.error('Erro ao carregar dados do livro.');
         }
-        
+
         router.push('/');
       }
     };
@@ -151,7 +163,7 @@ export default function EditBookPage({ params }: Props) {
       router.push(`/books/${id}`);
     } catch (error: any) {
       console.error('Error updating book:', error);
-      
+
       // More specific error messages
       if (error.response?.status === 400) {
         toast.error('Dados inválidos. Verifique os campos preenchidos.');
@@ -172,18 +184,18 @@ export default function EditBookPage({ params }: Props) {
     // Better confirmation dialog
     const confirmMessage = `Tem certeza que deseja excluir o livro "${initialBook?.title}"?\n\nEsta ação não pode ser desfeita.`;
     const confirmed = window.confirm(confirmMessage);
-    
+
     if (!confirmed) return;
 
     try {
       setIsDeleting(true);
       await deleteBook(id);
-      
+
       toast.success('Livro deletado com sucesso!');
       router.push('/');
     } catch (error: any) {
       console.error('Error deleting book:', error);
-      
+
       // Specific error handling for delete
       if (error.response?.status === 404) {
         toast.error('Livro não encontrado.');
@@ -226,9 +238,8 @@ export default function EditBookPage({ params }: Props) {
           <input
             type="text"
             {...register('title')}
-            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${
-              errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-            }`}
+            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+              }`}
           />
           {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
         </div>
@@ -255,10 +266,10 @@ export default function EditBookPage({ params }: Props) {
                 >
                   {previewUrl ? (
                     <div className="relative">
-                      <img 
-                        src={previewUrl} 
-                        alt="Prévia da capa" 
-                        className="object-contain max-h-60 rounded-md" 
+                      <img
+                        src={previewUrl}
+                        alt="Prévia da capa"
+                        className="object-contain max-h-60 rounded-md"
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 hover:opacity-100 flex items-center justify-center rounded-md transition-opacity">
                         <span className="text-white text-sm">Clique para alterar</span>
@@ -284,13 +295,13 @@ export default function EditBookPage({ params }: Props) {
                         toast.error('Imagem muito grande. Máximo 5MB permitido.');
                         return;
                       }
-                      
+
                       // Validate file type
                       if (!file.type.startsWith('image/')) {
                         toast.error('Por favor, selecione apenas arquivos de imagem.');
                         return;
                       }
-                      
+
                       field.onChange(file);
                     }
                   }}
@@ -341,6 +352,7 @@ export default function EditBookPage({ params }: Props) {
                   categories={categories}
                   selectedCategoryIds={field.value || []}
                   onChange={field.onChange}
+                  onCategoryCreated={fetchCategories}
                 />
               )}
             />
@@ -352,9 +364,8 @@ export default function EditBookPage({ params }: Props) {
             type="button"
             onClick={handleDelete}
             disabled={isDeleting || isSubmitting}
-            className={`bg-red-600 hover:bg-red-700 text-xs md:text-base text-white font-semibold cursor-pointer py-2 px-3 md:px-8 rounded-md transition ${
-              (isDeleting || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`bg-red-600 hover:bg-red-700 text-xs md:text-base text-white font-semibold cursor-pointer py-2 px-3 md:px-8 rounded-md transition ${(isDeleting || isSubmitting) ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
           >
             {isDeleting ? 'Deletando...' : 'Deletar'}
           </button>
@@ -362,9 +373,8 @@ export default function EditBookPage({ params }: Props) {
           <button
             type="submit"
             disabled={isSubmitting || isDeleting}
-            className={`bg-blue-500 hover:bg-blue-600 text-xs md:text-base text-white font-semibold py-2 px-3 md:px-8 rounded-md transition cursor-pointer ${
-              (isSubmitting || isDeleting) ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`bg-blue-500 hover:bg-blue-600 text-xs md:text-base text-white font-semibold py-2 px-3 md:px-8 rounded-md transition cursor-pointer ${(isSubmitting || isDeleting) ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
           >
             {isSubmitting ? 'Salvando...' : 'Salvar Alterações'}
           </button>

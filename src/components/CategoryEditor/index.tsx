@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import CategorySelector from '../CategorySelector';
 import { Book } from '@/types/bookData';
-import { Category } from '@/types/categoryData';
+import { BookCategory, Category } from '@/types/categoryData';
 import { useBooks } from '@/contexts/useBooks';
 import { useRouter } from 'next/navigation';
 
-export function CategoriesEditor({ book }: { book: Book }) {
+export function CategoriesEditor({ book, onCategoriesUpdated }: { book: Book; onCategoriesUpdated?: (newCategories: Book["categories"]) => void; }) {
   const { updateBook } = useBooks();
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [selected, setSelected] = useState<string[]>(book.categories.map(c => c.categoryId));
@@ -35,7 +35,19 @@ export function CategoriesEditor({ book }: { book: Book }) {
   const onChange = async (newIds: string[]) => {
     setSelected(newIds);
     await updateBook({ id: book.id, categoryIds: newIds });
-    router.refresh();
+
+    // Atualiza localmente as categorias
+
+const updatedCategories: BookCategory[] = allCategories
+  .filter(cat => newIds.includes(cat.id))
+  .map(cat => ({
+    bookId: book.id,
+    categoryId: cat.id,
+    category: cat,
+    assignedAt: cat.createdAt
+  }));
+
+    onCategoriesUpdated?.(updatedCategories);
   };
 
   return (
