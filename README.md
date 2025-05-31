@@ -19,13 +19,13 @@ Ideal para quem gosta de manter um histórico cultural organizado.
 
 ## 🧩 Funcionalidades
 
-- 📚 **Cadastro de livros, filmes e séries**
+- 📚 **Cadastro de livros, mangás, filmes e séries**
 - 🏷️ **Gerenciamento de categorias personalizadas**
 - 🖼️ **Upload de capa da obra**
 - 🔐 **Login com JWT e Google OAuth 2.0**
 - 🌓 **Tema escuro e design responsivo**
 - 📱 **Menu mobile com navegação fluida**
-- 🗃️ **Dashboard com progresso mensal e controle visual**
+- 🗃️ **Dashboard**
 
 ---
 
