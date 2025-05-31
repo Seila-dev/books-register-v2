@@ -47,11 +47,11 @@ Ideal para quem gosta de manter um histórico cultural organizado.
 - [JWT](https://jwt.io/)
 - [Google OAuth 2.0](https://developers.google.com/identity)
 
-## 🛠️ DevOps & Deploy
+### DevOps & Deploy
 
-- 🐳 **[Docker](https://www.docker.com/)** — Containerização da aplicação para padronizar ambientes e facilitar deploys.
-- ☁️ **[Railway](https://railway.app/)** — Plataforma de nuvem utilizada para hospedar o backend e o banco de dados PostgreSQL.
-- 🔁 **[Git](https://git-scm.com/)** — Controle de versão com ramificações para gerenciar o desenvolvimento de forma colaborativa.
+- [Docker](https://www.docker.com/) — Containerização da aplicação para padronizar ambientes e facilitar deploys.
+- [Railway](https://railway.app/) — Plataforma de nuvem utilizada para hospedar o backend e o banco de dados PostgreSQL.
+- [Git](https://git-scm.com/) - Versionamento
 
 ---
 
