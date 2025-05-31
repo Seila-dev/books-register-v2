@@ -35,7 +35,6 @@ Ideal para quem gosta de manter um histórico cultural organizado.
 - [Next.js 13+ (App Router)](https://nextjs.org/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [TailwindCSS](https://tailwindcss.com/)
-- [Framer Motion](https://www.framer.com/motion/)
 - [Lucide React Icons](https://lucide.dev/)
 - [React Hook Form](https://react-hook-form.com/)
 - [Zod](https://zod.dev/)
