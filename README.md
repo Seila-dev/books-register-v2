@@ -21,11 +21,12 @@ Ideal para quem gosta de manter um histórico cultural organizado.
 
 - 📚 **Cadastro de livros, mangás, filmes e séries**
 - 🏷️ **Gerenciamento de categorias personalizadas**
+- 🗂️ **Tags múltiplas por obra**
 - 🖼️ **Upload de capa da obra**
 - 🔐 **Login com JWT e Google OAuth 2.0**
 - 🌓 **Tema escuro e design responsivo**
 - 📱 **Menu mobile com navegação fluida**
-- 🗃️ **Dashboard**
+- 🔍 **Filtro e busca por obras similar ao do Youtube**
 
 ---
 
@@ -95,13 +96,10 @@ npm run dev
 ---
 
 ## 📌 Futuras Melhorias
-🔍 Filtro e busca por obras
 
 📈 Estatísticas detalhadas de leitura/visualização
 
 📲 Instalação como PWA
-
-🗂️ Tags múltiplas por obra
 
 🔔 Notificações e lembretes
 
