@@ -127,7 +127,7 @@ export default function BooksPage() {
         </div>
 
         <button
-          onClick={() => router.push('/categories')}
+          // onClick={() => router.push('/books')}
           className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm"
         >
           Ver todas

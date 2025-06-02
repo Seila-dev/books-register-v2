@@ -118,7 +118,7 @@ export default function TopCategories() {
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-3 gap-2 md:gap-4">
+      <div className="grid grid-cols-3 gap-x-[6px] gap-y-3 md:gap-4">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <div
@@ -142,63 +142,51 @@ export default function TopCategories() {
             <p className="text-gray-500 text-sm mt-1">Adicione alguns livros para ver suas categorias populares.</p>
           </div>
         ) : (
-          categories.map((category, index) => (
+          categories.map((category) => (
             <div
               key={category.id}
               onClick={() => router.push(`/categories/${category.id}`)}
-              className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 ${getRankColor(category.rank!)} bg-gray-800/30 backdrop-blur-sm hover:bg-gray-700/40`}
+              className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 ${getRankColor(category.rank!)} bg-gray-800/30 backdrop-blur-sm hover:bg-gray-700/40 min-w-[90px] p-1.5 sm:p-3`}
             >
               {/* Background Gradient */}
               <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
 
               {/* Rank Badge */}
-              <div className="absolute top-3 right-3 z-10 hidden md:flex">
-                <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full ${category.rank === 1
-                      ? 'bg-yellow-400/20'
-                      : category.rank === 2
-                        ? 'bg-gray-400/20'
-                        : 'bg-amber-600/20'
-                    } backdrop-blur-sm`}
-                >
+              <div className="absolute top-1.5 right-1.5 z-10 hidden md:flex">
+                <div className={`flex items-center justify-center w-6 h-6 rounded-full ${category.rank === 1
+                  ? 'bg-yellow-400/20'
+                  : category.rank === 2
+                    ? 'bg-gray-400/20'
+                    : 'bg-amber-600/20'
+                  } backdrop-blur-sm`}>
                   {getRankIcon(category.rank!)}
                 </div>
               </div>
 
               {/* Content */}
-              <div className="relative z-10 p-2 sm:p-5 sm:block flex items-center justify-center text-center sm:text-left w-full h-full">
-                {/* Top Section */}
-                {/* <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br ${category.color} shadow-lg`}>
-                    <BookOpen className="text-white" size={10} />
-                  </div>
-                </div> */}
-
-                <h3 className="text-white font-bold text-[0.5rem] sm:text-[0.8rem] md:text-lg mb-0 md:mb-14 mr-0  md:mr-10 group-hover:text-yellow-300 transition-colors text-center sm:text-left">
+              <div className="relative z-10 w-full h-full text-center sm:text-left flex flex-col justify-between">
+                {/* Título */}
+                <h3 className="text-white font-bold text-[0.65rem] sm:text-sm md:text-lg truncate mb-2 group-hover:text-yellow-300 transition-colors">
                   {category.name}
                 </h3>
 
                 {/* Stats */}
                 <div className="hidden sm:flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-1 text-gray-400">
-                    <span>#{category.rank} mais usada - </span>
-                    <div className="text-xs text-orange-400">{category.books.length}</div>
-                    <div className="text-xs text-gray-400">
-                      {category.books.length === 1 ? 'Livro' : 'Livros'}
-                    </div>
+                  <div className="flex items-center gap-1 text-gray-400 text-xs">
+                    <span>#{category.rank}</span>
+                    <div className="text-orange-400">{category.books.length}</div>
+                    <div>{category.books.length === 1 ? 'Livro' : 'Livros'}</div>
                   </div>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="flex mt-4 relative">
+                <div className="mt-2 sm:mt-4 relative">
                   <div className="w-full bg-gray-700/50 rounded-full h-1.5">
                     <div
                       className={`bg-gradient-to-r ${category.color} h-1.5 rounded-full transition-all duration-500 group-hover:shadow-lg`}
                       style={{
                         width: `${Math.min(
-                          (category.books.length /
-                            Math.max(...categories.map((c) => c.books.length))) *
-                          100,
+                          (category.books.length / Math.max(...categories.map((c) => c.books.length))) * 100,
                           100,
                         )}%`,
                       }}
@@ -210,8 +198,7 @@ export default function TopCategories() {
               {/* Glow Effect */}
               <div className={`absolute -inset-1 bg-gradient-to-r ${category.color} opacity-0 group-hover:opacity-20 blur-lg rounded-xl transition-opacity duration-400 -z-10`}></div>
             </div>
-          ))
-        )}
+          )))}
       </div>
 
       {/* Mobile "Ver todas" Button */}

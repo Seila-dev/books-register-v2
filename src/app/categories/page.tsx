@@ -154,20 +154,7 @@ export default function AllCategoriesPage() {
                       className="p-2 ml-2 transition rounded-full duration-200 hover:bg-gray-700 cursor-pointer "
                       aria-label="Abrir menu de ações"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8 7V3m8 4V3m-9 8h10m-9 4h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"
-                        />
-                      </svg>
+                      :
                     </button>
 
                     {/* Menu dropdown */}
