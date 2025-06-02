@@ -96,7 +96,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 shadow-xl z-50 flex flex-col p-6"
+            className="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 shadow-xl z-50 flex flex-col p-6 overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-white text-lg font-semibold">BooksRegister</h2>
@@ -109,7 +109,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
               </button>
             </div>
 
-            <nav className="flex flex-col gap-2">
+            <nav className="flex flex-col gap-2 mb-3">
               <Link
                 href="/"
                 onClick={onClose}
