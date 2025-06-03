@@ -18,8 +18,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Books Register v2",
-  description: "Save your favorite books on a secure and beautiful place.",
+  title: 'Minha Biblioteca | BooksRegister',
+  description: 'Salve, organize e acompanhe seus livros, filmes e séries em um só lugar!',
+  keywords: ['livros', 'séries', 'filmes', 'biblioteca pessoal', 'books register'],
+  openGraph: {
+    title: 'Minha Biblioteca | BooksRegister',
+    description: 'Gerencie seus conteúdos favoritos com organização e praticidade.',
+    type: 'website',
+    url: 'https://books-register-v2.vercel.app/',
+    siteName: 'BooksRegister',
+    images: [
+      {
+        url: '/books-register-mobile.png',
+        width: 1200,
+        height: 630,
+        alt: 'Imagem',
+      }
+      ],
+  },
+  metadataBase: new URL('https://books-register-v2.vercel.app/'),
 };
 
 export default function RootLayout({
