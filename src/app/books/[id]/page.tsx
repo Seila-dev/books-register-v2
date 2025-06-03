@@ -13,7 +13,7 @@ import api from '@/services/api';
 import { Metadata } from 'next';
 
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('books-register.token')?.value;

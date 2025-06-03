@@ -9,11 +9,7 @@ import api from '@/services/api';
 import { parseCookies } from 'nookies';
 import { cookies } from 'next/headers';
 
-type Props = {
-  params: { id: string };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: any): Promise<Metadata> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('books-register.token')?.value;
