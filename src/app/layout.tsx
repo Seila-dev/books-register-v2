@@ -60,6 +60,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
           rel="stylesheet"
         />
+        <meta name="google-site-verification" content="y0S8kr42i5AZrgHZVoTVwGowo_g1UBa-1jrli3MWTjM" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900  min-h-screen w-full`}
