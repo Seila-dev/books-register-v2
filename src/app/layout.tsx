@@ -24,22 +24,28 @@ export const metadata: Metadata = {
   },
   description: 'Salve, organize e acompanhe seus livros, filmes e séries em um só lugar!',
   keywords: ['livros', 'séries', 'filmes', 'biblioteca pessoal', 'books register'],
+  metadataBase: new URL('https://books-register-v2.vercel.app/'),
   openGraph: {
-    title: 'Minha Biblioteca | BooksRegister',
-    description: 'Gerencie seus conteúdos favoritos com organização e praticidade.',
-    type: 'website',
+    title: 'BooksRegister',
+    description: 'Sua estante digital para livros, filmes e séries. Organize sua jornada de entretenimento!',
     url: 'https://books-register-v2.vercel.app/',
     siteName: 'BooksRegister',
     images: [
       {
-        url: '/books-register-mobile.png',
+        url: '/og-booksregister.png',
         width: 1200,
         height: 630,
-        alt: 'Imagem',
-      }
+        alt: 'BooksRegister - Biblioteca Digital',
+      },
     ],
+    type: 'website',
   },
-  metadataBase: new URL('https://books-register-v2.vercel.app/'),
+  twitter: {
+    card: 'summary_large_image',
+    title: 'BooksRegister',
+    description: 'Sua estante digital para livros, filmes e séries. Organize sua jornada de entretenimento!',
+    images: ['/og-booksregister.png'],
+  },
 };
 
 export default function RootLayout({
