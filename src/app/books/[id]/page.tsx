@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import Link from 'next/link';
 import { BookOpen, ArrowLeft } from 'lucide-react';
 import { BookRating } from '@/components/BookRating';
@@ -9,6 +9,41 @@ import CategorySelector from '@/components/CategorySelector';
 import { CategoriesEditor } from '@/components/CategoryEditor';
 import ComponentArrowBack from '@/components/ArrowBack';
 import EditBookPage from '@/components/BookEditor';
+import api from '@/services/api';
+import { Metadata } from 'next';
+
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('books-register.token')?.value;
+
+    const res = await api.get(`/books/${params.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const book: Book = res.data;
+
+    return {
+      title: `${book.title} | BooksRegister`,
+      description: `Informações detalhadas sobre o livro "${book.title}" na sua biblioteca.`,
+      openGraph: {
+        title: `${book.title} | BooksRegister`,
+        description: `Veja detalhes do livro "${book.title}" no BooksRegister.`,
+        url: `/books/${params.id}`,
+        siteName: 'BooksRegister',
+        type: 'website',
+      }
+    };
+  } catch (error) {
+    return {
+      title: 'Livro não encontrado | BooksRegister',
+      description: 'Não foi possível carregar os dados do livro.',
+    };
+  }
+}
 
 export default async function BookDetailPage({ params }: any) {
     const { id } = params;
