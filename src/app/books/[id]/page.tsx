@@ -11,7 +11,8 @@ import ComponentArrowBack from '@/components/ArrowBack';
 import EditBookPage from '@/components/BookEditor';
 import api from '@/services/api';
 import { Metadata } from 'next';
-import BookDetailHero from '@/components/BookDetailedHero';
+import BookDetailHero from '@/components/bookDetailedComponents/BookDetailedHero';
+import BookExtrasSection from '@/components/bookDetailedComponents/BookExtrasSection';
 
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
@@ -62,11 +63,20 @@ export default async function BookDetailPage({ params }: any) {
         cache: 'no-store',
     });
 
+    const responseBooks = await fetch(`${process.env.API_URL}/books`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        cache: 'no-store',
+    });
+
     if (!response.ok) {
         const errorText = await response.text();
         console.log('Erro da API:', response.status, errorText);
         notFound();
     }
+
+    const allBooks: Book[] = await responseBooks.json()
 
     const book: Book = await response.json();
 
@@ -82,9 +92,12 @@ export default async function BookDetailPage({ params }: any) {
         });
     }
 
+
+
     return (
         <main className='w-full h-screen'>
             <BookDetailHero book={book} />
+            
         </main>
     );
 }
