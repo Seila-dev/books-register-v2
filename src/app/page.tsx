@@ -12,7 +12,7 @@ import { useContext } from "react";
 export default function Home() {
   const  { user } = useContext(AuthContext)
   return (
-    <div className="w-full">
+    <div className="w-full max-w-screen-xl p-6">
       <DashboardPanel
         userName={user?.username}
         booksRead={4}
