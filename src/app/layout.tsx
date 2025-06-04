@@ -19,30 +19,30 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'BooksRegister',
-    template: '%s | BooksRegister',
+    default: 'Watchlist',
+    template: '%s | Watchlist',
   },
   description: 'Salve, organize e acompanhe seus livros, filmes e séries em um só lugar!',
-  keywords: ['livros', 'séries', 'filmes', 'biblioteca pessoal', 'books register'],
+  keywords: ['livros', 'séries', 'filmes', 'biblioteca pessoal', 'Watch list'],
   metadataBase: new URL('https://books-register-v2.vercel.app/'),
   openGraph: {
-    title: 'BooksRegister',
+    title: 'Watchlist',
     description: 'Sua estante digital para livros, filmes e séries. Organize sua jornada de entretenimento!',
     url: 'https://books-register-v2.vercel.app/',
-    siteName: 'BooksRegister',
+    siteName: 'Watchlist',
     images: [
       {
         url: '/og-booksregister.png',
         width: 1200,
         height: 630,
-        alt: 'BooksRegister - Biblioteca Digital',
+        alt: 'Watchlist - Biblioteca Digital',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BooksRegister',
+    title: 'Watchlist',
     description: 'Sua estante digital para livros, filmes e séries. Organize sua jornada de entretenimento!',
     images: ['/og-booksregister.png'],
   },

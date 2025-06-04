@@ -21,19 +21,19 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const category = res.data;
 
     return {
-      title: `${category.name} | BooksRegister`,
-      description: `Explore os livros, séries e filmes da categoria "${category.name}" no BooksRegister.`,
+      title: `${category.name} | Watchlist`,
+      description: `Explore os livros, séries e filmes da categoria "${category.name}" no Watchlist.`,
       openGraph: {
-        title: `${category.name} | BooksRegister`,
+        title: `${category.name} | Watchlist`,
         description: `Veja o conteúdo salvo na categoria "${category.name}".`,
         url: `/categories/${params.id}`,
         type: 'website',
-        siteName: 'BooksRegister',
+        siteName: 'Watchlist',
       },
     };
   } catch (err) {
     return {
-      title: 'Categoria não encontrada | BooksRegister',
+      title: 'Categoria não encontrada | Watchlist',
       description: 'Não foi possível carregar essa categoria.',
     };
   }
@@ -73,7 +73,7 @@ export default async function CategoryPage({ params }: any) {
       </h1>
 
       {filteredBooks.length === 0 ? (
-        <p className="text-gray-400">Nenhum livro nesta categoria.</p>
+        <p className="text-gray-400">Nenhum conteúdo nesta categoria.</p>
       ) : (
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredBooks.map((book) => (

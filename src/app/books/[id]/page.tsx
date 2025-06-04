@@ -27,20 +27,20 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     const book: Book = res.data;
 
     return {
-      title: `${book.title} | BooksRegister`,
-      description: `Informações detalhadas sobre o livro "${book.title}" na sua biblioteca.`,
+      title: `${book.title} | Watchlist`,
+      description: `Informações detalhadas sobre o conteúdo "${book.title}" na sua biblioteca.`,
       openGraph: {
-        title: `${book.title} | BooksRegister`,
-        description: `Veja detalhes do livro "${book.title}" no BooksRegister.`,
+        title: `${book.title} | Watchlist`,
+        description: `Veja detalhes do conteúdo "${book.title}" no Watchlist.`,
         url: `/books/${params.id}`,
-        siteName: 'BooksRegister',
+        siteName: 'Watchlist',
         type: 'website',
       }
     };
   } catch (error) {
     return {
-      title: 'Livro não encontrado | BooksRegister',
-      description: 'Não foi possível carregar os dados do livro.',
+      title: 'Conteúdo não encontrado | Watchlist',
+      description: 'Não foi possível carregar os dados do conteúdo.',
     };
   }
 }
@@ -88,7 +88,7 @@ export default async function BookDetailPage({ params }: any) {
                 <Link
                     href={`/books/${book.id}/edit`}
                     className="w-10 h-10 flex items-center justify-center rounded-md bg-gray-700 hover:bg-blue-600 transition"
-                    title="Editar livro"
+                    title="Editar conteúdo"
                 >
                     <span className="material-symbols-outlined text-white text-xl">edit</span>
                 </Link>

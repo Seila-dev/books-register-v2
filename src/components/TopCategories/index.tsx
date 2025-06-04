@@ -139,7 +139,7 @@ export default function TopCategories() {
           <div className="col-span-full text-center py-12">
             <BookOpen className="mx-auto mb-4 text-gray-400" size={48} />
             <p className="text-gray-400 text-lg">Nenhuma categoria encontrada.</p>
-            <p className="text-gray-500 text-sm mt-1">Adicione alguns livros para ver suas categorias populares.</p>
+            <p className="text-gray-500 text-sm mt-1">Adicione alguns conteúdos para ver suas categorias populares.</p>
           </div>
         ) : (
           categories.map((category) => (
@@ -175,7 +175,7 @@ export default function TopCategories() {
                   <div className="flex items-center gap-1 text-gray-400 text-xs">
                     <span>#{category.rank}</span>
                     <div className="text-orange-400">{category.books.length}</div>
-                    <div>{category.books.length === 1 ? 'Livro' : 'Livros'}</div>
+                    <div>{category.books.length === 1 ? 'Conteúdo' : 'Conteúdos'}</div>
                   </div>
                 </div>
 

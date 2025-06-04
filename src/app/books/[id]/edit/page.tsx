@@ -123,15 +123,15 @@ export default function EditBookPage({ params }: Props) {
 
         // More specific error handling
         if (error.response?.status === 404) {
-          toast.error('Livro não encontrado.');
+          toast.error('Conteúdo não encontrado.');
         } else if (error.response?.status === 401) {
           toast.error('Não autorizado. Faça login novamente.');
           router.push('/login');
         } else if (error.response?.status === 403) {
-          toast.error('Você não tem permissão para editar este livro.');
+          toast.error('Você não tem permissão para editar este conteúdo.');
           router.push('/');
         } else {
-          toast.error('Erro ao carregar dados do livro.');
+          toast.error('Erro ao carregar dados do conteúdo.');
         }
 
         router.push('/');
@@ -159,10 +159,10 @@ export default function EditBookPage({ params }: Props) {
       const updateData = prepareUpdateData(data);
       await updateBook(updateData);
 
-      toast.success('Livro atualizado com sucesso!');
+      toast.success('Conteúdo atualizado com sucesso!');
       router.push(`/books/${id}`);
     } catch (error: any) {
-      console.error('Error updating book:', error);
+      console.error('Error updating content:', error);
 
       // More specific error messages
       if (error.response?.status === 400) {
@@ -171,18 +171,18 @@ export default function EditBookPage({ params }: Props) {
         toast.error('Sessão expirada. Faça login novamente.');
         router.push('/login');
       } else if (error.response?.status === 403) {
-        toast.error('Você não tem permissão para editar este livro.');
+        toast.error('Você não tem permissão para editar este conteúdo.');
       } else if (error.response?.status === 413) {
         toast.error('Imagem muito grande. Escolha uma imagem menor.');
       } else {
-        toast.error('Erro ao atualizar o livro. Tente novamente.');
+        toast.error('Erro ao atualizar o conteúdo. Tente novamente.');
       }
     }
   };
 
   const handleDelete = async () => {
     // Better confirmation dialog
-    const confirmMessage = `Tem certeza que deseja excluir o livro "${initialBook?.title}"?\n\nEsta ação não pode ser desfeita.`;
+    const confirmMessage = `Tem certeza que deseja excluir o conteúdo "${initialBook?.title}"?\n\nEsta ação não pode ser desfeita.`;
     const confirmed = window.confirm(confirmMessage);
 
     if (!confirmed) return;
@@ -191,24 +191,24 @@ export default function EditBookPage({ params }: Props) {
       setIsDeleting(true);
       await deleteBook(id);
 
-      toast.success('Livro deletado com sucesso!');
+      toast.success('Conteúdo deletado com sucesso!');
       router.push('/');
     } catch (error: any) {
-      console.error('Error deleting book:', error);
+      console.error('Error deleting content:', error);
 
       // Specific error handling for delete
       if (error.response?.status === 404) {
-        toast.error('Livro não encontrado.');
+        toast.error('Conteúdo não encontrado.');
         router.push('/');
       } else if (error.response?.status === 401) {
         toast.error('Sessão expirada. Faça login novamente.');
         router.push('/login');
       } else if (error.response?.status === 403) {
-        toast.error('Você não tem permissão para excluir este livro.');
+        toast.error('Você não tem permissão para excluir este conteúdo.');
       } else if (error.response?.status === 409) {
-        toast.error('Não é possível excluir este livro. Ele pode estar sendo usado em outras partes do sistema.');
+        toast.error('Não é possível excluir este conteúdo. Ele pode estar sendo usado em outras partes do sistema.');
       } else {
-        toast.error('Erro ao deletar livro. Tente novamente.');
+        toast.error('Erro ao deletar conteúdo. Tente novamente.');
       }
     } finally {
       setIsDeleting(false);
@@ -221,7 +221,7 @@ export default function EditBookPage({ params }: Props) {
       <div className="w-full mt-8">
         <ComponentArrowBack />
         <div className="flex justify-center items-center h-64">
-          <div className="text-gray-400">Carregando dados do livro...</div>
+          <div className="text-gray-400">Carregando dados do conteúdo...</div>
         </div>
       </div>
     );
@@ -230,7 +230,7 @@ export default function EditBookPage({ params }: Props) {
   return (
     <div className="w-full mt-0 md:mt-6">
       <ComponentArrowBack />
-      <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Editar Livro</h1>
+      <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Editar Conteúdo</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div>

@@ -10,6 +10,7 @@ import { AuthContext } from "@/contexts/AuthContext"
 import api from "../../services/api"
 import Link from 'next/link'
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
+import { Metadata } from "next";
 
 const signUpUserFormSchema = z.object({
     username: z.string().nonempty("O nome é obrigatório"),

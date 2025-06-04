@@ -118,10 +118,10 @@ export default function BooksPage() {
           </div>
           <div>
             <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
-              Livros Recentes
+              Conteúdos Recentes
             </h2>
             <p className="text-gray-400 text-sm">
-              Últimos livros adicionados
+              Últimos conteúdos adicionados
             </p>
           </div>
         </div>
@@ -130,13 +130,13 @@ export default function BooksPage() {
           // onClick={() => router.push('/books')}
           className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm"
         >
-          Ver todas
+          Ver todos
           <ArrowRight size={16} />
         </button>
       </div>
 
       {!isLoading && filteredBooks.length === 0 && (
-        <p className="text-gray-500 mb-4">Nenhum livro encontrado.</p>
+        <p className="text-gray-500 mb-4">Nenhum conteúdo encontrado.</p>
       )}
       {error && (
         <p className="text-red-400 mb-4">{error.message}</p>

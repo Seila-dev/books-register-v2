@@ -75,7 +75,7 @@ export const Header = () => {
 
           <Link href="/" className="hidden md:flex items-center w-fit">
             <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
-            <h1 className="ml-2 font-semibold text-base text-white">BooksRegister</h1>
+            <h1 className="ml-2 font-semibold text-base text-white">Watchlist</h1>
           </Link>
 
           {/* Search input + resultados */}
@@ -83,7 +83,7 @@ export const Header = () => {
             <span className="material-symbols-outlined mr-2 text-gray-400 !text-[14px] !md:text-base">search</span>
             <input
               type="text"
-              placeholder="Buscar livro por título..."
+              placeholder="Buscar conteúdo por título..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full bg-transparent p-2 md:p-2 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none"

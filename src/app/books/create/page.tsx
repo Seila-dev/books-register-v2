@@ -78,10 +78,10 @@ export default function CreateBookPage() {
   const onSubmit = async (data: CreateBookFormData) => {
     try {
       await createBook(data);
-      toast.success('Livro adicionado para a biblioteca');
+      toast.success('Conteúdo adicionado para a biblioteca');
       router.push('/');
     } catch (err) {
-      toast.error('Erro ao criar livro.');
+      toast.error('Erro ao criar conteúdo.');
     }
   };
 
@@ -89,7 +89,7 @@ export default function CreateBookPage() {
     <div className="w-full">
       <ComponentArrowBack />
 
-      <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Livro</h1>
+      <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Conteúdo</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
         <div>
@@ -224,7 +224,7 @@ export default function CreateBookPage() {
           disabled={isLoading}
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50 cursor-pointer"
         >
-          {isLoading ? 'Salvando...' : 'Salvar Livro'}
+          {isLoading ? 'Salvando...' : 'Salvar conteúdo'}
         </button>
       </form>
     </div>
