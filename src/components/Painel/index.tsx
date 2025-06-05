@@ -38,17 +38,7 @@ export default function DashboardPanel({
     .slice(0, 3);
 
   return (
-    <div className="space-y-6 w-full mt-1 mb-4">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white flex items-center justify-between shadow-md w-full">
-        <div>
-          <p className="text-base md:text-2xl font-bold ">Bem-vindo de volta, {userName}! 👋</p>
-          <p className="text-xs md:text-sm mt-1">Estamos atualizando o website para o melhor design e experiência pro usuário. Aproveite o site atual enquanto isso :D</p>
-        </div>
-        <Link href={'/books/create'} className="bg-white text-purple-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-gray-100 hidden md:flex cursor-pointer">
-          + Adicionar Conteúdo
-        </Link>
-      </div>
+    <div className="space-y-6 w-full mt-1 my-6">
 
       {/* Estatísticas principais */}
       {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-center md:text-start">
@@ -64,7 +54,7 @@ export default function DashboardPanel({
             <LucideWallpaper size={24} className="text-white" />
           </div>
           <div>
-            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+            <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
               Painel do usuário
             </h2>
             <p className="text-gray-400 text-sm">

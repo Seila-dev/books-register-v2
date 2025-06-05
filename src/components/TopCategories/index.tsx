@@ -99,7 +99,7 @@ export default function TopCategories() {
             <TrendingUp size={24} className="text-white" />
           </div>
           <div>
-            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+            <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
               Categorias em destaque
             </h2>
             <p className="text-gray-400 text-sm">

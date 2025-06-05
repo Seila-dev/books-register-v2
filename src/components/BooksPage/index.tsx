@@ -110,7 +110,7 @@ export default function BooksPage() {
   if (error) router.push('/login')
 
   return (
-    <div className="text-white w-full">
+    <div className="text-white w-full my-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">

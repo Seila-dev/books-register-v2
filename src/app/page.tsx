@@ -1,29 +1,30 @@
 "use client"
 
-import BooksPage from "@/components/BooksPage";
-import { Header } from "@/components/Header";
-import NotesPage from "@/app/notes/page";
-import DashboardPanel from "@/components/Painel";
-import DashboardIntro from "@/components/Painel";
-import TopCategories from "@/components/TopCategories";
-import { AuthContext } from "@/contexts/AuthContext";
-import Image from "next/image";
-import { useContext } from "react";
-import NoteCard from "@/components/NoteCard";
-import { useNotes } from "@/hooks/useNotes";
-import { ArrowRight, Plus, TrendingUp } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useBooks } from "@/hooks/useBooks";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import BooksCarousel from "@/components/BooksCarousel";
-import Link from "next/link";
+import { useContext } from "react"
+import { useRouter } from "next/navigation"
+import { formatDistanceToNow } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import Link from "next/link"
+import { Plus } from "lucide-react"
+
+import BooksPage from "@/components/BooksPage"
+import BooksCarousel from "@/components/BooksCarousel"
+import DashboardPanel from "@/components/Painel"
+import TopCategories from "@/components/TopCategories"
+import PainelHeader from "@/components/PainelHeader"
+
+import { AuthContext } from "@/contexts/AuthContext"
+import { useBooks } from "@/hooks/useBooks"
+import { useNotes } from "@/hooks/useNotes"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
 
 export default function Home() {
   const { user } = useContext(AuthContext)
   const { books } = useBooks()
   const { deleteNote, isDeleting, notes } = useNotes()
   const router = useRouter()
+
+  const isMobile = useMediaQuery("(max-width: 450px)")
 
   const recentBooks = [...books]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -36,6 +37,12 @@ export default function Home() {
   }))
   return (
     <div className="w-full max-w-screen-xl p-6">
+      <PainelHeader />
+      {isMobile ? (
+        <BooksPage />
+      ) : (
+        <BooksCarousel books={books} />
+      )}
       <DashboardPanel
         userName={user?.username}
         booksRead={4}
@@ -44,8 +51,6 @@ export default function Home() {
         readingNow={1}
         recentActivities={recentActivities}
       />
-      {/* <BooksPage /> */}
-      <BooksCarousel books={books} />
       <TopCategories />
 
       <Link
