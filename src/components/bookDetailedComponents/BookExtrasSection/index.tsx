@@ -1,19 +1,33 @@
 // components/BookExtrasSection.tsx
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import { Book } from '@/types/bookData';
-import { StarRating } from '@/components/StarRating';
+import { ChevronLeft, ChevronRight, Pointer } from 'lucide-react';
+
 
 export default function BookExtrasSection({
-  book,
   similarBooks,
+  book
 }: {
-  book: Book;
   similarBooks: Book[];
+  book: Book;
 }) {
   const [notes, setNotes] = useState('');
+
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  function scroll(direction: 'left' | 'right') {
+    if (carouselRef.current) {
+      const scrollAmount = carouselRef.current.offsetWidth * 0.8;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth',
+      });
+    }
+  }
+
 
   function handleSaveNotes() {
     console.log('Salvando anotações:', notes);
@@ -44,49 +58,58 @@ export default function BookExtrasSection({
       <section>
         <h2 className="text-xl font-bold text-white mb-4">Conteúdos Similares</h2>
 
-              <div className="grid grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
         {similarBooks.length === 0 ? (
           <p className="text-gray-400">Nenhum livro semelhante encontrado.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <div className="flex gap-6 min-w-full p-1">
+          <div className="relative">
+            {/* Botão esquerdo */}
+            <button
+              onClick={() => scroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 text-white p-2 rounded-full hidden md:flex cursor-pointer"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            {/* Lista rolável */}
+            <div
+              ref={carouselRef}
+              className="flex overflow-x-auto gap-4 scrollbar-hide scroll-smooth px-1"
+            >
               {similarBooks.map((item) => (
                 <div
-              key={item.id}
-              className={`flex flex-col overflow-hidden shadow-md w-full transform bg-gray-900 transition-all duration-300 ease-in-out rounded-xl`}
-            >
-              <Link
-                // onClick={handleClick}
-                href={`/books/${item.id}`}
-                className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800"
-              >
-                {item.coverImage ? (
-                  <img
-                    src={item.coverImage}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center md:text-xl text-xs justify-center text-gray-400 text-center">
-                    {item.title}
-                  </div>
-                )}
-              </Link>
+                  key={item.id}
+                  className="flex-shrink-0 w-40 md:w-48 flex flex-col overflow-hidden shadow-md bg-gray-900 rounded-xl"
+                >
+                  <Link
+                    href={`/books/${item.id}`}
+                    className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800"
+                  >
+                    {item.coverImage ? (
+                      <img
+                        src={item.coverImage}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-center text-xs md:text-xl">
+                        {item.title}
+                      </div>
+                    )}
+                  </Link>
+                </div>
+              ))}
+            </div>
 
-              {/* <div className="p-1 flex flex-col gap-2 text-center w-full items-center">
-                <StarRating
-                  rating={book.rating || 0}
-                  onRate={(newRating) => handleRatingChange(book.id, newRating)}
-                  size={starSize}
-                />
-              </div> */}
-            </div>
-          ))}
-            </div>
+            {/* Botão direito */}
+            <button
+              onClick={() => scroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 text-white p-2 rounded-full hidden md:flex cursor-pointer"
+            >
+              <ChevronRight size={24} />
+            </button>
           </div>
         )}
-        </div>
       </section>
     </div>
   );
