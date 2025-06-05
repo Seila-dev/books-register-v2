@@ -184,16 +184,7 @@ export default function BooksPage() {
 
         <QuickAddCard />
 
-        <Link
-          href={`/books/create`}
-          className={`
-            fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg hover:shadow-xl 
-            bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700
-            border-0 transition-all duration-300 ease-out z-20 flex justify-center items-center
-          `}
-        >
-          <Plus className={`h-6 w-6 transition-transform duration-300`} />
-        </Link>
+        
       </div>
     </div>
   );
