@@ -1,5 +1,8 @@
+import { useNotes } from "@/hooks/useNotes";
 import { ArrowRight, BookOpenIcon, Settings2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import NoteCard from "../NoteCard";
 
 interface Activity {
   title: string;
@@ -27,8 +30,15 @@ export default function DashboardPanel({
   const progressPercent = Math.min((booksRead / monthlyGoal) * 100, 100);
   const remaining = monthlyGoal - booksRead;
 
+  const { deleteNote, isDeleting, notes } = useNotes()
+  const router = useRouter()
+
+  const lastNotes = [...notes]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 3);
+
   return (
-    <div className="space-y-6 w-full mt-1 mb-3">
+    <div className="space-y-6 w-full mt-1 mb-4">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white flex items-center justify-between shadow-md w-full">
         <div>
@@ -50,19 +60,32 @@ export default function DashboardPanel({
 
       {/* Progresso + Atividades */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-2">Meta Mensal</h3>
-          <p className="text-sm mb-1 text-gray-300">{booksRead} de {monthlyGoal} livros</p>
-          <div className="w-full bg-gray-700 rounded-full h-3 mb-2">
-            <div
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 h-3 rounded-full"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-          <p className="text-sm text-gray-400">Faltam {remaining > 0 ? remaining : 0} livros para atingir sua meta!</p>
-        </div> */}
+        <div className="bg-gray-800 text-white p-6 rounded-xl shadow h-full w-full flex flex-col">
+        <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
 
-        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
+        {lastNotes.length === 0 ? (
+          <p className="text-gray-400">Nenhuma anotação recente.</p>
+        ) : (
+          <div className="space-y-4">
+            {lastNotes.map(note => (
+              <NoteCard
+                key={note.id}
+                note={note}
+                onDelete={deleteNote}
+                isDeleting={isDeleting}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="text-right pt-4 mt-auto">
+          <Link href="/notes" className="text-sm text-purple-400 hover:underline">
+            Ver todas as anotações &rarr;
+          </Link>
+        </div>
+        </div>
+
+        <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
           <ul className="space-y-3">
             {recentActivities.map((a, i) => (
@@ -78,8 +101,10 @@ export default function DashboardPanel({
           <div className="text-right mt-4">
             <button className="text-sm text-purple-400 hover:underline">Ver todas as atividades</button>
           </div>
-        </div> */}
+        </div>
       </div>
+      {/* Últimas Anotações */}
+
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { parseCookies } from 'nookies';
 import { toast } from 'sonner';
 import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 import api from '@/services/api';
 
 import { useForm, Controller } from 'react-hook-form';

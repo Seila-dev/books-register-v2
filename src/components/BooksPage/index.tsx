@@ -6,7 +6,7 @@ import api from '@/services/api';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { StarRating } from '../StarRating';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 import Link from 'next/link';

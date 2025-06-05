@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import CategorySelector from '../CategorySelector';
 import { Book } from '@/types/bookData';
 import { BookCategory, Category } from '@/types/categoryData';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 import { useRouter } from 'next/navigation';
 
 export function CategoriesEditor({ book, onCategoriesUpdated }: { book: Book; onCategoriesUpdated?: (newCategories: Book["categories"]) => void; }) {

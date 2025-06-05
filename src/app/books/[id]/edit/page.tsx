@@ -13,7 +13,7 @@ import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book, UpdateBookData } from '@/types/bookData';
 import api from '@/services/api';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 
 const editBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
