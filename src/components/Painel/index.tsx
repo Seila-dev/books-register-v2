@@ -1,5 +1,5 @@
 import { useNotes } from "@/hooks/useNotes";
-import { ArrowRight, BookOpenIcon, Settings2 } from "lucide-react";
+import { ArrowRight, BookOpen, BookOpenIcon, LucideWallpaper, Settings2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NoteCard from "../NoteCard";
@@ -59,6 +59,19 @@ export default function DashboardPanel({
       </div> */}
 
       {/* Progresso + Atividades */}
+      <div className="flex items-center gap-4">
+          <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
+            <LucideWallpaper size={24} className="text-white" />
+          </div>
+          <div>
+            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+              Painel do usuário
+            </h2>
+            <p className="text-gray-400 text-sm">
+              Estatísticas recentes do usuário
+            </p>
+          </div>
+        </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-gray-800 text-white p-6 rounded-xl shadow h-full w-full flex flex-col">
         <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>

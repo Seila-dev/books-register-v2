@@ -70,6 +70,11 @@ export default function EditBookPage({ params }: Props) {
     };
   }, [coverImageFile]);
 
+  const formatDate = (dateString: string | null | undefined): string => {
+    if (!dateString) return '';
+    return new Date(dateString).toISOString().split('T')[0];
+  };
+
   const fetchCategories = async () => {
     try {
       const { 'books-register.token': token } = parseCookies();
@@ -110,8 +115,8 @@ export default function EditBookPage({ params }: Props) {
         // Set form values
         setValue('title', book.title);
         setValue('description', book.description || '');
-        setValue('startDate', book.startDate || '');
-        setValue('finishDate', book.finishDate || '');
+        setValue('startDate', formatDate(book.startDate));
+        setValue('finishDate', formatDate(book.finishDate));
         setValue('categoryIds', book.categories?.map(c => c.categoryId) || []);
 
         // Set initial preview URL if book has cover image
@@ -215,7 +220,6 @@ export default function EditBookPage({ params }: Props) {
     }
   };
 
-  // Loading state while fetching data
   if (!initialBook && !categories.length) {
     return (
       <div className="w-full mt-8">

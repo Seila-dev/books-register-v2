@@ -95,7 +95,7 @@ export default function TopCategories() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-orange-600 to-blue-600 rounded-lg">
             <TrendingUp size={24} className="text-white" />
           </div>
           <div>
