@@ -41,7 +41,7 @@ export default function Home() {
       {isMobile ? (
         <BooksPage />
       ) : (
-        <BooksCarousel books={books} />
+        <BooksCarousel books={books} mode="noFilter" />
       )}
       <DashboardPanel
         userName={user?.username}
