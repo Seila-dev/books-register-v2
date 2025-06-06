@@ -315,7 +315,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
       </section>
 
       {/* 📚 Leituras similares */}
-      <BooksCarousel books={similarBooks}/>
+      <BooksCarousel books={similarBooks} mode='filter'/>
     </div>
   );
 }

@@ -36,7 +36,7 @@ export default function Home() {
     date: formatDistanceToNow(new Date(book.createdAt), { addSuffix: true, locale: ptBR }),
   }))
   return (
-    <div className="w-full max-w-screen-xl p-6">
+    <div className="w-full p-6">
       <PainelHeader />
       {isMobile ? (
         <BooksPage />
