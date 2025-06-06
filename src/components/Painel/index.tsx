@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, BookOpenIcon, LucideWallpaper, Settings2 } from "
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NoteCard from "../NoteCard";
+import { useState } from "react";
 
 interface Activity {
   title: string;
@@ -37,6 +38,24 @@ export default function DashboardPanel({
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 3);
 
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+
+  function toggleNoteExpansion(noteId: string) {
+    const newExpanded = new Set(expandedNotes);
+    if (newExpanded.has(noteId)) {
+      newExpanded.delete(noteId);
+    } else {
+      newExpanded.add(noteId);
+    }
+    setExpandedNotes(newExpanded);
+  }
+
+  function truncateText(text: string, maxLength: number = 150) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  }
+
+
   return (
     <div className="space-y-6 w-full mt-1 my-6">
 
@@ -50,42 +69,45 @@ export default function DashboardPanel({
 
       {/* Progresso + Atividades */}
       <div className="flex items-center gap-4">
-          <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
-            <LucideWallpaper size={24} className="text-white" />
-          </div>
-          <div>
-            <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
-              Painel do usuário
-            </h2>
-            <p className="text-gray-400 text-sm">
-              Estatísticas recentes do usuário
-            </p>
-          </div>
+        <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
+          <LucideWallpaper size={24} className="text-white" />
         </div>
+        <div>
+          <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
+            Painel do usuário
+          </h2>
+          <p className="text-gray-400 text-sm">
+            Estatísticas recentes do usuário
+          </p>
+        </div>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-gray-800 text-white p-6 rounded-xl shadow h-full w-full flex flex-col">
-        <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
+          <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
 
-        {lastNotes.length === 0 ? (
-          <p className="text-gray-400">Nenhuma anotação recente.</p>
-        ) : (
-          <div className="space-y-4">
-            {lastNotes.map(note => (
-              <NoteCard
-                key={note.id}
-                note={note}
-                onDelete={deleteNote}
-                isDeleting={isDeleting}
-              />
-            ))}
+          {lastNotes.length === 0 ? (
+            <p className="text-gray-400">Nenhuma anotação recente.</p>
+          ) : (
+            <div className="space-y-4">
+              {lastNotes.map(note => (
+                <NoteCard
+                  key={note.id}
+                  note={note}
+                  isExpanded={expandedNotes.has(note.id)}
+                  onToggleExpansion={() => toggleNoteExpansion(note.id)}
+                  onDelete={() => deleteNote(note.id)}
+                  isDeleting={isDeleting}
+                  truncateText={truncateText}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="text-right pt-4 mt-auto">
+            <Link href="/notes" className="text-sm text-purple-400 hover:underline">
+              Ver todas as anotações &rarr;
+            </Link>
           </div>
-        )}
-
-        <div className="text-right pt-4 mt-auto">
-          <Link href="/notes" className="text-sm text-purple-400 hover:underline">
-            Ver todas as anotações &rarr;
-          </Link>
-        </div>
         </div>
 
         <div className="bg-gray-800 text-white p-6 rounded-xl shadow">

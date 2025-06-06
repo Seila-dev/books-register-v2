@@ -1,53 +1,29 @@
 'use client';
+
 import Link from 'next/link';
-import { Edit3, Trash2, BookOpen } from 'lucide-react';
+import { BookOpen, Edit3, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useState } from 'react';
 
 interface NoteCardProps {
-  note: {
-    id: string;
-    content: string;
-    createdAt: string;
-    book: {
-      id: string;
-      title: string;
-    };
-  };
-  onDelete: (noteId: string) => Promise<void>;
+  note: any;
+  isExpanded: boolean;
+  onToggleExpansion: () => void;
+  onDelete: () => void | Promise<void>;
   isDeleting: boolean;
+  truncateText: (text: string, maxLength?: number) => string;
 }
 
-export default function NoteCard({ note, onDelete, isDeleting }: NoteCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  function truncateText(text: string, maxLength = 150) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-  }
-
-  async function handleDelete(e: React.MouseEvent) {
-    e.stopPropagation();
-    if (!confirm('Tem certeza que deseja excluir esta anotação?')) return;
-    await onDelete(note.id);
-  }
-
+export default function NoteCard({
+  note,
+  isExpanded,
+  onToggleExpansion,
+  onDelete,
+  isDeleting,
+  truncateText,
+}: NoteCardProps) {
   return (
-    <div
-      className="cursor-pointer rounded-lg"
-      onClick={() => setIsExpanded(!isExpanded)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setIsExpanded(!isExpanded);
-        }
-      }}
-      aria-expanded={isExpanded}
-      aria-label={`Anotação do livro ${note.book.title}`}
-    >
+    <div className="p-6 hover:bg-gray-700 transition-colors cursor-pointer">
       <div className="flex justify-between items-start space-x-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1 text-sm text-blue-400 font-semibold">
@@ -55,12 +31,12 @@ export default function NoteCard({ note, onDelete, isDeleting }: NoteCardProps) 
             <span>{note.book.title}</span>
           </div>
           <p className="text-gray-200 whitespace-pre-wrap">
-            {isExpanded ? note.content : truncateText(note.content)}
+            {isExpanded ? note.content : truncateText(note.content, 150)}
           </p>
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsExpanded(!isExpanded);
+              onToggleExpansion();
             }}
             className="mt-2 text-xs text-blue-400 hover:underline focus:outline-none"
             aria-label={isExpanded ? 'Mostrar menos' : 'Mostrar mais'}
@@ -68,18 +44,20 @@ export default function NoteCard({ note, onDelete, isDeleting }: NoteCardProps) 
             {isExpanded ? 'Mostrar menos ▲' : 'Mostrar mais ▼'}
           </button>
         </div>
-
         <div className="flex flex-col space-y-2">
           <Link
             href={`/notes/${note.id}/edit`}
-            onClick={(e) => e.stopPropagation()}
             className="p-1 rounded hover:bg-blue-600 transition-colors"
+            onClick={e => e.stopPropagation()}
             aria-label="Editar anotação"
           >
             <Edit3 className="w-5 h-5 text-blue-400" />
           </Link>
           <button
-            onClick={handleDelete}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
             disabled={isDeleting}
             className="p-1 rounded hover:bg-red-600 transition-colors disabled:opacity-50"
             aria-label="Excluir anotação"
@@ -88,7 +66,6 @@ export default function NoteCard({ note, onDelete, isDeleting }: NoteCardProps) 
           </button>
         </div>
       </div>
-
       <div className="mt-4 text-xs text-gray-500">
         Criado em {format(new Date(note.createdAt), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
       </div>
