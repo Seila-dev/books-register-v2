@@ -20,7 +20,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery"
 
 export default function Home() {
   const { user } = useContext(AuthContext)
-  const { books } = useBooks()
+  const { books, error } = useBooks()
   const { deleteNote, isDeleting, notes } = useNotes()
   const router = useRouter()
 
@@ -35,6 +35,9 @@ export default function Home() {
     status: book.finishDate ? "Finalizado" : book.startDate ? "Iniciado" : "Adicionado",
     date: formatDistanceToNow(new Date(book.createdAt), { addSuffix: true, locale: ptBR }),
   }))
+
+  if (error) router.push('/login')
+
   return (
     <div className="w-full p-6">
       <PainelHeader />

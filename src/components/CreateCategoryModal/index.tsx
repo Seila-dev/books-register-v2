@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { headers } from 'next/headers';
 
 export function CreateCategoryModal({ onCategoryCreated }: { onCategoryCreated?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);

@@ -50,6 +50,7 @@ export default function TopCategories() {
         setCategories(sorted)
       } catch (error) {
         console.error('Erro ao buscar categorias:', error)
+        // router.push('/login')
       } finally {
         setIsLoading(false)
       }
