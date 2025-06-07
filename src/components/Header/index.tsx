@@ -67,7 +67,7 @@ export const Header = () => {
 
   return (
     <header className="w-full bg-gray-900 text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-screen-xl mx-auto flex justify-between items-center px-2 py-2 md:p-4 relative">
+      <div className="mx-auto flex justify-between items-center px-2 py-2 md:p-4 relative">
         <div className="flex justify-between w-full items-center">
           <button onClick={handleOpenMenu} className="mr-2 mt-1 md:hidden">
             <span className="material-symbols-outlined text-xs text-white">menu</span>

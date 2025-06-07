@@ -9,6 +9,7 @@ export interface Book {
   startDate?: string | null;
   finishDate?: string | null;
   userId: string;
+  isFavorite?: boolean;
   createdAt: string;
   updatedAt: string;
   categories: BookCategory[];
@@ -22,6 +23,7 @@ export interface CreateBookData {
   startDate?: string | null;
   finishDate?: string | null;
   categoryIds?: string[];
+  isFavorite?: boolean;
 }
 
 export interface UpdateBookData extends Partial<CreateBookData> {

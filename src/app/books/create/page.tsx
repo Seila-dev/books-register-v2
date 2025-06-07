@@ -6,7 +6,7 @@ import { parseCookies } from 'nookies';
 import { toast } from 'sonner';
 import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 import api from '@/services/api';
 
 import { useForm, Controller } from 'react-hook-form';
@@ -86,7 +86,7 @@ export default function CreateBookPage() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full p-6">
       <ComponentArrowBack />
 
       <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Conteúdo</h1>

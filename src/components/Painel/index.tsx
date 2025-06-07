@@ -1,5 +1,9 @@
-import { ArrowRight, BookOpenIcon, Settings2 } from "lucide-react";
+import { useNotes } from "@/hooks/useNotes";
+import { ArrowRight, BookOpen, BookOpenIcon, LucideWallpaper, Settings2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import NoteCard from "../NoteCard";
+import { useState } from "react";
 
 interface Activity {
   title: string;
@@ -24,21 +28,33 @@ export default function DashboardPanel({
   readingNow,
   recentActivities,
 }: DashboardPanelProps) {
-  const progressPercent = Math.min((booksRead / monthlyGoal) * 100, 100);
-  const remaining = monthlyGoal - booksRead;
+
+  const { deleteNote, isDeleting, notes } = useNotes()
+
+  const lastNotes = [...notes]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 2);
+
+  const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
+
+  function toggleNoteExpansion(noteId: string) {
+    const newExpanded = new Set(expandedNotes);
+    if (newExpanded.has(noteId)) {
+      newExpanded.delete(noteId);
+    } else {
+      newExpanded.add(noteId);
+    }
+    setExpandedNotes(newExpanded);
+  }
+
+  function truncateText(text: string, maxLength: number = 150) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  }
+
 
   return (
-    <div className="space-y-6 w-full mt-1 mb-3">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-4 md:p-6 text-white flex items-center justify-between shadow-md w-full">
-        <div>
-          <p className="text-base md:text-2xl font-bold ">Bem-vindo de volta, {userName}! 👋</p>
-          <p className="text-xs md:text-sm mt-1">Estamos atualizando o website para o melhor design e experiência pro usuário. Aproveite o site atual enquanto isso :D</p>
-        </div>
-        <Link href={'/books/create'} className="bg-white text-purple-600 px-4 py-2 rounded-md font-semibold shadow hover:bg-gray-100 hidden md:flex cursor-pointer">
-          + Adicionar Conteúdo
-        </Link>
-      </div>
+    <div className="space-y-6 w-full mt-1 my-6">
 
       {/* Estatísticas principais */}
       {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-center md:text-start">
@@ -49,37 +65,68 @@ export default function DashboardPanel({
       </div> */}
 
       {/* Progresso + Atividades */}
+      <div className="flex items-center gap-4">
+        <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
+          <LucideWallpaper size={24} className="text-white" />
+        </div>
+        <div>
+          <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
+            Painel do usuário
+          </h2>
+          <p className="text-gray-400 text-sm">
+            Estatísticas recentes do usuário
+          </p>
+        </div>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-2">Meta Mensal</h3>
-          <p className="text-sm mb-1 text-gray-300">{booksRead} de {monthlyGoal} livros</p>
-          <div className="w-full bg-gray-700 rounded-full h-3 mb-2">
-            <div
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 h-3 rounded-full"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-          <p className="text-sm text-gray-400">Faltam {remaining > 0 ? remaining : 0} livros para atingir sua meta!</p>
-        </div> */}
+        <div className="bg-gray-800 text-white p-6 rounded-xl shadow h-full w-full flex flex-col">
+          <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
 
-        {/* <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
+          {lastNotes.length === 0 ? (
+            <p className="text-gray-400">Nenhuma anotação recente.</p>
+          ) : (
+            <div className="space-y-4">
+              {lastNotes.map(note => (
+                <NoteCard
+                  key={note.id}
+                  note={note}
+                  isExpanded={expandedNotes.has(note.id)}
+                  onToggleExpansion={() => toggleNoteExpansion(note.id)}
+                  onDelete={() => deleteNote(note.id)}
+                  isDeleting={isDeleting}
+                  truncateText={truncateText}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="text-right pt-4 mt-auto">
+            <Link href="/notes" className="text-sm text-purple-400 hover:underline">
+              Ver todas as anotações &rarr;
+            </Link>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
           <ul className="space-y-3">
             {recentActivities.map((a, i) => (
-              <li key={i} className="flex justify-between border-b border-gray-700 pb-2">
+              <li key={i} className="flex justify-between border-b border-gray-700 pb-2 gap-2">
                 <div>
                   <p className="font-medium">{a.title}</p>
-                  <p className="text-sm text-gray-400">{a.status}</p>
+                  <p className="text-sm text-gray-400 mt-2 sm:mt-0">{a.status}</p>
                 </div>
-                <span className="text-sm text-gray-500">{a.date}</span>
+                <span className="text-sm text-end text-gray-500">{a.date}</span>
               </li>
             ))}
           </ul>
           <div className="text-right mt-4">
             <button className="text-sm text-purple-400 hover:underline">Ver todas as atividades</button>
           </div>
-        </div> */}
+        </div>
       </div>
+      {/* Últimas Anotações */}
+
     </div>
   );
 }

@@ -54,7 +54,8 @@ export default function CategorySelector({
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center"
+  style={{ zIndex: 999999, position: 'fixed' }}>
           <div className="bg-[#1a1a1a] text-white w-full max-w-md rounded-lg shadow-lg flex flex-col max-h-[80vh]">
             
             {/* Header fixo */}
@@ -96,7 +97,7 @@ export default function CategorySelector({
             </div>
 
             {/* Rodapé fixo */}
-            <div className="border-t border-gray-700 px-4 py-3 flex justify-end gap-2 sticky bottom-0 bg-[#1a1a1a]">
+            <div className="border-t border-gray-700 px-4 py-3 flex justify-end gap-2 sticky bottom-0 bg-[#1a1a1a] z-50">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}

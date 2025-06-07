@@ -11,38 +11,40 @@ import ComponentArrowBack from '@/components/ArrowBack';
 import EditBookPage from '@/components/BookEditor';
 import api from '@/services/api';
 import { Metadata } from 'next';
+import BookDetailHero from '@/components/bookDetailedComponents/BookDetailedHero';
+import BookExtrasSection from '@/components/bookDetailedComponents/BookExtrasSection';
 
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('books-register.token')?.value;
+    try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get('books-register.token')?.value;
 
-    const res = await api.get(`/books/${params.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+        const res = await api.get(`/books/${params.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
 
-    const book: Book = res.data;
+        const book: Book = res.data;
 
-    return {
-      title: `${book.title} | Watchlist`,
-      description: `Informações detalhadas sobre o conteúdo "${book.title}" na sua biblioteca.`,
-      openGraph: {
-        title: `${book.title} | Watchlist`,
-        description: `Veja detalhes do conteúdo "${book.title}" no Watchlist.`,
-        url: `/books/${params.id}`,
-        siteName: 'Watchlist',
-        type: 'website',
-      }
-    };
-  } catch (error) {
-    return {
-      title: 'Conteúdo não encontrado | Watchlist',
-      description: 'Não foi possível carregar os dados do conteúdo.',
-    };
-  }
+        return {
+            title: `${book.title} | Watchlist`,
+            description: `Informações detalhadas sobre o conteúdo "${book.title}" na sua biblioteca.`,
+            openGraph: {
+                title: `${book.title} | Watchlist`,
+                description: `Veja detalhes do conteúdo "${book.title}" no Watchlist.`,
+                url: `/books/${params.id}`,
+                siteName: 'Watchlist',
+                type: 'website',
+            }
+        };
+    } catch (error) {
+        return {
+            title: 'Conteúdo não encontrado | Watchlist',
+            description: 'Não foi possível carregar os dados do conteúdo.',
+        };
+    }
 }
 
 export default async function BookDetailPage({ params }: any) {
@@ -61,11 +63,20 @@ export default async function BookDetailPage({ params }: any) {
         cache: 'no-store',
     });
 
+    const responseBooks = await fetch(`${process.env.API_URL}/books`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        cache: 'no-store',
+    });
+
     if (!response.ok) {
         const errorText = await response.text();
         console.log('Erro da API:', response.status, errorText);
         notFound();
     }
+
+    const allBooks: Book[] = await responseBooks.json()
 
     const book: Book = await response.json();
 
@@ -81,74 +92,12 @@ export default async function BookDetailPage({ params }: any) {
         });
     }
 
+
+
     return (
-        <div className='w-full'>
-            <div className="flex w-full justify-between items-center gap-2 mt-0 mb-4 md:mt-6">
-                <ComponentArrowBack />
-                <Link
-                    href={`/books/${book.id}/edit`}
-                    className="w-10 h-10 flex items-center justify-center rounded-md bg-gray-700 hover:bg-blue-600 transition"
-                    title="Editar conteúdo"
-                >
-                    <span className="material-symbols-outlined text-white text-xl">edit</span>
-                </Link>
-            </div>
-            <div className="  flex flex-col md:flex-row items-center md:items-start pt-4">
-                <div className="flex flex-col items-center md:items-start w-full md:w-1/3">
-                    <div className="w-48 h-64 rounded-xl overflow-hidden shadow-lg mb-4">
-                        {book.coverImage ? (
-                            <img
-                                src={book.coverImage}
-                                alt={`Capa de ${book.title}`}
-                                className="w-full h-full object-cover"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-200 text-white">
-                                <BookOpen size={48} />
-                            </div>
-                        )}
-                    </div>
-                    {book.rating != null && (
-                        <div className="mb-3 scale-110">
-                            <BookRating bookId={book.id} initialRating={book.rating} size={32} />
-                        </div>
-                    )}
-                </div>
-                <div className="flex-1 text-center md:text-left text-white w-full">
-                    <h1 className="text-3xl font-bold mb-2 text-white">{book.title}</h1>
-                    {book.description && (
-                        <p className="text-gray-100 text-base leading-relaxed mb-6">
-                            {book.description}
-                        </p>
-                    )}
-                    <p className="text-sm text-gray-300 mb-8">
-                        {formatDate(book.startDate)} - {formatDate(book.finishDate)}
-                    </p>
-                    <div className='flex flex-col items-start'>
-                        <h3 className="text-lg font-semibold text-white">Categorias</h3>
-                        <div className="flex gap-2 mt-4 flex-wrap">
-                            {(book.categories || []).map((cat) => (
-                                <span
-                                    key={cat.categoryId}
-                                    className="bg-white flex items-center text-gray-800 text-sm px-4 py-2 rounded-lg font-medium border border-gray-300 shadow-sm cursor-pointer"
-                                >
-                                    {cat.category.name}
-                                </span>
-                            ))}
-
-                            <CategoriesEditor book={book} />
-
-                        </div>
-                    </div>
-
-                    <div className="mt-10 text-xs text-gray-400 flex flex-col md:flex-row md:justify-between gap-1">
-                        <span>ID: {book.id}</span>
-                        <span>
-                            Adicionado em: {formatDate(book.createdAt)} | Atualizado em: {formatDate(book.updatedAt)}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <main className='w-full h-screen'>
+            <BookDetailHero bookId={book.id} />
+            
+        </main>
     );
 }

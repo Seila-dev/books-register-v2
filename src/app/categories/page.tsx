@@ -1,192 +1,110 @@
-'use client';
+'use client'
 
-import { useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
-import { parseCookies } from 'nookies';
-import api from '@/services/api';
-import CategoryLoading from './loading';
-import ComponentArrowBack from '@/components/ArrowBack';
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { parseCookies } from 'nookies'
+import api from '@/services/api'
+import {
+  ArrowRight,
+  BookOpen,
+} from 'lucide-react'
 
-type Category = {
-  id: string;
-  name: string;
-};
+interface Category {
+  id: string
+  name: string
+  books: any[]
+}
 
-export default function AllCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState('');
-  const [error, setError] = useState('');
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-
-  const { 'books-register.token': token } = parseCookies();
-
-  const menuRefs = useRef<Record<string, HTMLDivElement | null>>({});
+export default function CategoriesPage() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    const fetchCategories = async () => {
+      try {
+        const { 'books-register.token': token } = parseCookies()
+        const res = await api.get('/categories', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      // Se o menu estiver aberto e o clique for fora do menu, fecha o menu
-      if (openMenuId) {
-        const menuElement = menuRefs.current[openMenuId];
-        if (menuElement && !menuElement.contains(event.target as Node)) {
-          setOpenMenuId(null);
-        }
+        setCategories(res.data)
+      } catch (error) {
+        console.error('Erro ao buscar categorias:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [openMenuId]);
+    fetchCategories()
+  }, [])
 
-  async function fetchCategories() {
-    setLoading(true);
-    try {
-      const res = await api.get('/categories', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setCategories(res.data);
-    } catch (error) {
-      console.error('Erro ao buscar categorias:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  async function handleEdit(id: string) {
-    if (!editName.trim()) {
-      setError('Nome não pode ser vazio');
-      return;
-    }
-    setError('');
-    try {
-      await api.put(
-        `/categories/${id}`,
-        { name: editName },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setEditingId(null);
-      setEditName('');
-      fetchCategories();
-      setOpenMenuId(null);
-    } catch (err) {
-      setError('Erro ao editar categoria');
-    }
-  }
+  if (!mounted) return null
 
-  async function handleDelete(id: string) {
-    if (!confirm('Tem certeza que quer deletar esta categoria?')) return;
-
-    try {
-      await api.delete(`/categories/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchCategories();
-      setOpenMenuId(null);
-    } catch (err) {
-      alert('Erro ao deletar categoria');
-    }
-  }
+  const maxBooks = Math.max(...categories.map(c => c.books.length), 1)
 
   return (
-    <main className="text-white w-full">
-      <ComponentArrowBack />
+    <div className="text-white w-full mt-10 px-4">
+      <div className="mb-8 text-center">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Categorias</h1>
+        <p className="text-gray-400 text-sm mt-1">Veja o progresso de cada categoria</p>
+      </div>
 
-      <h1 className="text-2xl font-bold my-6">Todas as Categorias</h1>
-
-      {loading ? (
-        <CategoryLoading />
-      ) : categories.length === 0 ? (
-        <p className="text-gray-400">Nenhuma categoria encontrada.</p>
-      ) : (
-        <ul className="space-y-2">
-          {categories.map((category) => (
-            <li
-              key={category.id}
-              className="flex items-center justify-between rounded relative my-2"
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {isLoading ? (
+          Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="rounded-xl border border-gray-700/50 bg-gray-800/30 backdrop-blur-md p-6 animate-pulse"
             >
-              {editingId === category.id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    className="text-white w-full outline-0 border-b border-b-blue-500 px-2 py-1 rounded"
-                    autoFocus
-                  />
-                  <div className="flex gap-2 ml-4">
-                    <button
-                      onClick={() => handleEdit(category.id)}
-                      className="bg-green-600 px-8 py-2 rounded cursor-pointer"
-                    >
-                      Salvar
-                    </button>
-                    <button
-                      onClick={() => {
-                        setEditingId(null);
-                        setEditName('');
-                        setError('');
-                      }}
-                      className="bg-gray-600 px-2 py-2 rounded cursor-pointer"
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <div className='w-full flex items-center justify-between'>
-                  <Link href={`/categories/${category.id}`} className="flex-1 px-4 py-2 bg-gray-600 cursor-pointer hover:bg-gray-700 transition duration-100 rounded-sm w-full h-full ">
-                    {category.name}
-                  </Link>
+              <div className="h-6 w-3/4 bg-gray-700 rounded mb-2"></div>
+              <div className="h-4 w-1/2 bg-gray-700 rounded mb-4"></div>
+              <div className="h-2 w-full bg-gray-700 rounded"></div>
+            </div>
+          ))
+        ) : categories.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <BookOpen className="mx-auto mb-4 text-gray-400" size={48} />
+            <p className="text-gray-400 text-lg">Nenhuma categoria encontrada.</p>
+            <p className="text-gray-500 text-sm mt-1">Adicione conteúdos para ver categorias aqui.</p>
+          </div>
+        ) : (
+          categories.map((category) => (
+            <div
+              key={category.id}
+              onClick={() => router.push(`/categories/${category.id}`)}
+              className="cursor-pointer rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-md p-4 hover:shadow-xl hover:bg-gray-700/30 transition duration-300"
+            >
+              <h3 className="text-lg font-semibold mb-1 truncate hover:text-yellow-300 transition-colors">{category.name}</h3>
+              <p className="text-sm text-gray-400 mb-3">{category.books.length} {category.books.length === 1 ? 'item' : 'itens'}</p>
 
-                  {/* Botão 3 pontinhos */}
-                  <div className="relative" ref={(el) => {
-                    menuRefs.current[category.id] = el;
-                  }}>
-                    <button
-                      onClick={() =>
-                        setOpenMenuId(openMenuId === category.id ? null : category.id)
-                      }
-                      className="p-2 ml-2 transition rounded-full duration-200 hover:bg-gray-700 cursor-pointer "
-                      aria-label="Abrir menu de ações"
-                    >
-                      :
-                    </button>
+              <div className="w-full bg-gray-700/50 rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-purple-500 to-blue-600 h-2 rounded-full"
+                  style={{ width: `${(category.books.length / maxBooks) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
-                    {/* Menu dropdown */}
-                    {openMenuId === category.id && (
-                      <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-lg shadow-lg z-10 p-2 ">
-                        <button
-                          onClick={() => {
-                            setEditingId(category.id);
-                            setEditName(category.name);
-                            setOpenMenuId(null);
-                            setError('');
-                          }}
-                          className="w-full text-left block rounded-md my-2 px-2 py-2 text-white cursor-pointer hover:bg-gray-700 transition"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(category.id)}
-                          className="w-full text-left block rounded-md my-2 px-2 py-2 text-red-500 cursor-pointer hover:bg-gray-700 transition"
-                        >
-                          Deletar
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </li>
-          ))}
-          {error && <p className="text-red-500 mt-2">{error}</p>}
-        </ul>
-      )}
-    </main>
-  );
+      <div className="mt-10 text-center">
+        <button
+          onClick={() => router.push('/')}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200"
+        >
+          Voltar para o início
+          <ArrowRight size={16} />
+        </button>
+      </div>
+    </div>
+  )
 }

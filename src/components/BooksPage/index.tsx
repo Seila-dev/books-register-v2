@@ -6,7 +6,7 @@ import api from '@/services/api';
 import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { StarRating } from '../StarRating';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 import Link from 'next/link';
@@ -110,7 +110,7 @@ export default function BooksPage() {
   if (error) router.push('/login')
 
   return (
-    <div className="text-white w-full">
+    <div className="text-white w-full my-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
@@ -184,16 +184,7 @@ export default function BooksPage() {
 
         <QuickAddCard />
 
-        <Link
-          href={`/books/create`}
-          className={`
-            fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg hover:shadow-xl 
-            bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700
-            border-0 transition-all duration-300 ease-out z-20 flex justify-center items-center
-          `}
-        >
-          <Plus className={`h-6 w-6 transition-transform duration-300`} />
-        </Link>
+        
       </div>
     </div>
   );

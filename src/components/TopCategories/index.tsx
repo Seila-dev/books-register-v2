@@ -50,6 +50,7 @@ export default function TopCategories() {
         setCategories(sorted)
       } catch (error) {
         console.error('Erro ao buscar categorias:', error)
+        // router.push('/login')
       } finally {
         setIsLoading(false)
       }
@@ -95,11 +96,11 @@ export default function TopCategories() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg">
+          <div className="p-2 bg-gradient-to-r from-orange-600 to-blue-600 rounded-lg">
             <TrendingUp size={24} className="text-white" />
           </div>
           <div>
-            <h2 className="lg:text-3xl md:text-2xl text-lg font-bold">
+            <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
               Categorias em destaque
             </h2>
             <p className="text-gray-400 text-sm">

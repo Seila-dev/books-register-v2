@@ -13,7 +13,7 @@ import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book, UpdateBookData } from '@/types/bookData';
 import api from '@/services/api';
-import { useBooks } from '@/contexts/useBooks';
+import { useBooks } from '@/hooks/useBooks';
 
 const editBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
@@ -70,6 +70,11 @@ export default function EditBookPage({ params }: Props) {
     };
   }, [coverImageFile]);
 
+  const formatDate = (dateString: string | null | undefined): string => {
+    if (!dateString) return '';
+    return new Date(dateString).toISOString().split('T')[0];
+  };
+
   const fetchCategories = async () => {
     try {
       const { 'books-register.token': token } = parseCookies();
@@ -110,8 +115,8 @@ export default function EditBookPage({ params }: Props) {
         // Set form values
         setValue('title', book.title);
         setValue('description', book.description || '');
-        setValue('startDate', book.startDate || '');
-        setValue('finishDate', book.finishDate || '');
+        setValue('startDate', formatDate(book.startDate));
+        setValue('finishDate', formatDate(book.finishDate));
         setValue('categoryIds', book.categories?.map(c => c.categoryId) || []);
 
         // Set initial preview URL if book has cover image
@@ -215,7 +220,6 @@ export default function EditBookPage({ params }: Props) {
     }
   };
 
-  // Loading state while fetching data
   if (!initialBook && !categories.length) {
     return (
       <div className="w-full mt-8">
@@ -228,7 +232,7 @@ export default function EditBookPage({ params }: Props) {
   }
 
   return (
-    <div className="w-full mt-0 md:mt-6">
+    <div className="w-full mt-0 md:mt-4 p-6">
       <ComponentArrowBack />
       <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Editar Conteúdo</h1>
 

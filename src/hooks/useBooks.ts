@@ -15,7 +15,7 @@ function getToken() {
 async function fetchBooks(): Promise<Book[]> {
   const token = getToken();
   if (!token) throw new Error('Usuário não autenticado');
-  
+
   const res = await api.get<Book[]>('/books', {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -50,11 +50,14 @@ async function createBook(data: CreateBookData): Promise<Book> {
   if (data.rating !== undefined) formData.append('rating', String(data.rating));
   if (data.startDate) formData.append('startDate', data.startDate);
   if (data.finishDate) formData.append('finishDate', data.finishDate);
-if (data.coverImage) {
-  formData.append('coverImage', data.coverImage);
-}
+  if (data.coverImage) {
+    formData.append('coverImage', data.coverImage);
+  }
   if (data.categoryIds && data.categoryIds.length > 0)
     formData.append('categoryIds', JSON.stringify(data.categoryIds));
+  if (data.isFavorite !== undefined) {
+    formData.append('isFavorite', String(data.isFavorite));
+  }
 
   const res = await api.post<Book>('/books', formData, {
     headers: {
@@ -75,10 +78,17 @@ async function updateBook(data: UpdateBookData): Promise<Book> {
   if (data.description !== undefined) formData.append('description', data.description || '');
   if (data.rating !== undefined) formData.append('rating', String(data.rating));
   if (data.startDate !== undefined) formData.append('startDate', data.startDate || '');
-  if (data.finishDate !== undefined) formData.append('finishDate', data.finishDate || '');
+  if (data.finishDate !== undefined) {
+    formData.append('finishDate', data.finishDate === null ? '' : data.finishDate);
+  }
   if (data.coverImage) formData.append('coverImage', data.coverImage);
   if (data.categoryIds && data.categoryIds.length > 0) {
     formData.append('categoryIds', JSON.stringify(data.categoryIds));
+  }
+  if (data.isFavorite !== undefined) {
+    // 👇 Aqui que pode estar falhando
+    formData.append("isFavorite", data.isFavorite ? "true" : "false");
+
   }
 
   const res = await api.put<Book>(`/books/${data.id}`, formData, {
@@ -91,9 +101,11 @@ async function updateBook(data: UpdateBookData): Promise<Book> {
   return res.data;
 }
 
+
+
 // Deletar livro
 async function deleteBook(id: string): Promise<void> {
-  
+
   const token = getToken();
   await api.delete(`/books/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -145,6 +157,9 @@ export function useBooks() {
       queryClient.setQueryData<Book[]>(['books'], (old) =>
         old ? old.map((b) => (b.id === updatedBook.id ? updatedBook : b)) : []
       );
+
+      // ✅ Força atualização do detalhe
+      queryClient.invalidateQueries({ queryKey: ['book', updatedBook.id] });
     },
   });
 
@@ -163,6 +178,43 @@ export function useBooks() {
       queryClient.setQueryData<Book[]>(['books'], (old) =>
         old ? old.map((b) => (b.id === updatedBook.id ? updatedBook : b)) : []
       );
+    },
+    
+  });
+
+  const toggleFavoriteMutation = useMutation<Book, Error, { book: Book }>({
+    mutationFn: async ({ book }) => {
+      const updatedBook: UpdateBookData = {
+        id: book.id,
+        isFavorite: !book.isFavorite,
+      };
+      return updateBook(updatedBook);
+    },
+    onSuccess: (updatedBook) => {
+      queryClient.setQueryData<Book[]>(['books'], (old) =>
+        old ? old.map((b) => (b.id === updatedBook.id ? updatedBook : b)) : []
+      );
+
+      queryClient.invalidateQueries({queryKey: ['book', updatedBook.id]});
+    },
+  });
+
+
+  // MARCAR COMO LIDO
+  const markAsReadMutation = useMutation<Book, Error, { book: Book }>({
+    mutationFn: async ({ book }) => {
+      const updatedBook: UpdateBookData = {
+        id: book.id,
+        finishDate: book.finishDate ? null : new Date().toISOString(),
+      };
+      return updateBook(updatedBook);
+    },
+    onSuccess: (updatedBook) => {
+      queryClient.setQueryData<Book[]>(['books'], (old) =>
+        old ? old.map((b) => (b.id === updatedBook.id ? updatedBook : b)) : []
+      );
+
+      queryClient.invalidateQueries({ queryKey: ['book', updatedBook.id] }); // <-- Aqui também
     },
   });
 
@@ -202,6 +254,8 @@ export function useBooks() {
     updateBook: updateBookMutation.mutateAsync,
     deleteBook: deleteBookMutation.mutateAsync,
     updateBookRating: updateRatingMutation.mutateAsync,
+    toggleFavorite: toggleFavoriteMutation.mutateAsync,
+    markAsRead: markAsReadMutation.mutateAsync,
     fetchBooksByCategory: fetchByCategory,
     getBookById: getById,
     useBookById

@@ -66,7 +66,7 @@ export default async function CategoryPage({ params }: any) {
   const categoryName = filteredBooks[0]?.categories.find(cat => cat.categoryId === id)?.category.name
 
   return (
-    <div className="text-white w-full">
+    <div className="text-white w-full p-6">
       <ComponentArrowBack />
       <h1 className="text-2xl font-bold my-6">
         Categoria: {categoryName ?? 'Categoria desconhecida'}
