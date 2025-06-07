@@ -28,15 +28,12 @@ export default function DashboardPanel({
   readingNow,
   recentActivities,
 }: DashboardPanelProps) {
-  const progressPercent = Math.min((booksRead / monthlyGoal) * 100, 100);
-  const remaining = monthlyGoal - booksRead;
 
   const { deleteNote, isDeleting, notes } = useNotes()
-  const router = useRouter()
 
   const lastNotes = [...notes]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 3);
+    .slice(0, 2);
 
   const [expandedNotes, setExpandedNotes] = useState<Set<string>>(new Set());
 
@@ -114,12 +111,12 @@ export default function DashboardPanel({
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
           <ul className="space-y-3">
             {recentActivities.map((a, i) => (
-              <li key={i} className="flex justify-between border-b border-gray-700 pb-2">
+              <li key={i} className="flex justify-between border-b border-gray-700 pb-2 gap-2">
                 <div>
                   <p className="font-medium">{a.title}</p>
-                  <p className="text-sm text-gray-400">{a.status}</p>
+                  <p className="text-sm text-gray-400 mt-2 sm:mt-0">{a.status}</p>
                 </div>
-                <span className="text-sm text-gray-500">{a.date}</span>
+                <span className="text-sm text-end text-gray-500">{a.date}</span>
               </li>
             ))}
           </ul>

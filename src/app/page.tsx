@@ -27,19 +27,25 @@ export default function Home() {
   const isMobile = useMediaQuery("(max-width: 450px)")
 
   const recentBooks = [...books]
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .slice(0, 3)
+    .map(book => {
+      const activityDate = book.finishDate || book.startDate || book.createdAt;
+      return { ...book, activityDate };
+    })
+    .sort((a, b) => new Date(b.activityDate).getTime() - new Date(a.activityDate).getTime())
+    .slice(0, 3);
 
   const recentActivities = recentBooks.map(book => ({
     title: book.title,
     status: book.finishDate ? "Finalizado" : book.startDate ? "Iniciado" : "Adicionado",
-    date: formatDistanceToNow(new Date(book.createdAt), { addSuffix: true, locale: ptBR }),
-  }))
-
+    date: formatDistanceToNow(new Date(book.finishDate || book.startDate || book.createdAt), {
+      addSuffix: true,
+      locale: ptBR,
+    }),
+  }));
   if (error) router.push('/login')
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full px-4 py-8">
       <PainelHeader />
       {isMobile ? (
         <BooksPage />

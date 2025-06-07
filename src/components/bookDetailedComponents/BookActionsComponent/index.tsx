@@ -132,17 +132,6 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
                     </div>
                 )}
             </div>
-
-            {/* Avaliar */}
-            {!book.rating && (
-                <button
-                    onClick={() => router.push(`/books/${book.id}/rating`)}
-                    className="bg-yellow-600 hover:bg-yellow-700 px-4 py-3 rounded-lg flex items-center gap-2 cursor-pointer transition-all duration-200"
-                >
-                    <Star size={18} />
-                    Avaliar
-                </button>
-            )}
         </div>
     );
 }
