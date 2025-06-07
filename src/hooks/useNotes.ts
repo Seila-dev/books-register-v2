@@ -3,29 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/services/api';
 import { parseCookies } from 'nookies';
-
-export interface Note {
-    id: string;
-    content: string;
-    createdAt: string;
-    bookId: string;
-    userId: number;
-    book: {
-        id: string;
-        title: string;
-        coverImage?: string;
-    };
-}
-
-export interface CreateNoteData {
-    content: string;
-    bookId: string;
-}
-
-export interface UpdateNoteData {
-    id: string;
-    content: string;
-}
+import { CreateNoteData, Note, UpdateNoteData } from '@/types/noteData';
 
 // Função para obter token dos cookies
 function getToken() {

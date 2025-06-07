@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Book } from '@/types/bookData';
-import { useNotes, Note } from '@/hooks/useNotes';
+import { useNotes } from '@/hooks/useNotes';
 import {
   ChevronLeft,
   ChevronRight,
@@ -21,6 +21,7 @@ import {
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import BooksCarousel from '@/components/BooksCarousel';
+import { Note } from '@/types/noteData';
 
 interface BookExtrasSectionProps {
   similarBooks: Book[];

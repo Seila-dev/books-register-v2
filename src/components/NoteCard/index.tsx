@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { BookOpen, Edit3, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Note } from '@/types/noteData';
 
 interface NoteCardProps {
-  note: any;
+  note: Note;
   isExpanded: boolean;
   onToggleExpansion: () => void;
   onDelete: () => void | Promise<void>;
@@ -23,12 +24,12 @@ export default function NoteCard({
   truncateText,
 }: NoteCardProps) {
   return (
-    <div className="p-6 hover:bg-gray-700 transition-colors cursor-pointer">
+    <div className="p-2 rounded-md hover:bg-gray-900 transition-colors">
       <div className="flex justify-between items-start space-x-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-1 text-sm text-blue-400 font-semibold">
             <BookOpen className="w-4 h-4" />
-            <span>{note.book.title}</span>
+            <Link href={`/books/${note.book.id}`}>{note.book.title}</Link>
           </div>
           <p className="text-gray-200 whitespace-pre-wrap">
             {isExpanded ? note.content : truncateText(note.content, 150)}
@@ -38,7 +39,7 @@ export default function NoteCard({
               e.stopPropagation();
               onToggleExpansion();
             }}
-            className="mt-2 text-xs text-blue-400 hover:underline focus:outline-none"
+            className="mt-2 text-xs text-blue-400 hover:underline focus:outline-none cursor-pointer"
             aria-label={isExpanded ? 'Mostrar menos' : 'Mostrar mais'}
           >
             {isExpanded ? 'Mostrar menos ▲' : 'Mostrar mais ▼'}
