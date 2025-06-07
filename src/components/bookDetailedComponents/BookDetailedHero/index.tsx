@@ -12,7 +12,8 @@ import { BookRating } from '@/components/BookRating';
 import { CategoriesEditor } from '@/components/CategoryEditor';
 import BookExtrasSection from '../BookExtrasSection';
 import { BookActionButtons } from '../BookActionsComponent';
-import { StarRating } from '@/components/StarRating';
+import { BookDetailHeroSkeleton } from '@/components/loaders/BookDetailedHeroSkeleton';
+import { BookExtrasSectionSkeleton } from '@/components/loaders/BookExtraSection';
 
 interface BookDetailHeroProps {
   bookId: string;
@@ -22,13 +23,12 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
   const { useBookById, books, updateBookRating } = useBooks();
   const { data: book, isLoading, error } = useBookById(bookId);
 
-  if (isLoading) {
-    return (
-      <section className="w-full text-white p-10 flex justify-center items-center">
-        <div className="text-gray-400 text-sm">Carregando livro...</div>
-      </section>
-    );
-  }
+  if (isLoading) return (
+  <div>
+    <BookDetailHeroSkeleton />
+    <BookExtrasSectionSkeleton />
+  </div>
+  )
 
   if (error || !book) {
     return (
@@ -45,20 +45,6 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
         book.categories.map((c) => c.categoryId).includes(cat.categoryId)
       )
   );
-
-    const handleRatingChange = async (bookId: string, newRating: number) => {
-    const bookToUpdate = books.find((b) => b.id === bookId);
-    if (!bookToUpdate) return;
-
-    const originalRating = bookToUpdate.rating;
-    bookToUpdate.rating = newRating;
-
-    try {
-      updateBookRating({ bookId, rating: newRating });
-    } catch (error) {
-      bookToUpdate.rating = originalRating;
-    }
-  };
 
   function formatDate(dateString?: string | null): string {
     if (!dateString) return 'Não informado';
@@ -79,9 +65,9 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
         style={{ backgroundImage: `url(${book.coverImage || ''})` }}
       />
 
-      <div className="relative z-10 flex flex-col lg:flex-row px-8 py-10 gap-10">
+      <div className="relative z-10 flex flex-col lg:flex-row px-4 py-8 gap-10">
         {/* Capa do livro */}
-        <div className="flex-shrink-0 w-full lg:w-60 flex justify-center lg:justify-start">
+        <div className="flex-shrink-0 w-full lg:w-60 flex justify-center md:justify-start">
           <div className="w-48 h-72 rounded-lg overflow-hidden shadow-lg ring-2 ring-white/10">
             {book.coverImage ? (
               <img
@@ -99,8 +85,8 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
 
         {/* Conteúdo principal */}
         <div className="flex-1 flex flex-col">
-          <div className="flex justify-between items-start mb-4">
-            <h1 className="text-4xl lg:text-5xl font-bold text-white drop-shadow-lg">
+          <div className="flex justify-between items-start mb-4 gap-1">
+            <h1 className="text-3xl lg:text-5xl font-bold text-white drop-shadow-lg">
               {book.title}
             </h1>
             <Link
@@ -123,7 +109,7 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
           {/* Avaliação */}
           {book.rating !== null && (
             <div className="flex items-center gap-3 mb-4">
-                            <BookRating bookId={book.id} initialRating={Number(book.rating)} size={32} />
+              <BookRating bookId={book.id} initialRating={Number(book.rating)} size={32} />
               <span className="text-sm text-gray-300">{Number(book.rating).toFixed(1)} / 5</span>
             </div>
           )}
@@ -147,7 +133,7 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
               {(book.categories || []).map((cat) => (
                 <span
                   key={cat.categoryId}
-                  className="px-3 py-1 bg-white flex justify-center items-center text-gray-800 rounded-md text-sm font-medium"
+                  className="px-3 py-2 md:py-1 bg-white flex justify-center items-center text-gray-800 rounded-md text-sm font-medium"
                 >
                   {cat.category.name}
                 </span>

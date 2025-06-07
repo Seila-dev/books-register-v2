@@ -84,7 +84,7 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
             <button
                 onClick={handleMarkAsRead}
                 disabled={localLoading.markAsRead}
-                className={`px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 cursor-pointer ${book.finishDate ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'
+                className={`px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all duration-200 cursor-pointer w-full sm:w-fit text-xs sm:text-base ${book.finishDate ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'
                     } ${localLoading.markAsRead ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
                 {localLoading.markAsRead ? (
@@ -101,7 +101,7 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
             <button
                 onClick={handleToggleFavorite}
                 disabled={localLoading.favorite}
-                className={`px-4 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 cursor-pointer ${book.isFavorite
+                className={`px-6 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 cursor-pointer w-full sm:w-fit text-xs sm:text-base ${book.isFavorite
                     ? 'bg-red-600 hover:bg-red-700 text-white'
                     : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
                     } ${localLoading.favorite ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -118,7 +118,7 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
             <div className="relative">
                 <button
                     onClick={() => handleShare()}
-                    className="bg-gray-800 hover:bg-gray-700 px-4 py-3 rounded-lg flex items-center gap-2 cursor-pointer transition-all duration-200"
+                    className="bg-gray-800 hover:bg-gray-700 px-4 py-3 rounded-lg flex items-center gap-2 cursor-pointer transition-all duration-200 text-xs sm:text-base"
                 >
                     <Share2 size={18} />
                     Compartilhar

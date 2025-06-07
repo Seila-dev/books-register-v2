@@ -121,7 +121,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
   if (!mounted) return null
 
   return (
-    <div className="mt-8 space-y-12 p-6 relative z-0">
+    <div className="mt-8 space-y-12 px-4 py-8 relative z-0">
       {/* 📝 Seção de Anotações */}
       <section className="space-y-6">
         {/* Header da seção */}
@@ -141,7 +141,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
           {!isAddingNote && (
             <button
               onClick={() => setIsAddingNote(true)}
-              className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105"
+              className="hidden md:flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               Nova Anotação
@@ -168,7 +168,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'newest' | 'oldest')}
-                className="bg-gray-800 border border-gray-700 rounded-lg text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-gray-800 border border-gray-700 rounded-lg text-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
               >
                 <option value="newest">Mais recentes</option>
                 <option value="oldest">Mais antigas</option>
@@ -199,7 +199,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
                   setIsAddingNote(false);
                   setNewNote('');
                 }}
-                className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
                 Cancelar
@@ -208,7 +208,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
               <button
                 onClick={handleCreateNote}
                 disabled={!newNote.trim() || isCreating}
-                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 {isCreating ? 'Salvando...' : 'Salvar'}
@@ -256,7 +256,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
                     <div className="flex justify-end gap-3">
                       <button
                         onClick={cancelEdit}
-                        className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                         Cancelar
@@ -265,7 +265,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
                       <button
                         onClick={() => handleUpdateNote(note.id)}
                         disabled={!editContent.trim() || isUpdating}
-                        className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 cursor-pointer"
                       >
                         <Save className="w-4 h-4" />
                         {isUpdating ? 'Salvando...' : 'Salvar'}
@@ -280,10 +280,10 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
                         {note.content}
                       </p>
 
-                      <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-2 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => startEdit(note)}
-                          className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors"
+                          className="p-2 text-gray-400 hover:text-blue-400 hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
                           title="Editar anotação"
                         >
                           <Edit3 className="w-4 h-4" />
@@ -292,7 +292,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
                         <button
                           onClick={() => handleDeleteNote(note.id)}
                           disabled={isDeleting}
-                          className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50"
+                          className="p-2 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
                           title="Excluir anotação"
                         >
                           <Trash2 className="w-4 h-4" />
