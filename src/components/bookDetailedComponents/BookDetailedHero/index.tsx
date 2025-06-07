@@ -1,12 +1,50 @@
-import { BookOpen, Bookmark, Share2, Pencil } from 'lucide-react';
+'use client';
+
+import {
+  BookOpen,
+  Pencil,
+  Check,
+  Star,
+} from 'lucide-react';
 import Link from 'next/link';
+import { useBooks } from '@/hooks/useBooks';
 import { BookRating } from '@/components/BookRating';
 import { CategoriesEditor } from '@/components/CategoryEditor';
-import { Book } from '@/types/bookData';
-import { cookies } from 'next/headers';
 import BookExtrasSection from '../BookExtrasSection';
+import { BookActionButtons } from '../BookActionsComponent';
 
-export default async function BookDetailHero({ book }: { book: Book }) {
+interface BookDetailHeroProps {
+  bookId: string;
+}
+
+export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
+  const { useBookById, books } = useBooks();
+  const { data: book, isLoading, error } = useBookById(bookId);
+
+  if (isLoading) {
+    return (
+      <section className="w-full text-white p-10 flex justify-center items-center">
+        <div className="text-gray-400 text-sm">Carregando livro...</div>
+      </section>
+    );
+  }
+
+  if (error || !book) {
+    return (
+      <section className="w-full text-white p-10 flex justify-center items-center">
+        <div className="text-red-500 text-sm">Erro ao carregar o livro.</div>
+      </section>
+    );
+  }
+
+  const similarBooks = (books || []).filter(
+    (b) =>
+      b.id !== book.id &&
+      b.categories.some((cat) =>
+        book.categories.map((c) => c.categoryId).includes(cat.categoryId)
+      )
+  );
+
   function formatDate(dateString?: string | null): string {
     if (!dateString) return 'Não informado';
     const date = new Date(dateString);
@@ -17,26 +55,6 @@ export default async function BookDetailHero({ book }: { book: Book }) {
       year: 'numeric',
     });
   }
-
-  const cookieStore = await cookies();
-  const token = cookieStore.get('books-register.token')?.value;
-
-  const responseBooks = await fetch(`${process.env.API_URL}/books`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    cache: 'no-store',
-  });
-
-  const allBooks: Book[] = await responseBooks.json();
-
-  const similarBooks = allBooks.filter(
-    (b) =>
-      b.id !== book.id &&
-      b.categories.some((cat) =>
-        book.categories.map((c) => c.categoryId).includes(cat.categoryId)
-      )
-  );
 
   return (
     <section className="relative w-full bg-gradient-to-br from-[#0f0f0f] to-black text-white overflow-hidden rounded-xl shadow-2xl">
@@ -79,6 +97,14 @@ export default async function BookDetailHero({ book }: { book: Book }) {
             </Link>
           </div>
 
+          {/* Status do livro */}
+          {book.finishDate && (
+            <div className="flex items-center gap-2 mb-4">
+              <Check size={20} className="text-green-500" />
+              <span className="text-green-400 font-medium">Terminou</span>
+            </div>
+          )}
+
           {/* Avaliação */}
           {book.rating !== null && (
             <div className="flex items-center gap-3 mb-4">
@@ -106,7 +132,7 @@ export default async function BookDetailHero({ book }: { book: Book }) {
               {(book.categories || []).map((cat) => (
                 <span
                   key={cat.categoryId}
-                  className="px-3 py-1 bg-white flex justify-center items-center text-gray-800 rounded-full text-sm font-medium"
+                  className="px-3 py-1 bg-white flex justify-center items-center text-gray-800 rounded-md text-sm font-medium"
                 >
                   {cat.category.name}
                 </span>
@@ -116,20 +142,10 @@ export default async function BookDetailHero({ book }: { book: Book }) {
           </div>
 
           {/* Ações */}
-          <div className="flex flex-wrap gap-4 text-sm mb-6">
-            <button className="bg-blue-600 hover:bg-blue-700 transition px-6 py-2 rounded-lg font-semibold">
-              Marcar como Lido
-            </button>
-            <button className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2">
-              <Bookmark size={18} /> Favoritar
-            </button>
-            <button className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg flex items-center gap-2">
-              <Share2 size={18} /> Compartilhar
-            </button>
-          </div>
+          <BookActionButtons book={book} />
 
           {/* Rodapé */}
-          <div className="text-xs text-gray-500 flex flex-col md:flex-row md:justify-between">
+          <div className="text-xs text-gray-500 flex flex-col md:flex-row md:justify-between mt-6">
             <span>ID: {book.id}</span>
             <span>
               Adicionado: {formatDate(book.createdAt)} | Atualizado: {formatDate(book.updatedAt)}
@@ -138,7 +154,7 @@ export default async function BookDetailHero({ book }: { book: Book }) {
         </div>
       </div>
 
-      {/* Seções extras: sugestões, anotações etc */}
+      {/* Seções extras */}
       <BookExtrasSection book={book} similarBooks={similarBooks} />
     </section>
   );

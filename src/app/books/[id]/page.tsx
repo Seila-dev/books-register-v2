@@ -96,7 +96,7 @@ export default async function BookDetailPage({ params }: any) {
 
     return (
         <main className='w-full h-screen'>
-            <BookDetailHero book={book} />
+            <BookDetailHero bookId={book.id} />
             
         </main>
     );
