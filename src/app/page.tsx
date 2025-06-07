@@ -42,7 +42,7 @@ export default function Home() {
       locale: ptBR,
     }),
   }));
-  if (error) router.push('/login')
+  // if (error) router.push('/login')
 
   return (
     <div className="w-full px-4 py-8">
