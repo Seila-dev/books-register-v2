@@ -179,6 +179,7 @@ export function useBooks() {
         old ? old.map((b) => (b.id === updatedBook.id ? updatedBook : b)) : []
       );
     },
+    
   });
 
   const toggleFavoriteMutation = useMutation<Book, Error, { book: Book }>({

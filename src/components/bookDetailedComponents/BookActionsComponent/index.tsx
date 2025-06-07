@@ -94,7 +94,7 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
                 ) : (
                     <BookOpen size={18} />
                 )}
-                {book.finishDate ? 'Marcar como Não finalizado' : 'Marcar como Finalizado'}
+                {book.finishDate ? 'Finalizado' : 'Marcar como Finalizado'}
             </button>
 
             {/* Favoritar */}

@@ -12,13 +12,14 @@ import { BookRating } from '@/components/BookRating';
 import { CategoriesEditor } from '@/components/CategoryEditor';
 import BookExtrasSection from '../BookExtrasSection';
 import { BookActionButtons } from '../BookActionsComponent';
+import { StarRating } from '@/components/StarRating';
 
 interface BookDetailHeroProps {
   bookId: string;
 }
 
 export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
-  const { useBookById, books } = useBooks();
+  const { useBookById, books, updateBookRating } = useBooks();
   const { data: book, isLoading, error } = useBookById(bookId);
 
   if (isLoading) {
@@ -44,6 +45,20 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
         book.categories.map((c) => c.categoryId).includes(cat.categoryId)
       )
   );
+
+    const handleRatingChange = async (bookId: string, newRating: number) => {
+    const bookToUpdate = books.find((b) => b.id === bookId);
+    if (!bookToUpdate) return;
+
+    const originalRating = bookToUpdate.rating;
+    bookToUpdate.rating = newRating;
+
+    try {
+      updateBookRating({ bookId, rating: newRating });
+    } catch (error) {
+      bookToUpdate.rating = originalRating;
+    }
+  };
 
   function formatDate(dateString?: string | null): string {
     if (!dateString) return 'Não informado';
@@ -108,7 +123,7 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
           {/* Avaliação */}
           {book.rating !== null && (
             <div className="flex items-center gap-3 mb-4">
-              <BookRating bookId={book.id} initialRating={Number(book.rating)} size={28} />
+                            <BookRating bookId={book.id} initialRating={Number(book.rating)} size={32} />
               <span className="text-sm text-gray-300">{Number(book.rating).toFixed(1)} / 5</span>
             </div>
           )}
