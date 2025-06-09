@@ -44,7 +44,8 @@ const updatedCategories: BookCategory[] = allCategories
     bookId: book.id,
     categoryId: cat.id,
     category: cat,
-    assignedAt: cat.createdAt
+    assignedAt: cat.createdAt,
+    book: book
   }));
 
     onCategoriesUpdated?.(updatedCategories);
