@@ -20,7 +20,7 @@ export default function UserSettings() {
   if (loading || !user) return <UserSettingsSkeleton />;
 
   return (
-      <div className='w-full'>
+      <div className='w-full px-4 py-8 '>
         {/* Top Bar */}
         <div className="flex items-center justify-between mb-6">
           <ComponentArrowBack />

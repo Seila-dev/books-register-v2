@@ -29,7 +29,7 @@ export default function BooksCarousel({ books, mode }: BooksCarouselProps) {
   }
 
   return (
-    <section className="space-y-6 my-6">
+    <section className="space-y-6 mb-6 mt-10">
       <div className="flex items-center gap-3">
         <div className="p-2 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg">
           <BookOpen className="w-5 h-5 text-white" />

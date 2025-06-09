@@ -86,7 +86,7 @@ export default function CreateBookPage() {
   };
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full px-4 py-8">
       <ComponentArrowBack />
 
       <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Conteúdo</h1>

@@ -77,22 +77,27 @@ export default function CategoriesPage() {
           </div>
         ) : (
           categories.map((category) => (
-            <div
-              key={category.id}
-              onClick={() => router.push(`/categories/${category.id}`)}
-              className="cursor-pointer rounded-xl bg-gray-800/30 border border-gray-700/50 backdrop-blur-md p-4 hover:shadow-xl hover:bg-gray-700/30 transition duration-300"
-            >
-              <h3 className="text-lg font-semibold mb-1 truncate hover:text-yellow-300 transition-colors">{category.name}</h3>
-              <p className="text-sm text-gray-400 mb-3">{category.books.length} {category.books.length === 1 ? 'item' : 'itens'}</p>
+  <div
+    key={category.id}
+    onClick={() => router.push(`/categories/${category.id}`)}
+    className="cursor-pointer rounded-2xl p-5 border border-purple-500/20 bg-gradient-to-br from-purple-800/40 via-indigo-800/30 to-blue-800/20 shadow-lg hover:shadow-purple-600/30 backdrop-blur-md transition-all duration-300 hover:scale-[1.02]"
+  >
+    <h3 className="text-lg font-bold text-white mb-1 truncate hover:text-purple-300 transition-colors duration-200">
+      {category.name}
+    </h3>
 
-              <div className="w-full bg-gray-700/50 rounded-full h-2">
-                <div
-                  className="bg-gradient-to-r from-purple-500 to-blue-600 h-2 rounded-full"
-                  style={{ width: `${(category.books.length / maxBooks) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-          ))
+    <p className="text-sm text-gray-300 mb-3">
+      {category.books.length} {category.books.length === 1 ? 'item' : 'itens'}
+    </p>
+
+    <div className="w-full bg-gray-700/40 rounded-full h-2">
+      <div
+        className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+        style={{ width: `${(category.books.length / maxBooks) * 100}%` }}
+      ></div>
+    </div>
+  </div>
+))
         )}
       </div>
 

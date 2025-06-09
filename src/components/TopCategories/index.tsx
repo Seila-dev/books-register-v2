@@ -11,21 +11,18 @@ import {
   ArrowRight,
   Crown,
   Trophy,
-  Award
+  Award,
+  ChevronRight,
+  ChartColumnIncreasingIcon
 } from 'lucide-react'
-
-type Category = {
-  id: string
-  name: string
-  books: any[]
-  color?: string
-  rank?: number
-}
+import { Category } from '@/types/categoryData'
+import Link from 'next/link'
 
 export default function TopCategories() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
@@ -33,9 +30,7 @@ export default function TopCategories() {
       try {
         const { 'books-register.token': token } = parseCookies()
         const res = await api.get('/categories', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         })
 
         const sorted = res.data
@@ -44,13 +39,11 @@ export default function TopCategories() {
           .map((category: Category, index: number) => ({
             ...category,
             rank: index + 1,
-            color: ['from-amber-500 to-orange-600', 'from-gray-400 to-gray-600', 'from-amber-600 to-yellow-700'][index] || 'from-purple-500 to-blue-600'
           }))
 
         setCategories(sorted)
       } catch (error) {
         console.error('Erro ao buscar categorias:', error)
-        // router.push('/login')
       } finally {
         setIsLoading(false)
       }
@@ -68,150 +61,197 @@ export default function TopCategories() {
   const getRankIcon = (rank: number) => {
     switch (rank) {
       case 1:
-        return <Crown className="text-yellow-400" size={20} fill="currentColor" />
+        return <Crown className="text-yellow-300 drop-shadow-lg" size={22} fill="currentColor" />
       case 2:
-        return <Trophy className="text-gray-300" size={20} />
+        return <Trophy className="text-slate-300 drop-shadow-lg" size={22} />
       case 3:
-        return <Award className="text-amber-600" size={20} />
+        return <Award className="text-amber-500 drop-shadow-lg" size={22} />
       default:
-        return <Star className="text-purple-400" size={20} />
+        return <Star className="text-violet-400 drop-shadow-lg" size={22} />
     }
   }
 
-  const getRankColor = (rank: number) => {
+  const getRankBadgeStyle = (rank: number) => {
     switch (rank) {
       case 1:
-        return 'border-yellow-400/50 hover:border-yellow-400'
+        return 'bg-yellow-800/20 border border-yellow-500/30 shadow-yellow-400/10'
       case 2:
-        return 'border-gray-400/50 hover:border-gray-400'
+        return 'bg-slate-700/20 border border-slate-400/30 shadow-slate-400/10'
       case 3:
-        return 'border-amber-600/50 hover:border-amber-600'
+        return 'bg-amber-700/20 border border-amber-500/30 shadow-amber-500/10'
       default:
-        return 'border-purple-500/50 hover:border-purple-500'
+        return 'bg-violet-700/20 border border-violet-500/30 shadow-violet-500/10'
     }
   }
 
+  const maxBooks = Math.max(...categories.map((c) => c.books.length), 1)
+
+
   return (
-    <div className="text-white w-full mt-10">
-      {/* Header */}
+    <section className="w-full text-white space-y-6 mb-6 mt-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="p-2 bg-gradient-to-r from-orange-600 to-blue-600 rounded-lg">
-            <TrendingUp size={24} className="text-white" />
+          <div className="p-2 bg-gradient-to-r from-green-800 to-blue-600 rounded-lg">
+            <ChartColumnIncreasingIcon size={24} className="text-white" />
           </div>
           <div>
-            <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
-              Categorias em destaque
+            <h2 className="lg:text-2xl md:text-xl text-base font-bold">
+              Categorias Populares
             </h2>
-            <p className="text-gray-400 text-sm">
-              Suas categorias mais utilizadas
-            </p>
+            <p className="text-gray-400 text-sm">Categorias com mais conteúdos</p>
           </div>
         </div>
 
-        <button
-          onClick={() => router.push('/categories')}
-          className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm"
-        >
-          Ver todas
+        <Link 
+          href="/categories" 
+          className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm cursor-pointer">
+          Ver todos
           <ArrowRight size={16} />
-        </button>
+        </Link>
       </div>
 
-      {/* Categories Grid */}
-      <div className="grid grid-cols-3 gap-x-[6px] gap-y-3 md:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
         {isLoading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <div
               key={index}
-              className="relative overflow-hidden rounded-xl border border-gray-700/50 bg-gray-800/30 backdrop-blur-sm"
+              className="group relative overflow-hidden rounded-3xl bg-gray-800 backdrop-blur-xl border border-white/5"
             >
-              <div className="p-6 animate-pulse">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-8 h-8 bg-gray-700 rounded-lg"></div>
-                  <div className="w-12 h-6 bg-gray-700 rounded-full"></div>
+              <div className="p-6 lg:p-8 space-y-6 animate-pulse">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 bg-gray-700/50 rounded-2xl"></div>
+                  <div className="w-16 h-8 bg-gray-700/50 rounded-full"></div>
                 </div>
-                <div className="w-3/4 h-6 bg-gray-700 rounded mb-2"></div>
-                <div className="w-1/2 h-4 bg-gray-700 rounded"></div>
+                <div className="space-y-3">
+                  <div className="w-3/4 h-7 bg-gray-700/50 rounded-lg"></div>
+                  <div className="w-1/2 h-5 bg-gray-700/50 rounded-lg"></div>
+                </div>
+                <div className="w-full h-2 bg-gray-700/50 rounded-full"></div>
               </div>
             </div>
           ))
         ) : categories.length === 0 ? (
-          <div className="col-span-full text-center py-12">
-            <BookOpen className="mx-auto mb-4 text-gray-400" size={48} />
-            <p className="text-gray-400 text-lg">Nenhuma categoria encontrada.</p>
-            <p className="text-gray-500 text-sm mt-1">Adicione alguns conteúdos para ver suas categorias populares.</p>
+          <div className="col-span-full text-center py-16 lg:py-24">
+            <div className="relative inline-flex mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-xl"></div>
+              <div className="relative p-4 bg-gray-800 rounded-full border border-white/10">
+                <BookOpen className="text-gray-400" size={48} />
+              </div>
+            </div>
+            <h3 className="text-xl lg:text-2xl font-bold text-gray-300 mb-2">
+              Nenhuma categoria encontrada
+            </h3>
+            <p className="text-gray-500 max-w-md mx-auto leading-relaxed">
+              Adicione alguns conteúdos para descobrir suas categorias mais populares e ver estatísticas detalhadas.
+            </p>
           </div>
         ) : (
-          categories.map((category) => (
-            <div
-              key={category.id}
-              onClick={() => router.push(`/categories/${category.id}`)}
-              className={`group relative overflow-hidden rounded-xl cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 ${getRankColor(category.rank!)} bg-gray-800/30 backdrop-blur-sm hover:bg-gray-700/40 min-w-[90px] p-1.5 sm:p-3`}
-            >
-              {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+          categories.map((category, index) => {
+            const coverImage = category.books[0]?.book?.coverImage || 'https://via.placeholder.com/400x600';
+            console.log('CategoryImage:', coverImage);
 
-              {/* Rank Badge */}
-              <div className="absolute top-1.5 right-1.5 z-10 hidden md:flex">
-                <div className={`flex items-center justify-center w-6 h-6 rounded-full ${category.rank === 1
-                  ? 'bg-yellow-400/20'
-                  : category.rank === 2
-                    ? 'bg-gray-400/20'
-                    : 'bg-amber-600/20'
-                  } backdrop-blur-sm`}>
-                  {getRankIcon(category.rank!)}
-                </div>
-              </div>
+            return (
+              <div
+                key={category.id}
+                onClick={() => router.push(`/categories/${category.id}`)}
+                onMouseEnter={() => setHoveredCard(category.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+                onFocus={() => setHoveredCard(category.id)}  // acessibilidade: foco tbm ativa
+                onBlur={() => setHoveredCard(null)}
+                tabIndex={0} // torna focável por teclado
+                className={`group relative overflow-hidden rounded-3xl cursor-pointer transition-all duration-500 hover:scale-[1.02] bg-gray-800 backdrop-blur-xl border border-white/5 hover:bg-gray-700 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                style={{
+                  animationDelay: `${index * 100}ms`,
+                  animation: 'fadeInUp 0.6s ease-out forwards',
+                }}
+              >
+                {/* Background Blur com capa da categoria */}
+                <div
+                  className={`absolute inset-0 bg-cover bg-center pointer-events-none`}
+                  style={{
+                    backgroundImage: `url(${coverImage})`,
+                    filter: 'blur(0px) brightness(0.35)',  // filtro menos agressivo
+                    opacity: 1,  // imagem sempre visível
+                    zIndex: 5,
+                    transition: 'opacity 0.5s ease',
+                  }}
+                />
 
-              {/* Content */}
-              <div className="relative z-10 w-full h-full text-center sm:text-left flex flex-col justify-between">
-                {/* Título */}
-                <h3 className="text-white font-bold text-[0.65rem] sm:text-sm md:text-lg truncate mb-2 group-hover:text-yellow-300 transition-colors">
-                  {category.name}
-                </h3>
-
-                {/* Stats */}
-                <div className="hidden sm:flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-1 text-gray-400 text-xs">
-                    <span>#{category.rank}</span>
-                    <div className="text-orange-400">{category.books.length}</div>
-                    <div>{category.books.length === 1 ? 'Conteúdo' : 'Conteúdos'}</div>
+                {/* Rank Badge */}
+                <div className="absolute top-4 right-4 lg:top-6 lg:right-6 z-20">
+                  <div className={`flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 rounded-2xl backdrop-blur-xl transition-all duration-300 ${getRankBadgeStyle(category.rank!)}`}>
+                    {getRankIcon(category.rank!)}
                   </div>
                 </div>
 
-                {/* Progress Bar */}
-                <div className="mt-2 sm:mt-4 relative">
-                  <div className="w-full bg-gray-700/50 rounded-full h-1.5">
-                    <div
-                      className={`bg-gradient-to-r ${category.color} h-1.5 rounded-full transition-all duration-500 group-hover:shadow-lg`}
-                      style={{
-                        width: `${Math.min(
-                          (category.books.length / Math.max(...categories.map((c) => c.books.length))) * 100,
-                          100,
-                        )}%`,
-                      }}
-                    ></div>
+                {/* Conteúdo */}
+                <div className="relative z-10 p-6 lg:p-8 h-full flex flex-col justify-between min-h-[200px] lg:min-h-[240px]">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <h3 className="text-xl lg:text-2xl font-bold text-white transition-all duration-300 leading-tight">
+                        {category.name}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm lg:text-base text-gray-400">
+                        <span className="font-medium">#{category.rank}</span>
+                        <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
+                        <span className="font-bold text-white">{category.books.length}</span>
+                        <span>{category.books.length === 1 ? 'conteúdo' : 'conteúdos'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="relative">
+                      <div className="w-full bg-white/5 rounded-full h-2 lg:h-3 overflow-hidden">
+                        <div
+                          className="bg-white/30 h-full rounded-full transition-all duration-700 ease-out shadow-lg relative"
+                          style={{
+                            width: `${(category.books.length / maxBooks) * 100}%`,
+                          }}
+                        >
+                          <div className="absolute inset-0 bg-white/10 rounded-full animate-pulse"></div>
+                        </div>
+                      </div>
+                      <div className="mt-2 flex justify-between text-xs text-gray-500">
+                        <span>Popularidade</span>
+                        <span>{Math.round((category.books.length / maxBooks) * 100)}%</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200">
+                      <span>Explorar categoria</span>
+                      <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* Glow Effect */}
-              <div className={`absolute -inset-1 bg-gradient-to-r ${category.color} opacity-0 group-hover:opacity-20 blur-lg rounded-xl transition-opacity duration-400 -z-10`}></div>
-            </div>
-          )))}
+            )
+          })
+        )}
       </div>
 
-      {/* Mobile "Ver todas" Button */}
-      <div className="md:hidden mt-6 text-center">
+      <div className="lg:hidden mt-8 text-center">
         <button
           onClick={() => router.push('/categories')}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-gray-800 hover:bg-gray-700 backdrop-blur-xl rounded-full border border-white/10 hover:border-white/20 transition-all duration-300 font-medium shadow-lg hover:shadow-xl group"
         >
-          Ver todas as categorias
-          <ArrowRight size={16} />
+          <span>Ver todas as categorias</span>
+          <ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform duration-200" />
         </button>
       </div>
-    </div>
+
+      <style jsx>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </section>
   )
 }

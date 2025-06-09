@@ -1,14 +1,22 @@
 import { useNotes } from "@/hooks/useNotes";
-import { ArrowRight, BookOpen, BookOpenIcon, LucideWallpaper, Settings2 } from "lucide-react";
+import {
+  BookOpen,
+  BookOpenIcon,
+  CheckCircle,
+  Clock,
+  LucideWallpaper,
+  Loader2,
+} from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import NoteCard from "../NoteCard";
 import { useState } from "react";
+import NoteCard from "../NoteCard";
+import { Book } from "@/types/bookData";
 
 interface Activity {
   title: string;
   status: string;
   date: string;
+  book: Book;
 }
 
 interface DashboardPanelProps {
@@ -28,8 +36,7 @@ export default function DashboardPanel({
   readingNow,
   recentActivities,
 }: DashboardPanelProps) {
-
-  const { deleteNote, isDeleting, notes } = useNotes()
+  const { deleteNote, isDeleting, notes } = useNotes();
 
   const lastNotes = [...notes]
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -39,32 +46,31 @@ export default function DashboardPanel({
 
   function toggleNoteExpansion(noteId: string) {
     const newExpanded = new Set(expandedNotes);
-    if (newExpanded.has(noteId)) {
-      newExpanded.delete(noteId);
-    } else {
-      newExpanded.add(noteId);
-    }
+    newExpanded.has(noteId) ? newExpanded.delete(noteId) : newExpanded.add(noteId);
     setExpandedNotes(newExpanded);
   }
 
   function truncateText(text: string, maxLength: number = 150) {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    return text.length <= maxLength ? text : text.substring(0, maxLength) + '...';
   }
 
+  const getActivityIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "concluído":
+        return <CheckCircle size={18} className="text-green-400" />;
+      case "em andamento":
+        return <Loader2 size={18} className="text-blue-400 animate-spin" />;
+      case "pendente":
+        return <Clock size={18} className="text-yellow-400" />;
+      default:
+        return <BookOpen size={18} className="text-gray-400" />;
+    }
+  };
 
   return (
-    <div className="space-y-6 w-full mt-1 my-6">
+    <div className="space-y-6 w-full mb-6 mt-10">
 
-      {/* Estatísticas principais */}
-      {/* <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-center md:text-start">
-        <StatCard title={booksRead} subtitle="Livros lidos este mês" />
-        <StatCard title={`${progressPercent.toFixed(0)}%`} subtitle="Meta mensal" />
-        <StatCard title={currentStreak} subtitle="Dias consecutivos" />
-        <StatCard title={readingNow} subtitle="Lendo agora"  />
-      </div> */}
-
-      {/* Progresso + Atividades */}
+      {/* Header */}
       <div className="flex items-center gap-4">
         <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
           <LucideWallpaper size={24} className="text-white" />
@@ -73,13 +79,14 @@ export default function DashboardPanel({
           <h2 className="lg:text-2xl md:text-xl text-lg font-bold">
             Painel do usuário
           </h2>
-          <p className="text-gray-400 text-sm">
-            Estatísticas recentes do usuário
-          </p>
+          <p className="text-gray-400 text-sm">Estatísticas recentes do usuário</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-gray-800 text-white p-6 rounded-xl shadow h-full w-full flex flex-col">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+        {/* Últimas Anotações */}
+        <div className=" text-white rounded-xl shadow flex flex-col">
           <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
 
           {lastNotes.length === 0 ? (
@@ -107,35 +114,40 @@ export default function DashboardPanel({
           </div>
         </div>
 
-        <div className="bg-gray-800 text-white p-6 rounded-xl shadow">
+        {/* Atividades Recentes */}
+        <div className=" text-white rounded-xl shadow flex flex-col">
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
-          <ul className="space-y-3">
-            {recentActivities.map((a, i) => (
-              <li key={i} className="flex justify-between border-b border-gray-700 pb-2 gap-2">
-                <div>
-                  <p className="font-medium">{a.title}</p>
-                  <p className="text-sm text-gray-400 mt-2 sm:mt-0">{a.status}</p>
+          <ul className="space-y-4">
+            {recentActivities.map((activity, i) => (
+              <li
+                key={i}
+                className="flex gap-4 items-center border-b border-gray-700 pb-3"
+              >
+                {activity.book?.coverImage ? (
+                  <img
+                    src={activity.book.coverImage}
+                    alt={`Capa do livro ${activity.book.title}`}
+                    className="w-12 h-16 object-cover rounded shadow"
+                  />
+                ) : (
+                  <div className="w-12 h-16 bg-gray-700 rounded flex items-center justify-center text-gray-400">
+                    <BookOpenIcon size={16} />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <p className="font-medium text-white flex items-center gap-2">
+                    {getActivityIcon(activity.status)}
+                    {activity.title}
+                  </p>
+                  <p className="text-sm text-gray-400">{activity.status}</p>
                 </div>
-                <span className="text-sm text-end text-gray-500">{a.date}</span>
+                <span className="text-sm text-gray-500">{activity.date}</span>
               </li>
             ))}
           </ul>
-          <div className="text-right mt-4">
-            <button className="text-sm text-purple-400 hover:underline">Ver todas as atividades</button>
-          </div>
+
         </div>
       </div>
-      {/* Últimas Anotações */}
-
-    </div>
-  );
-}
-
-function StatCard({ title, subtitle }: { title: string | number; subtitle: string }) {
-  return (
-    <div className="bg-gray-800 p-4 rounded-xl shadow text-white">
-      <h4 className="text-2xl font-bold">{title}</h4>
-      <p className="text-xs md:text-sm text-gray-400">{subtitle}</p>
     </div>
   );
 }

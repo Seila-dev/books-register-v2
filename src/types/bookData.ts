@@ -12,6 +12,7 @@ export interface Book {
   isFavorite?: boolean;
   createdAt: string;
   updatedAt: string;
+  book?: Book;
   categories: BookCategory[];
 }
 

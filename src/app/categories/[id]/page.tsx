@@ -67,7 +67,6 @@ export default async function CategoryPage({ params }: any) {
 
   return (
     <div className="text-white w-full p-6">
-      <ComponentArrowBack />
       <h1 className="text-2xl font-bold my-6">
         Categoria: {categoryName ?? 'Categoria desconhecida'}
       </h1>

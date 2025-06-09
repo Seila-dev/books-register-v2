@@ -41,6 +41,7 @@ export default function Home() {
       addSuffix: true,
       locale: ptBR,
     }),
+    book: book
   }));
   // if (error) router.push('/login')
 
