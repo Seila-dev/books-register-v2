@@ -4,60 +4,62 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { parseCookies } from 'nookies';
 import { toast } from 'sonner';
-import CategorySelector from '@/components/CategorySelector';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import Step1Title from '@/components/createContentComponents/step1';
+import Step2Image from '@/components/createContentComponents/step2';
+import Step3Description from '@/components/createContentComponents/step3';
+import Step4Details from '@/components/createContentComponents/step4';
+import ConfirmationModal from '@/components/createContentComponents/confirmationModal';
+import SuccessModal from '@/components/createContentComponents/successModal';
+
+import { createBookSchema, CreateBookFormData } from '@/types/bookData';
 import { Category } from '@/types/categoryData';
+
 import { useBooks } from '@/hooks/useBooks';
 import api from '@/services/api';
-
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import ComponentArrowBack from '@/components/ArrowBack';
-
-const createBookSchema = z.object({
-  title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
-  description: z.string().optional(),
-  coverImage: z
-    .instanceof(File)
-    .optional(),
-  startDate: z.string().optional(),
-  finishDate: z.string().optional(),
-  categoryIds: z.array(z.string()).optional(),
-});
-
-type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 export default function CreateBookPage() {
   const router = useRouter();
   const { createBook } = useBooks();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [step, setStep] = useState<number>(1);
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState<boolean>(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState<boolean>(false);
+  const [isFirstContent, setIsFirstContent] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
     control,
     watch,
-    formState: { errors, isLoading },
+    formState: { errors, isSubmitting },
+    trigger,
   } = useForm<CreateBookFormData>({
     resolver: zodResolver(createBookSchema),
-    mode: 'onBlur'
+    mode: 'onBlur',
   });
 
-  const coverImageFileList = watch('coverImage');
+  const watchAllFields = watch();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && coverImageFileList instanceof File) {
-      const url = URL.createObjectURL(coverImageFileList);
-      setPreviewUrl(url);
+    fetchCategories();
+    checkIfFirstContent();
+  }, []);
 
-      return () => {
-        URL.revokeObjectURL(url);
-      };
+  useEffect(() => {
+    const coverImageFile = watchAllFields.coverImage;
+    if (typeof window !== 'undefined' && coverImageFile instanceof File) {
+      const url = URL.createObjectURL(coverImageFile);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
     } else {
       setPreviewUrl(null);
     }
-  }, [coverImageFileList]);
+  }, [watchAllFields.coverImage]);
 
   const fetchCategories = async () => {
     try {
@@ -67,164 +69,307 @@ export default function CreateBookPage() {
       });
       setCategories(res.data);
     } catch (error) {
-      toast.error('Erro ao carregar categorias');
+      toast.error('Error loading categories');
     }
   };
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const checkIfFirstContent = async () => {
+    try {
+      const { 'books-register.token': token } = parseCookies();
+      const res = await api.get('/books/count', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setIsFirstContent(res.data.count === 0);
+    } catch (error) {
+      // If error, assume it's not first content
+      setIsFirstContent(false);
+    }
+  };
+
+  const nextStep = async () => {
+    let isValid = true;
+
+    switch (step) {
+      case 1:
+        isValid = await trigger('title');
+        break;
+      case 2:
+        isValid = await trigger('coverImage');
+        break;
+      case 3:
+        isValid = await trigger('description');
+        break;
+      case 4:
+        isValid = await trigger(['startDate', 'finishDate', 'categoryIds']);
+        break;
+    }
+
+    if (isValid && step < 4) {
+      setStep(step + 1);
+      toast.success('Etapa concluida! ➡️');
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
+  const canProceed = () => {
+    switch (step) {
+      case 1:
+        return watchAllFields.title && watchAllFields.title.trim().length > 0;
+      case 2:
+      case 3:
+      case 4:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const openConfirmation = () => {
+    setIsConfirmationOpen(true);
+  };
+
+  const closeConfirmation = () => {
+    setIsConfirmationOpen(false);
+  };
 
   const onSubmit = async (data: CreateBookFormData) => {
     try {
       await createBook(data);
-      toast.success('Conteúdo adicionado para a biblioteca');
-      router.push('/');
+      setIsConfirmationOpen(false);
+
+      toast.success('🎉 Conteúdo adicionado pra sua biblioteca!');
+
+      setTimeout(() => {
+        setIsSuccessOpen(true);
+      }, 500);
+
     } catch (err) {
-      toast.error('Erro ao criar conteúdo.');
+      toast.error('❌ Error creating content');
+      console.error('Error creating book:', err);
+    }
+  };
+
+  const getStepTitle = () => {
+    switch (step) {
+      case 1: return 'Step 1 of 4';
+      case 2: return 'Step 2 of 4';
+      case 3: return 'Step 3 of 4';
+      case 4: return 'Step 4 of 4';
+      default: return '';
     }
   };
 
   return (
-    <div className="w-full max-w-screen-xl px-4 py-8">
-      <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Conteúdo</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-        <div>
-          <label className="block mb-1 text-sm">Título *</label>
-          <input
-            type="text"
-            {...register('title')}
-            className={`w-full bg-transparent border-b p-2 outline-none text-white transition ${errors.title ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-              }`}
-          />
-          {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
+    <div className="min-h-screen bg-gray-900 w-full py-8 px-4">
+      <div className="max-w-screen-lg w-full mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Add New Content</h1>
+          <p className="text-gray-400">{getStepTitle()}</p>
         </div>
 
-        <div>
-          <label className="block mb-1 text-sm">Descrição</label>
-          <textarea
-            {...register('description')}
-            rows={5}
-            className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white resize-none"
-          />
-          {errors.description && (
-            <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block mb-1 text-sm">Capa (imagem)</label>
-
-          <Controller
-            name="coverImage"
-            control={control}
-            render={({ field }) => (
-              <>
-                <label
-                  htmlFor="coverImage"
-                  className="w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-500 hover:border-blue-500 rounded-md p-6 cursor-pointer transition hover:bg-gray-800"
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            {[1, 2, 3, 4].map((stepNum) => (
+              <div
+                key={stepNum}
+                className={`flex items-center ${stepNum < 4 ? 'flex-1' : ''}`}
+              >
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${step >= stepNum
+                      ? 'bg-blue-500 text-white shadow-lg scale-110'
+                      : 'bg-gray-700 text-gray-400'
+                    }`}
                 >
-                  {previewUrl ? (
+                  {step > stepNum ? (
+                    <span className="material-symbols-outlined text-sm">check</span>
+                  ) : (
+                    stepNum
+                  )}
+                </div>
+                {stepNum < 4 && (
+                  <div
+                    className={`flex-1 h-1 mx-4 rounded transition-all duration-300 ${step > stepNum ? 'bg-blue-500' : 'bg-gray-700'
+                      }`}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
+            <span>Title</span>
+            <span>Image</span>
+            <span>Description</span>
+            <span>Details</span>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
+          <div className="bg-gray-800 rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+            {/* Formulário */}
+            <div className="p-8 w-full lg:w-1/2">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="min-h-[400px]">
+                  {step === 1 && <Step1Title register={register} errors={errors} />}
+                  {step === 2 && (
+                    <Step2Image
+                      control={control}
+                      errors={errors}
+                      previewUrl={previewUrl}
+                      setPreviewUrl={setPreviewUrl}
+                    />
+                  )}
+                  {step === 3 && (
+                    <Step3Description
+                      register={register}
+                      errors={errors}
+                      watchDescription={watchAllFields.description}
+                    />
+                  )}
+                  {step === 4 && (
+                    <Step4Details
+                      register={register}
+                      control={control}
+                      errors={errors}
+                      categories={categories}
+                      selectedCategoryIds={watchAllFields.categoryIds || []}
+                      onCategoryCreated={fetchCategories}
+                    />
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-700">
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    disabled={step === 1}
+                    className="flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <span className="material-symbols-outlined mr-2">arrow_back</span>
+                    Previous
+                  </button>
+
+                  <div className="text-center">
+                    <p className="text-gray-400 text-sm">{step} of 4 steps completed</p>
+                  </div>
+
+                  {step < 4 ? (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      disabled={!canProceed()}
+                      className="flex items-center px-6 py-3 bg-blue-800 hover:bg-blue-900 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                      Next
+                      <span className="material-symbols-outlined ml-2">arrow_forward</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={openConfirmation}
+                      disabled={!canProceed() || isSubmitting}
+                      className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <span className="material-symbols-outlined mr-2">preview</span>
+                      Review & Save
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            {/* Preview */}
+            {watchAllFields.title && (
+              <div className="p-6 w-full lg:w-1/2 border-t bg-gray-800 lg:border-t-0 lg:border-l">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                  <span className="material-symbols-outlined mr-2">visibility</span>
+                  Live Preview
+                </h3>
+                <div className="flex gap-4">
+                  {previewUrl && (
                     <img
                       src={previewUrl}
-                      alt="Prévia da capa"
-                      className="object-contain max-h-60 rounded-md"
+                      alt="Preview"
+                      className="w-20 h-28 object-cover rounded-lg shadow-md"
                     />
-                  ) : (
-                    <div className="text-center text-gray-400">
-                      <span className="material-symbols-outlined text-5xl mb-2">image</span>
-                      <p className="text-sm">Clique para adicionar capa</p>
-                      <p className="text-xs text-gray-500">Formatos aceitos: .jpg, .png, .webp</p>
-                    </div>
                   )}
-                </label>
-
-                <input
-                  id="coverImage"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const files = e.target.files;
-                    if (files && files.length > 0) {
-                      const file = files[0];
-                      setPreviewUrl(URL.createObjectURL(file));
-                      field.onChange(file); // passa só o arquivo, não a FileList
-                    }
-                  }}
-                />
-              </>
-            )}
-          />
-          {errors.coverImage?.message && (
-            <p className="text-red-500 text-xs mt-1">{String(errors.coverImage.message)}</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1 text-sm">Início da leitura</label>
-            <input
-              type="date"
-              {...register('startDate')}
-              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white"
-            />
-            {errors.startDate && (
-              <p className="text-red-500 text-xs mt-1">{errors.startDate.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block mb-1 text-sm">Fim da leitura</label>
-            <input
-              type="date"
-              {...register('finishDate')}
-              className="w-full bg-transparent border-b border-gray-600 focus:border-blue-500 transition p-2 outline-none text-white"
-            />
-            {errors.finishDate && (
-              <p className="text-red-500 text-xs mt-1">{errors.finishDate.message}</p>
+                  <div className="flex-1">
+                    <h4 className="text-white font-bold text-lg mb-2">
+                      {watchAllFields.title}
+                    </h4>
+                    <p className="text-gray-300 text-sm mb-2">
+                      {watchAllFields.description || 'No description yet...'}
+                    </p>
+                    <div className="flex gap-4 text-xs text-gray-400">
+                      <span>Categories: {(watchAllFields.categoryIds?.length || 0)}</span>
+                      <span>
+                        Dates:{' '}
+                        {watchAllFields.startDate || watchAllFields.finishDate
+                          ? '✓'
+                          : '○'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
 
-        <div>
-          <label className="mb-2 text-sm w-full flex">Categorias</label>
-
-          <div className="flex flex-wrap w-full gap-2 mb-2">
-            {(watch('categoryIds') || [])
-              .map((id) => categories.find((c) => c.id === id))
-              .filter(Boolean)
-              .map((cat) => (
-                <span
-                  key={cat!.id}
-                  className="bg-white flex items-center text-gray-800 text-sm px-4 py-2 rounded-lg font-medium border border-gray-300 shadow-sm cursor-pointer"
-                >
-                  {cat!.name}
-                </span>
-              ))}
-            <Controller
-              control={control}
-              name="categoryIds"
-              render={({ field }) => (
-                <CategorySelector
-                  categories={categories}
-                  selectedCategoryIds={field.value || []}
-                  onChange={field.onChange}
-                  onCategoryCreated={fetchCategories}
+        {/* {watchAllFields.title && (
+          <div className="mt-8 bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+              <span className="material-symbols-outlined mr-2">visibility</span>
+              Live Preview
+            </h3>
+            <div className="flex gap-4">
+              {previewUrl && (
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-20 h-28 object-cover rounded-lg shadow-md"
                 />
               )}
-            />
+              <div className="flex-1">
+                <h4 className="text-white font-bold text-lg mb-2">
+                  {watchAllFields.title}
+                </h4>
+                <p className="text-gray-300 text-sm mb-2">
+                  {watchAllFields.description || 'No description yet...'}
+                </p>
+                <div className="flex gap-4 text-xs text-gray-400">
+                  <span>
+                    Categories: {(watchAllFields.categoryIds?.length || 0)}
+                  </span>
+                  <span>
+                    Dates: {watchAllFields.startDate || watchAllFields.finishDate ? '✓' : '○'}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        )} */}
+      </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition disabled:opacity-50 cursor-pointer"
-        >
-          {isLoading ? 'Salvando...' : 'Salvar conteúdo'}
-        </button>
-      </form>
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={closeConfirmation}
+        onConfirm={handleSubmit(onSubmit)}
+        formData={watchAllFields}
+        categories={categories}
+        previewUrl={previewUrl}
+        isSubmitting={isSubmitting}
+      />
+
+      <SuccessModal
+        isOpen={isSuccessOpen}
+        isFirstContent={isFirstContent}
+        contentTitle={watchAllFields.title || 'Your Content'}
+      />
     </div>
   );
 }
