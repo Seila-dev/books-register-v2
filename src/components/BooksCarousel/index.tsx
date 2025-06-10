@@ -12,10 +12,9 @@ interface Book {
 
 interface BooksCarouselProps {
   books: Book[];
-  mode?: "filter" | "noFilter"
 }
 
-export default function BooksCarousel({ books, mode }: BooksCarouselProps) {
+export default function BooksCarousel({ books }: BooksCarouselProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   function scroll(direction: "left" | "right") {
@@ -29,21 +28,12 @@ export default function BooksCarousel({ books, mode }: BooksCarouselProps) {
   }
 
   return (
-    <section className="space-y-6 mb-6 mt-10">
-      <div className="flex items-center gap-3">
-        <div className="p-2 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg">
-          <BookOpen className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-white">{mode === 'filter' ? 'Conteúdos Similares' : 'Sua biblioteca'} </h2>
-          <p className="text-gray-400 text-sm">{mode === 'filter' ? 'Descubra conteúdos relacionados' : 'Todas as suas mídias em um só lugar.'}</p>
-        </div>
-      </div>
+    <section className="space-y-6 mb-12 mt-6">
 
       {books.length === 0 ? (
         <div className="text-center py-12 space-y-3">
           <BookOpen className="w-12 h-12 text-gray-600 mx-auto" />
-          <p className="text-gray-400">{mode === 'filter' ? 'Nenhum conteúdo similar encontrado.' : 'Nenhum conteúdo encontrado.'}</p>
+          <p className="text-gray-400">Nenhum conteúdo encontrado.</p>
         </div>
       ) : (
         <div className="relative">

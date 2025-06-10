@@ -88,7 +88,7 @@ export default function TopCategories() {
 
 
   return (
-    <section className="w-full text-white space-y-6 mb-6 mt-10">
+    <section className="w-full text-white space-y-6 mb-12 mt-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <div className="p-2 bg-gradient-to-r from-green-800 to-blue-600 rounded-lg">
@@ -148,8 +148,6 @@ export default function TopCategories() {
         ) : (
           categories.map((category, index) => {
             const coverImage = category.books[0]?.book?.coverImage || 'https://via.placeholder.com/400x600';
-            console.log('CategoryImage:', coverImage);
-
             return (
               <div
                 key={category.id}

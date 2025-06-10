@@ -38,14 +38,6 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
     );
   }
 
-  const similarBooks = (books || []).filter(
-    (b) =>
-      b.id !== book.id &&
-      b.categories.some((cat) =>
-        book.categories.map((c) => c.categoryId).includes(cat.categoryId)
-      )
-  );
-
   function formatDate(dateString?: string | null): string {
     if (!dateString) return 'Não informado';
     const date = new Date(dateString);
@@ -156,7 +148,7 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
       </div>
 
       {/* Seções extras */}
-      <BookExtrasSection book={book} similarBooks={similarBooks} />
+      <BookExtrasSection book={book} allBooks={books} />
     </section>
   );
 }

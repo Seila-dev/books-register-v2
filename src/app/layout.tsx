@@ -62,13 +62,13 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900  min-h-screen w-full`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased  min-h-screen w-full`}
       >
         <ClientAuthProvider>
           <Providers>
             <Header />
             <Toaster />
-            <div className="bg-gray-900 text-white flex flex-col items-center min-h-full w-full justify-center m-auto gap-8 transation duration-200">{children}</div>
+            <div className=" text-white flex flex-col items-center min-h-full w-full justify-center m-auto gap-8 transation duration-200">{children}</div>
           </Providers>
         </ClientAuthProvider>
       </body>

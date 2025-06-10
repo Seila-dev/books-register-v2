@@ -86,9 +86,7 @@ export default function CreateBookPage() {
   };
 
   return (
-    <div className="w-full px-4 py-8">
-      <ComponentArrowBack />
-
+    <div className="w-full max-w-screen-xl px-4 py-8">
       <h1 className="text-xl md:text-2xl my-4 font-bold mb-6">Adicionar Novo Conteúdo</h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">

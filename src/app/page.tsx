@@ -17,6 +17,12 @@ import { AuthContext } from "@/contexts/AuthContext"
 import { useBooks } from "@/hooks/useBooks"
 import { useNotes } from "@/hooks/useNotes"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
+import FavoriteBooksCarousel from "@/components/carousel/FavoriteBooksCarousel"
+import ReadBooksCarousel from "@/components/carousel/ReadBooksCarousel"
+import AllBooksCarrousel from "@/components/carousel/AllBooks"
+import RatingBooksSection from "@/components/RatingBooksSection"
+import DashboardGreeting from "@/components/PainelHeader"
+import WelcomeModal from "@/components/WelcomeModal"
 
 export default function Home() {
   const { user } = useContext(AuthContext)
@@ -48,11 +54,15 @@ export default function Home() {
   return (
     <div className="w-full px-4 py-8">
       <PainelHeader />
+      {/* <WelcomeModal /> */}
       {isMobile ? (
         <BooksPage />
       ) : (
-        <BooksCarousel books={books} mode="noFilter" />
+        <AllBooksCarrousel allBooks={books} />
       )}
+            {/* <FavoriteBooksCarousel allBooks={books} />
+      <ReadBooksCarousel allBooks={books} />
+      <RatingBooksSection books={books}/> */}
       <DashboardPanel
         userName={user?.username}
         booksRead={4}
@@ -62,6 +72,7 @@ export default function Home() {
         recentActivities={recentActivities}
       />
       <TopCategories />
+
 
       <Link
         href={`/books/create`}

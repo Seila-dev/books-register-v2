@@ -68,7 +68,7 @@ export default function DashboardPanel({
   };
 
   return (
-    <div className="space-y-6 w-full mb-6 mt-10">
+    <div className="space-y-6 w-full mb-12 mt-6">
 
       {/* Header */}
       <div className="flex items-center gap-4">

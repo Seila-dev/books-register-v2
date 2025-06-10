@@ -22,13 +22,14 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import BooksCarousel from '@/components/BooksCarousel';
 import { Note } from '@/types/noteData';
+import SimilarBooksCarousel from '@/components/carousel/SimilarBooksCarousel';
 
 interface BookExtrasSectionProps {
-  similarBooks: Book[];
+  allBooks: Book[];
   book: Book;
 }
 
-export default function BookExtrasSection({ similarBooks, book }: BookExtrasSectionProps) {
+export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionProps) {
   const { useNotesByBook, createNote, updateNote, deleteNote, isCreating, isUpdating, isDeleting } = useNotes();
   const { data: notes = [], isLoading: notesLoading, refetch } = useNotesByBook(book.id);
 
@@ -316,7 +317,7 @@ export default function BookExtrasSection({ similarBooks, book }: BookExtrasSect
       </section>
 
       {/* 📚 Leituras similares */}
-      <BooksCarousel books={similarBooks} mode='filter'/>
+      <SimilarBooksCarousel allBooks={allBooks} currentBook={book} />
     </div>
   );
 }
