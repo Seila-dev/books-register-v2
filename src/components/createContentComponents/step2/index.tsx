@@ -2,6 +2,7 @@ import { Controller, Control, FieldErrors } from 'react-hook-form';
 import { CreateBookFormData } from '@/types/bookData';
 import { toast } from 'sonner';
 import { Image } from 'lucide-react';
+import InfoBox from '@/components/ui/InfoBox';
 
 interface Step2ImageProps {
   control: Control<CreateBookFormData>;
@@ -10,11 +11,11 @@ interface Step2ImageProps {
   setPreviewUrl: (url: string | null) => void;
 }
 
-export default function Step2Image({ 
-  control, 
-  errors, 
-  previewUrl, 
-  setPreviewUrl 
+export default function Step2Image({
+  control,
+  errors,
+  previewUrl,
+  setPreviewUrl
 }: Step2ImageProps) {
   return (
     <div className="space-y-6">
@@ -64,13 +65,13 @@ export default function Step2Image({
                   const files = e.target.files;
                   if (files && files.length > 0) {
                     const file = files[0];
-                    
+
                     // Validate file size (10MB)
                     if (file.size > 10 * 1024 * 1024) {
                       toast.error('❌ Arquivo grande demais! Tamanho max: 10MB');
                       return;
                     }
-                    
+
                     const url = URL.createObjectURL(file);
                     setPreviewUrl(url);
                     field.onChange(file);
@@ -107,12 +108,12 @@ export default function Step2Image({
         </div>
       )}
 
-      <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-green-500">
-        <h3 className="text-green-400 font-medium mb-1">Opcional</h3>
-        <p className="text-gray-300 text-sm">
-          Você pode pular essa etapa e adicionar a imagem depois
-        </p>
-      </div>
+      <InfoBox
+        title="Opcional"
+        borderColorClass='border-green-500'
+        titleColorClass='text-green-500'>
+        <p>Opcional, você pode alterar a imagem o quando quiser</p>
+      </InfoBox>
     </div>
   );
 }

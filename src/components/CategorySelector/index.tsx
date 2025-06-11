@@ -97,7 +97,7 @@ export default function CategorySelector({
             </div>
 
             {/* Rodapé fixo */}
-            <div className="border-t border-gray-700 px-4 py-3 flex justify-end gap-2 sticky bottom-0 bg-[#1a1a1a] z-50">
+            <div className="border-t border-gray-700 px-4 py-3 flex justify-end gap-2 sticky bottom-0 bg-[#1a1a1a]">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}

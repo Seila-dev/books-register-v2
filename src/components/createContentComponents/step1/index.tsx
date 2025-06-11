@@ -1,6 +1,7 @@
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import { CreateBookFormData } from '@/types/bookData';
 import { Lightbulb } from 'lucide-react';
+import InfoBox from '@/components/ui/InfoBox';
 
 interface Step1TitleProps {
   register: UseFormRegister<CreateBookFormData>;
@@ -38,12 +39,14 @@ export default function Step1Title({ register, errors }: Step1TitleProps) {
         )}
       </div>
 
-      <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-blue-500">
-        <h3 className="text-blue-400 font-medium mb-2 flex items-center gap-2"><Lightbulb/> Dica</h3>
-        <p className="text-gray-300 text-sm">
-          Escolha um titulo decente, isso ajuda a encontrar o conteudo depois.
-        </p>
-      </div>
+      <InfoBox
+        title="Dica"
+        icon={<Lightbulb className="text-yellow-400" />}
+        borderColorClass="border-blue-500"
+        titleColorClass="text-blue-400"
+      >
+        <p>Escolha um titulo decente, isso ajuda a encontrar o conteudo depois.</p>
+      </InfoBox>
     </div>
   );
 }
