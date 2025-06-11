@@ -165,12 +165,12 @@ export default function CreateBookPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 w-full py-8 px-4">
-      <div className="max-w-screen-lg w-full mx-auto">
-        <div className="text-center mb-8">
+    <div className="min-h-screen w-full py-4 px-4 sm:px-4 sm:py-8">
+      <div className="max-w-screen-xl w-full mx-auto">
+        {/* <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Add New Content</h1>
           <p className="text-gray-400">{getStepTitle()}</p>
-        </div>
+        </div> */}
 
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
@@ -200,124 +200,125 @@ export default function CreateBookPage() {
               </div>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-2">
-            <span>Title</span>
-            <span>Image</span>
-            <span>Description</span>
-            <span>Details</span>
+          <div className="flex justify-between items-center text-xs text-gray-500 mt-2">
+            <span>Título</span>
+            <span>Imagem</span>
+            <span>Descrição</span>
+            <span>Detalhes</span>
           </div>
         </div>
 
-        <div className="bg-gray-800 rounded-xl shadow-2xl overflow-hidden">
-          <div className="bg-gray-800 rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
-            {/* Formulário */}
-            <div className="p-8 w-full lg:w-1/2">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="min-h-[400px]">
-                  {step === 1 && <Step1Title register={register} errors={errors} />}
-                  {step === 2 && (
-                    <Step2Image
-                      control={control}
-                      errors={errors}
-                      previewUrl={previewUrl}
-                      setPreviewUrl={setPreviewUrl}
-                    />
-                  )}
-                  {step === 3 && (
-                    <Step3Description
-                      register={register}
-                      errors={errors}
-                      watchDescription={watchAllFields.description}
-                    />
-                  )}
-                  {step === 4 && (
-                    <Step4Details
-                      register={register}
-                      control={control}
-                      errors={errors}
-                      categories={categories}
-                      selectedCategoryIds={watchAllFields.categoryIds || []}
-                      onCategoryCreated={fetchCategories}
-                    />
-                  )}
-                </div>
+        <div className=" rounded-xl shadow-2xl overflow-hidden">
+          <div className=" rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row lg:h-[650px]">
+  {/* Form Section */}
+  <div className="w-full lg:w-1/2 py-4 sm:p-6 flex flex-col justify-between">
+    <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col justify-between">
+      <div className="flex-grow overflow-auto">
+        {step === 1 && <Step1Title register={register} errors={errors} />}
+        {step === 2 && (
+          <Step2Image
+            control={control}
+            errors={errors}
+            previewUrl={previewUrl}
+            setPreviewUrl={setPreviewUrl}
+          />
+        )}
+        {step === 3 && (
+          <Step3Description
+            register={register}
+            errors={errors}
+            watchDescription={watchAllFields.description}
+          />
+        )}
+        {step === 4 && (
+          <Step4Details
+            register={register}
+            control={control}
+            errors={errors}
+            categories={categories}
+            selectedCategoryIds={watchAllFields.categoryIds || []}
+            onCategoryCreated={fetchCategories}
+          />
+        )}
+      </div>
 
-                <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-700">
-                  <button
-                    type="button"
-                    onClick={prevStep}
-                    disabled={step === 1}
-                    className="flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <span className="material-symbols-outlined mr-2">arrow_back</span>
-                    Previous
-                  </button>
+      {/* Form Footer */}
+      <div className="pt-6 border-t border-gray-700 flex justify-between items-center">
+        <button
+          type="button"
+          onClick={prevStep}
+          disabled={step === 1}
+          className="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        >
+          <span className="material-symbols-outlined mr-2">arrow_back</span>
+          Voltar
+        </button>
 
-                  <div className="text-center">
-                    <p className="text-gray-400 text-sm">{step} of 4 steps completed</p>
-                  </div>
+        {step < 4 ? (
+          <button
+            type="button"
+            onClick={nextStep}
+            disabled={!canProceed()}
+            className="flex items-center px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md disabled:opacity-50 cursor-pointer"
+          >
+            Avançar
+            <span className="material-symbols-outlined ml-2">arrow_forward</span>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={openConfirmation}
+            disabled={!canProceed() || isSubmitting}
+            className="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined mr-2">preview</span>
+            Review & Save
+          </button>
+        )}
+      </div>
+    </form>
+  </div>
 
-                  {step < 4 ? (
-                    <button
-                      type="button"
-                      onClick={nextStep}
-                      disabled={!canProceed()}
-                      className="flex items-center px-6 py-3 bg-blue-800 hover:bg-blue-900 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                    >
-                      Next
-                      <span className="material-symbols-outlined ml-2">arrow_forward</span>
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={openConfirmation}
-                      disabled={!canProceed() || isSubmitting}
-                      className="flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <span className="material-symbols-outlined mr-2">preview</span>
-                      Review & Save
-                    </button>
-                  )}
-                </div>
-              </form>
+  {/* Live Preview */}
+  {watchAllFields.title && (
+    <div className="w-full lg:w-1/2 px-1 py-4 sm:p-6 border-t lg:border-t-0 lg:border-l border-gray-700 flex flex-col justify-between">
+      <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+        <span className="material-symbols-outlined mr-2">visibility</span>
+        Live Preview
+      </h3>
+
+      <div className="flex flex-col items-center justify-center flex-grow">
+        <div className="relative w-full aspect-[2/3] max-w-sm rounded-2xl overflow-hidden shadow-lg border border-gray-700">
+          {previewUrl ? (
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${previewUrl})` }}
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+            <h4 className="text-xl font-bold mb-1">{watchAllFields.title}</h4>
+            <p className="text-sm text-gray-300 line-clamp-2 mb-2">
+              {watchAllFields.description
+                ? (watchAllFields.description.length > 100
+                  ? watchAllFields.description.slice(0, 100) + '...'
+                  : watchAllFields.description)
+                : ''}
+            </p>
+            <div className="flex justify-between text-xs text-gray-400">
+              <span>Categories: {watchAllFields.categoryIds?.length || 0}</span>
+              <span>Dates: {(watchAllFields.startDate || watchAllFields.finishDate) ? '✔' : '○'}</span>
             </div>
-
-            {/* Preview */}
-            {watchAllFields.title && (
-              <div className="p-6 w-full lg:w-1/2 border-t bg-gray-800 lg:border-t-0 lg:border-l">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <span className="material-symbols-outlined mr-2">visibility</span>
-                  Live Preview
-                </h3>
-                <div className="flex gap-4">
-                  {previewUrl && (
-                    <img
-                      src={previewUrl}
-                      alt="Preview"
-                      className="w-20 h-28 object-cover rounded-lg shadow-md"
-                    />
-                  )}
-                  <div className="flex-1">
-                    <h4 className="text-white font-bold text-lg mb-2">
-                      {watchAllFields.title}
-                    </h4>
-                    <p className="text-gray-300 text-sm mb-2">
-                      {watchAllFields.description || 'No description yet...'}
-                    </p>
-                    <div className="flex gap-4 text-xs text-gray-400">
-                      <span>Categories: {(watchAllFields.categoryIds?.length || 0)}</span>
-                      <span>
-                        Dates:{' '}
-                        {watchAllFields.startDate || watchAllFields.finishDate
-                          ? '✓'
-                          : '○'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
         </div>
 
         {/* {watchAllFields.title && (

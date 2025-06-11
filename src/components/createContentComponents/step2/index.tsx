@@ -1,6 +1,7 @@
 import { Controller, Control, FieldErrors } from 'react-hook-form';
 import { CreateBookFormData } from '@/types/bookData';
 import { toast } from 'sonner';
+import { Image } from 'lucide-react';
 
 interface Step2ImageProps {
   control: Control<CreateBookFormData>;
@@ -17,9 +18,9 @@ export default function Step2Image({
 }: Step2ImageProps) {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">Add a cover image</h2>
-        <p className="text-gray-400">Make your content visually appealing (optional)</p>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-2">Adicione uma capa</h2>
+        <p className="text-gray-400">Faça seu conteúdo ser mais atraente (optional)</p>
       </div>
 
       <div>
@@ -33,27 +34,23 @@ export default function Step2Image({
             <>
               <label
                 htmlFor="coverImage"
-                className="group relative w-full flex flex-col items-center justify-center border-2 border-dashed border-gray-500 hover:border-blue-500 rounded-xl p-8 cursor-pointer transition-all duration-300 hover:bg-gray-800/50"
+                className="group relative w-fit flex flex-col items-center justify-center border-2  border-gray-500 hover:border-blue-500 rounded-xl p-1 md:px-4 md:py-1 cursor-pointer transition-all duration-300 hover:bg-gray-800/50 md:text-sm text-xs"
               >
                 {previewUrl ? (
-                  <div className="relative">
-                    <img
-                      src={previewUrl}
-                      alt="Cover preview"
-                      className="object-contain max-h-80 rounded-lg shadow-lg"
-                    />
-                    <div className="absolute inset-0 bg-gray-700 bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-300 flex items-center justify-center">
-                      <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        Click to change image
+                  <div className="relative p-2 ">
+                    <div className="inset-0 group-hover:bg-opacity-20 rounded-lg  transition-all duration-300 flex items-center justify-center w-full">
+                      <span className="text-gray-300 flex items-center gap-2 duration-300 w-full">
+                        <Image size={16} />
+                        Clique aqui para alterar a imagem
                       </span>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center text-gray-400 group-hover:text-blue-400 transition-colors duration-300">
+                  <div className="text-center text-gray-400 group-hover:text-blue-400 transition-colors duration-300 p-4">
                     <span className="material-symbols-outlined text-6xl mb-4 block">image</span>
-                    <p className="text-lg font-medium mb-2">Click to add cover image</p>
+                    <p className="text-lg font-medium mb-2">Clique para adicionar uma capa</p>
                     <p className="text-sm text-gray-500">
-                      Supports: JPG, PNG, WEBP • Max 10MB
+                      Suporta: JPG, PNG, WEBP • Max 10MB
                     </p>
                   </div>
                 )}
@@ -70,14 +67,14 @@ export default function Step2Image({
                     
                     // Validate file size (10MB)
                     if (file.size > 10 * 1024 * 1024) {
-                      toast.error('❌ File too large. Max size: 10MB');
+                      toast.error('❌ Arquivo grande demais! Tamanho max: 10MB');
                       return;
                     }
                     
                     const url = URL.createObjectURL(file);
                     setPreviewUrl(url);
                     field.onChange(file);
-                    toast.success('📸 Cover image selected!');
+                    toast.success('📸 Imagem de capa selecionada!');
                   }
                 }}
               />
@@ -93,19 +90,19 @@ export default function Step2Image({
       </div>
 
       {previewUrl && (
-        <div className="flex justify-center">
+        <div className="flex ">
           <button
             type="button"
             onClick={() => {
               setPreviewUrl(null);
               const fileInput = document.getElementById('coverImage') as HTMLInputElement;
               if (fileInput) fileInput.value = '';
-              toast('🗑️ Image removed');
+              toast('🗑️ Imagem removida');
             }}
-            className="text-red-400 hover:text-red-300 text-sm flex items-center transition-colors duration-200"
+            className="text-red-100 hover:text-red-300 md:text-sm text-xs flex items-center transition-colors duration-200 bg-red-600 rounded-md py-2 px-4 w-fit cursor-pointer"
           >
             <span className="material-symbols-outlined text-sm mr-1">delete</span>
-            Remove image
+            Remover capa
           </button>
         </div>
       )}

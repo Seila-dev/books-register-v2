@@ -18,20 +18,20 @@ export default function Step3Description({
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">Tell us about it</h2>
-        <p className="text-gray-400">Share your thoughts, notes, or a brief summary (optional)</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Diga mais sobre</h2>
+        <p className="text-gray-400">Compartilhe suas anotações, pensamentos ou ideias (opcional)</p>
       </div>
 
       <div>
         <label className="block mb-3 text-sm font-semibold text-white">
-          Description
+          Descrição (opcional)
         </label>
         <div className="relative">
           <textarea
             {...register('description')}
             rows={6}
             maxLength={maxCharacters}
-            placeholder="What did you think about it? Any memorable quotes, key takeaways, or personal notes you'd like to remember..."
+            placeholder="O que você gostaria de anotar? Alguma frase especifica ou notas pessoais que você gostaria de relembrar depois..."
             className={`w-full bg-gray-800 border-2 rounded-lg p-4 outline-none text-white resize-none transition-all duration-300
               ${errors.description 
                 ? 'border-red-500 focus:border-red-400' 
@@ -52,34 +52,22 @@ export default function Step3Description({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-blue-500">
-          <h3 className="text-blue-400 font-medium mb-2">💭 Ideas to include:</h3>
+          <h3 className="text-blue-400 font-medium mb-2">O que colocar?</h3>
           <ul className="text-gray-300 text-sm space-y-1">
-            <li>• Your personal rating or opinion</li>
-            <li>• Favorite quotes or passages</li>
-            <li>• Key lessons learned</li>
-            <li>• Memorable characters or scenes</li>
+            <li>• Sua opinião ou avaliação</li>
+            <li>• Frases favoritas ou memoráveis</li>
+            <li>• Lembretes</li>
           </ul>
         </div>
 
         <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-green-500">
-          <h3 className="text-green-400 font-medium mb-2">✨ Remember:</h3>
+          <h3 className="text-green-400 font-medium mb-2">Não esqueça:</h3>
           <ul className="text-gray-300 text-sm space-y-1">
-            <li>• This is completely optional</li>
-            <li>• You can edit this anytime</li>
-            <li>• Keep it personal and meaningful</li>
-            <li>• There's no right or wrong way</li>
+            <li>• É opcional. Você pode editar isso quando quiser</li>
+            <li>• Use da forma que quiser</li>
           </ul>
         </div>
       </div>
-
-      {characterCount > 0 && (
-        <div className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <h4 className="text-white font-medium mb-2">Preview:</h4>
-          <p className="text-gray-300 text-sm italic">
-            "{watchDescription?.substring(0, 100)}{watchDescription && watchDescription.length > 100 ? '...' : ''}"
-          </p>
-        </div>
-      )}
     </div>
   );
 }
