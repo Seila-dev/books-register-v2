@@ -21,12 +21,12 @@ export default function Step2Image({
     <div className="space-y-6">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Adicione uma capa</h2>
-        <p className="text-gray-400">Faça seu conteúdo ser mais atraente (optional)</p>
+        <p className="text-gray-400">Faça seu conteúdo ser mais atraente (opcional)</p>
       </div>
 
       <div>
         <label className="block mb-3 text-sm font-semibold text-white">
-          Cover Image
+          Imagem de capa
         </label>
         <Controller
           name="coverImage"

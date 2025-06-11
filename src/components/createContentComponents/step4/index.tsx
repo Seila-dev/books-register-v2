@@ -31,7 +31,7 @@ export default function Step4Details({
     <div className="space-y-6">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Detalhes finais</h2>
-        <p className="text-gray-400">Adicione categorias e a timeline (Todos opcionais)</p>
+        <p className="text-gray-400">Adicione categorias e o progresso (todos opcionais)</p>
       </div>
 
       {/* Categories Section */}
