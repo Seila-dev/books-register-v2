@@ -154,7 +154,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="min-h-screen w-full py-4 px-4 sm:px-4 sm:py-8">
+    <div className="min-h-full w-full py-4 px-4 sm:px-4 sm:pt-4 sm:pb-2">
       <div className="max-w-screen-xl w-full mx-auto">
         {/* <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Add New Content</h1>
@@ -198,7 +198,7 @@ useEffect(() => {
         </div>
 
         <div className=" rounded-xl shadow-2xl overflow-hidden">
-          <div className=" rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row lg:h-[650px]">
+          <div className=" rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row lg:h-[590px]">
             {/* Form Section */}
             <div className="w-full lg:w-1/2 py-4 sm:p-6 flex flex-col justify-between">
               <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col justify-between">
@@ -278,7 +278,7 @@ useEffect(() => {
                 </h3>
 
                 <div className="flex flex-col items-center justify-center flex-grow">
-                  <div className="relative w-full aspect-[2/3] max-w-sm rounded-2xl overflow-hidden shadow-lg border border-gray-700">
+                  <div className="relative w-full aspect-[2/3] max-w-xs rounded-2xl overflow-hidden shadow-lg border border-gray-700">
                     {previewUrl ? (
                       <div
                         className="absolute inset-0 bg-cover bg-center"
@@ -287,7 +287,7 @@ useEffect(() => {
                     ) : (
                       <div className="absolute inset-0 bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900" />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/100 via-black/20 to-transparent" />
 
                     <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                       <h4 className="text-xl font-bold mb-1">{watchAllFields.title}</h4>
@@ -298,9 +298,28 @@ useEffect(() => {
                             : watchAllFields.description)
                           : ''}
                       </p>
-                      <div className="flex justify-between text-xs text-gray-400">
-                        <span>Categories: {watchAllFields.categoryIds?.length || 0}</span>
-                        <span>Dates: {(watchAllFields.startDate || watchAllFields.finishDate) ? '✔' : '○'}</span>
+                    <div className="flex justify-between items-center w-full text-xs rounded-md">
+                        <span className="bg-gray-700 text-white px-3 py-1  rounded-full truncate max-w-[60%]">
+                          {watchAllFields.categoryIds?.length
+                            ? (() => {
+                              const selectedNames = watchAllFields.categoryIds
+                                .map((id: number | string) => categories.find(cat => cat.id === id)?.name)
+                                .filter(Boolean);
+
+                              const firstTwo = selectedNames.slice(0, 2).join(', ');
+                              const extraCount =
+                                selectedNames.length > 2 ? ` +${selectedNames.length - 2} mais` : '';
+
+                              return firstTwo + extraCount;
+                            })()
+                            : ''}
+                        </span>
+
+                        <span className="text-right text-gray-300 truncate max-w-[40%]">
+                          {watchAllFields.startDate || watchAllFields.finishDate
+                            ? `${watchAllFields.startDate || ''}${watchAllFields.finishDate ? ' - ' + watchAllFields.finishDate : ''}`
+                            : ''}
+                        </span>
                       </div>
                     </div>
                   </div>

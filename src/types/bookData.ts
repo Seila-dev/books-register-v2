@@ -55,8 +55,8 @@ export const StepDetails = [
 import * as z from 'zod';
 
 export const createBookSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(100, 'Maximum 100 characters'),
-  description: z.string().max(500, 'Maximum 500 characters').optional(),
+  title: z.string().min(1, 'Title is required').max(50, 'No máximo 50 caracteres'),
+  description: z.string().max(500, 'No máximo 500 caracteres').optional(),
   coverImage: z.instanceof(File).optional(),
   startDate: z.string().optional(),
   finishDate: z.string().optional(),

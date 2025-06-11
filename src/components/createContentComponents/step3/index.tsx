@@ -20,14 +20,14 @@ export default function Step3Description({
 
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
+      <div className="mb-8">
         <h2 className="text-2xl font-bold text-white mb-2">Diga mais sobre</h2>
         <p className="text-gray-400">Compartilhe suas anotações, pensamentos ou ideias (opcional)</p>
       </div>
 
       <div>
         <label className="block mb-3 text-sm font-semibold text-white">
-          Descrição (opcional)
+          Descrição
         </label>
         <div className="relative">
           <textarea

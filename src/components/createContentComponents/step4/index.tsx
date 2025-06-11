@@ -29,9 +29,9 @@ export default function Step4Details({
 }: Step4DetailsProps) {
   return (
     <div className="space-y-6">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">Final details</h2>
-        <p className="text-gray-400">Add categories and reading dates (all optional)</p>
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-2">Detalhes finais</h2>
+        <p className="text-gray-400">Adicione categorias e a timeline (Todos opcionais)</p>
       </div>
 
       {/* Categories Section */}
@@ -66,14 +66,6 @@ export default function Step4Details({
             )}
           />
         </div>
-
-
-        {/* <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-purple-500">
-          <h3 className="text-purple-400 font-medium mb-1">Categorias te ajudam a:</h3>
-          <p className="text-gray-300 text-sm">
-            Organizar sua galeria, encontrar conteúdos similares, e destacar seus conteúdos da melhor forma.
-          </p>
-        </div> */}
       </div>
 
       {/* Reading Dates Section */}
@@ -124,7 +116,8 @@ export default function Step4Details({
           borderColorClass='border-green-500'
           titleColorClass='text-green-500'
         >
-          <p>Não preencha se ainda não começou, ou não terminou a obra. Você pode atualizar essas informações depois.</p>
+          <p>Todos os campos são opcionais. </p>
+          <p>Você pode atualizar essas informações depois.</p>
         </InfoBox>
       </div>
     </div>
