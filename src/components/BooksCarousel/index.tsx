@@ -3,7 +3,8 @@
 import { ChevronLeft, ChevronRight, BookOpen, Popcorn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { parseCookies } from "nookies";
+import { useEffect, useRef } from "react";
 
 interface Book {
   id: string;
@@ -28,6 +29,10 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
       });
     }
   }
+  useEffect(() => {
+      const { 'books-register.token': token } = parseCookies();
+      if (!token) router.push('/login');
+  }, []);
 
   return (
     <section className="space-y-6 mb-12 mt-6">
