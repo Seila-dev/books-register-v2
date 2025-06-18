@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { parseCookies } from 'nookies'
 import {
   ArrowRight,
   BookOpen,
@@ -25,12 +24,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { 'books-register.token': token } = parseCookies()
-        const res = await api.get('/categories', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        const res = await api.get('/categories')
 
         setCategories(res.data)
       } catch (error) {

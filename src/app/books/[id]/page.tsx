@@ -1,26 +1,45 @@
 import { notFound } from 'next/navigation';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { Book } from '@/types/bookData';
 import { Metadata } from 'next';
 import BookDetailHero from '@/components/bookDetailedComponents/BookDetailedHero';
-import { getServerApi } from '@/hooks/useApi';
-
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
     try {
         const cookieStore = await cookies();
         const token = cookieStore.get('books-register.token')?.value;
-        const api = getServerApi(token);
+        
+        if (!token) {
+            console.log('Token não encontrado, retornando metadata padrão');
+            return {
+                title: 'Conteúdo não encontrado',
+                description: 'Não foi possível carregar os dados do conteúdo.',
+            };
+        }
 
-        const res = await api.get(`/books/${params.id}`);
+        const apiUrl = process.env.API_URL || 'https://books-register-api-production.up.railway.app';
+        
+        const response = await fetch(`${apiUrl}/books/${params.id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
+        });
 
-        const book: Book = res.data;
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.log('Erro na API:', response.status, errorText);
+            throw new Error(`API Error: ${response.status} - ${errorText}`);
+        }
+
+        const book: Book = await response.json();
 
         return {
-            title: `${book.title} | Watchlist`,
+            title: `${book.title}`,
             description: `Informações detalhadas sobre o conteúdo "${book.title}" na sua biblioteca.`,
             openGraph: {
-                title: `${book.title} | Watchlist`,
+                title: `${book.title}`,
                 description: `Veja detalhes do conteúdo "${book.title}" no Watchlist.`,
                 url: `/books/${params.id}`,
                 siteName: 'Watchlist',
@@ -28,8 +47,9 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
             }
         };
     } catch (error) {
+        console.error('Erro no generateMetadata:', error);
         return {
-            title: 'Conteúdo não encontrado | Watchlist',
+            title: 'Conteúdo não encontrado',
             description: 'Não foi possível carregar os dados do conteúdo.',
         };
     }
@@ -37,34 +57,27 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
 
 export default async function BookDetailPage({ params }: any) {
     const { id } = params;
-    const headersList = await headers();
-    const cookie = headersList.get('cookie') ?? '';
-    const token = cookie
-        .split('; ')
-        .find(c => c.startsWith('books-register.token='))
-        ?.split('=')[1] ?? '';
+
+    const cookieStore = await cookies();
+    const token = cookieStore.get('books-register.token')?.value;
+
+    if (!token) {
+        notFound();
+    }
 
     const response = await fetch(`${process.env.API_URL}/books/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
         },
         cache: 'no-store',
     });
-
-    // const responseBooks = await fetch(`${process.env.API_URL}/books`, {
-    //     headers: {
-    //         Authorization: `Bearer ${token}`,
-    //     },
-    //     cache: 'no-store',
-    // });
 
     if (!response.ok) {
         const errorText = await response.text();
         console.log('Erro da API:', response.status, errorText);
         notFound();
     }
-
-    // const allBooks: Book[] = await responseBooks.json()
 
     const book: Book = await response.json();
 

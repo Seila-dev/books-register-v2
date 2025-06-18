@@ -1,22 +1,47 @@
 import { notFound } from 'next/navigation'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import Link from 'next/link'
 import { BookOpen } from 'lucide-react'
 import { Book } from '@/types/bookData'
 import { Metadata } from 'next';
-import { getServerApi } from '@/hooks/useApi'
+import { Category } from '@/types/categoryData'
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   try {
-    const api = getServerApi();
-    const res = await api.get(`/categories/${params.id}`);
-    const category = res.data;
+    const cookieStore = await cookies();
+    const token = cookieStore.get('books-register.token')?.value;
+
+    if (!token) {
+      console.log('Token não encontrado, retornando metadata padrão');
+      return {
+        title: 'Conteúdo não encontrado',
+        description: 'Não foi possível carregar os dados do conteúdo.',
+      };
+    }
+
+    const apiUrl = process.env.API_URL || 'https://books-register-api-production.up.railway.app';
+
+    const response = await fetch(`${apiUrl}/categories/${params.id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log('Erro na API:', response.status, errorText);
+      throw new Error(`API Error: ${response.status} - ${errorText}`);
+    }
+
+    const category: Category = await response.json();
 
     return {
-      title: `${category.name} | Watchlist`,
+      title: `${category.name}`,
       description: `Explore os livros, séries e filmes da categoria "${category.name}" no Watchlist.`,
       openGraph: {
-        title: `${category.name} | Watchlist`,
+        title: `${category.name}`,
         description: `Veja o conteúdo salvo na categoria "${category.name}".`,
         url: `/categories/${params.id}`,
         type: 'website',
@@ -25,7 +50,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
     };
   } catch (err) {
     return {
-      title: 'Categoria não encontrada | Watchlist',
+      title: 'Categoria não encontrada',
       description: 'Não foi possível carregar essa categoria.',
     };
   }
