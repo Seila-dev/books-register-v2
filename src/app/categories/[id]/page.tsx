@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import Link from 'next/link'
 import { BookOpen } from 'lucide-react'
 import { Book } from '@/types/bookData'
-import ComponentArrowBack from '@/components/ArrowBack'
+import ComponentArrowBack from '@/components/ui/ArrowBack'
 import { Metadata } from 'next';
 import api from '@/services/api';
 import { parseCookies } from 'nookies';

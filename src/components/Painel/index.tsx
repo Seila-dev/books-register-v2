@@ -1,4 +1,4 @@
-import { useNotes } from "@/hooks/useNotes";
+import { useNotes } from "@/hooks/notes/useNotes";
 import {
   BookOpen,
   BookOpenIcon,

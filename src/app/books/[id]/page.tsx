@@ -7,7 +7,7 @@ import { Book } from '@/types/bookData';
 import { Category } from '@/types/categoryData';
 import CategorySelector from '@/components/CategorySelector';
 import { CategoriesEditor } from '@/components/CategoryEditor';
-import ComponentArrowBack from '@/components/ArrowBack';
+import ComponentArrowBack from '@/components/ui/ArrowBack';
 import EditBookPage from '@/components/BookEditor';
 import api from '@/services/api';
 import { Metadata } from 'next';

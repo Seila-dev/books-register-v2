@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useNotes } from '@/hooks/useNotes';
+import { useNotes } from '@/hooks/notes/useNotes';
 import {
     Search,
     Filter,

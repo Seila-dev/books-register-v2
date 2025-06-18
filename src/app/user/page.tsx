@@ -5,7 +5,7 @@ import { AuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, LogOut } from 'lucide-react';
 import UserSettingsSkeleton from '@/components/loaders/UserSettingsSkeleton';
-import ComponentArrowBack from '@/components/ArrowBack';
+import ComponentArrowBack from '@/components/ui/ArrowBack';
 
 export default function UserSettings() {
   const { user, loading, signOut } = useContext(AuthContext);
@@ -20,7 +20,7 @@ export default function UserSettings() {
   if (loading || !user) return <UserSettingsSkeleton />;
 
   return (
-      <div className='w-full px-4 py-8 '>
+      <div className='w-full px-4 py-8'>
         {/* Top Bar */}
         <div className="flex items-center justify-between mb-6">
           <ComponentArrowBack />
@@ -36,7 +36,7 @@ export default function UserSettings() {
         <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Minha Conta</h1>
         {/* Cartões de informação */}
         <div className="space-y-4">
-          <section className="bg-gray-900 rounded-xl">
+          <section className="rounded-xl">
             <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Perfil</h2>
             <p className="text-sm text-gray-400">Usuário:</p>
             <p className="text-base font-medium">{user.username}</p>
@@ -45,7 +45,7 @@ export default function UserSettings() {
               <p className="text-base font-medium">{user.email}</p>
             </div>
           </section>
-          <section className="bg-gray-900 rounded-xl">
+          <section className="rounded-xl">
             <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Preferências</h2>
             <div className="flex flex-col gap-2 text-base">
               <div className="flex justify-between">
@@ -59,7 +59,7 @@ export default function UserSettings() {
             </div>
           </section>
           {/* Espaço reservado para futuras configurações */}
-          <section className="bg-gray-900 rounded-xl">
+          <section className="rounded-xl">
             <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Notificações</h2>
             <p className="text-sm text-gray-400">Funcionalidade em desenvolvimento</p>
           </section>

@@ -17,7 +17,7 @@ import SuccessModal from '@/components/createContentComponents/successModal';
 import { createBookSchema, CreateBookFormData } from '@/types/bookData';
 import { Category } from '@/types/categoryData';
 
-import { useBooks } from '@/hooks/useBooks';
+import { useBooks } from '@/hooks/books/useBooks';
 import api from '@/services/api';
 
 export default function CreateBookPage() {

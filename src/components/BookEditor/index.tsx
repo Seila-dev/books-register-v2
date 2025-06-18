@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import ComponentArrowBack from '@/components/ArrowBack';
+import ComponentArrowBack from '@/components/ui/ArrowBack';
 import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book } from '@/types/bookData';

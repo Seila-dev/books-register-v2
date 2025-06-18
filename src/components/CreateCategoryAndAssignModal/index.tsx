@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useBooks } from '@/hooks/useBooks';
+import { useBooks } from '@/hooks/books/useBooks';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 

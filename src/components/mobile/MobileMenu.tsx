@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   X,
-  List,
   Book,
-  Film,
-  Tv,
   LayoutGrid,
   UserIcon,
   Tag

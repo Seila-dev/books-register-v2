@@ -7,20 +7,21 @@ import {
   Star,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useBooks } from '@/hooks/useBooks';
+import { useBooks } from '@/hooks/books/useBooks';
 import { BookRating } from '@/components/BookRating';
 import { CategoriesEditor } from '@/components/CategoryEditor';
 import BookExtrasSection from '../BookExtrasSection';
 import { BookActionButtons } from '../BookActionsComponent';
 import { BookDetailHeroSkeleton } from '@/components/loaders/BookDetailedHeroSkeleton';
 import { BookExtrasSectionSkeleton } from '@/components/loaders/BookExtraSection';
+import { useBookById } from '@/hooks/books/useBookById';
 
 interface BookDetailHeroProps {
   bookId: string;
 }
 
 export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
-  const { useBookById, books, updateBookRating } = useBooks();
+  const { books } = useBooks();
   const { data: book, isLoading, error } = useBookById(bookId);
 
   if (isLoading) return (
@@ -147,7 +148,6 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
         </div>
       </div>
 
-      {/* Seções extras */}
       <BookExtrasSection book={book} allBooks={books} />
     </section>
   );

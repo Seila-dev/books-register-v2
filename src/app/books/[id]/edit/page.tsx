@@ -8,12 +8,12 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
-import ComponentArrowBack from '@/components/ArrowBack';
+import ComponentArrowBack from '@/components/ui/ArrowBack';
 import CategorySelector from '@/components/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book, UpdateBookData } from '@/types/bookData';
 import api from '@/services/api';
-import { useBooks } from '@/hooks/useBooks';
+import { useBooks } from '@/hooks/books/useBooks';
 
 const editBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
