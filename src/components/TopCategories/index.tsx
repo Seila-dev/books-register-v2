@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { parseCookies } from 'nookies'
-import api from '@/services/api'
 import {
   BookOpen,
-  TrendingUp,
   Star,
   ArrowRight,
   Crown,
@@ -17,21 +14,28 @@ import {
 } from 'lucide-react'
 import { Category } from '@/types/categoryData'
 import Link from 'next/link'
+import { getToken, useApi } from '@/hooks/useApi'
+import axios from 'axios'
 
 export default function TopCategories() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+  const [_, setHoveredCard] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { 'books-register.token': token } = parseCookies()
-        const res = await api.get('/categories', {
-          headers: { Authorization: `Bearer ${token}` },
+        const token = getToken()
+        const api = axios.create({
+          baseURL: 'https://books-register-api-production.up.railway.app/',
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
         })
+
+        const res = await api.get('/categories')
 
         const sorted = res.data
           .sort((a: Category, b: Category) => b.books.length - a.books.length)
@@ -102,8 +106,8 @@ export default function TopCategories() {
           </div>
         </div>
 
-        <Link 
-          href="/categories" 
+        <Link
+          href="/categories"
           className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm cursor-pointer">
           Ver todos
           <ArrowRight size={16} />

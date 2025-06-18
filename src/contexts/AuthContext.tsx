@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useCallback } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "@/types/userData";
 import { useRouter } from "next/navigation";
+import { getToken } from "@/hooks/useApi";
 
 type FormData = {
   email: string;
@@ -32,38 +33,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const isAuthenticated = !!user;
-
-  // useEffect(() => {
-  //   const { 'books-register.token': token } = parseCookies();
-
-  //   if (!token) {
-  //       setLoading(false);
-  //       return
-  //   }
-
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await fetch('https://books-register-api-production.up.railway.app/users', {
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-
-  //       if (!response.ok) throw new Error();
-
-  //       const userData = await response.json();
-  //       setUser(userData);
-  //     } catch {
-  //       destroyCookie(null, 'books-register.token');
-  //       setUser(null);
-  //     } finally {
-  //        setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUser();
-  // }, [typeof window !== 'undefined' && document.cookie]); 
 
   const signIn = async ({ email, password }: FormData) => {
     const url = 'https://books-register-api-production.up.railway.app/users/login';
@@ -137,7 +106,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const loadUserFromCookies = async () => {
-    const { 'books-register.token': token } = parseCookies();
+    const token = getToken()
     if (!token) {
       setLoading(false);
       return;

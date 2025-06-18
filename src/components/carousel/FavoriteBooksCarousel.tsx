@@ -1,8 +1,8 @@
 'use client'
 
-import BooksCarousel from '@/components/BooksCarousel'
+import BooksCarousel from '@/components/bookComponents/BooksCarousel'
 import { Book } from '@/types/bookData'
-import { BookOpen, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 
 interface FavoriteBooksCarouselProps {
   allBooks: Book[]

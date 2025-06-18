@@ -1,8 +1,8 @@
 'use client'
 
-import BooksCarousel from '@/components/BooksCarousel'
+import BooksCarousel from '@/components/bookComponents/BooksCarousel'
 import { Book } from '@/types/bookData'
-import { BookOpen, BookPlus } from 'lucide-react'
+import { BookPlus } from 'lucide-react'
 
 interface SimilarBooksCarouselProps {
   allBooks: Book[]

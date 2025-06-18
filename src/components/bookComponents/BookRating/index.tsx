@@ -1,7 +1,7 @@
 'use client';
 
 import { StarRating } from '@/components/StarRating';
-import { useBooks } from '@/hooks/useBooks';
+import { useBooks } from '@/hooks/books/useBooks';
 
 interface BookRatingProps {
   bookId: string;

@@ -22,7 +22,6 @@ export default function SuccessModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4">
       <div className="bg-gray-800 rounded-xl max-w-lg w-full shadow-2xl overflow-hidden">
-        {/* Celebration Header */}
         <div className="bg-gradient-to-r from-green-500 to-blue-500 p-6 text-center">
           <div className="text-6xl mb-4">
             {isFirstContent ? '🎉' : '✨'}
@@ -38,7 +37,6 @@ export default function SuccessModal({
           </p>
         </div>
 
-        {/* Content */}
         <div className="p-6 text-center space-y-6">
           <div className="bg-gray-700 rounded-lg p-4">
             <h4 className="text-white font-semibold mb-2">"{contentTitle}"</h4>
@@ -79,7 +77,6 @@ export default function SuccessModal({
             </button> */}
           </div>
 
-          {/* Stats or tips for first-time users */}
           {isFirstContent && (
             <div className="border-t border-gray-700 pt-4">
               <p className="text-gray-400 text-xs">

@@ -5,10 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   X,
-  List,
   Book,
-  Film,
-  Tv,
   LayoutGrid,
   UserIcon,
   Tag
@@ -16,8 +13,7 @@ import {
 import { AuthContext } from '@/contexts/AuthContext';
 import { usePathname } from 'next/navigation';
 import { Category } from '@/types/categoryData';
-import { parseCookies } from 'nookies';
-import api from '@/services/api';
+import { getToken, useApi } from '@/hooks/useApi';
 
 type MobileMenuProps = {
   isOpen: boolean;
@@ -27,11 +23,12 @@ type MobileMenuProps = {
 export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const { isAuthenticated, user, reloadUser } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_, setLoading] = useState(true);
 
-  const { 'books-register.token': token } = parseCookies();
+  const token = getToken()
+  const api = useApi()
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -66,9 +63,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
   const fetchCategories = async () => {
     setLoading(true)
     try {
-      const res = await api.get('/categories', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get('/categories');
       setCategories(res.data);
     } catch (err) {
       console.error('Erro ao buscar categorias:', err);
@@ -99,7 +94,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             className="fixed top-0 left-0 h-full w-64 bg-gray-900 border-r border-gray-700 shadow-xl z-50 flex flex-col p-6 overflow-y-auto"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-white text-lg font-semibold">BooksRegister</h2>
+              <h2 className="text-white text-lg font-semibold">Watchlist</h2>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-red-400 transition"
@@ -129,7 +124,6 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
                 Categorias
               </Link>
 
-              {/* Categorias dinâmicas */}
               {categories.map(category => (
                 <Link
                   key={category.id}

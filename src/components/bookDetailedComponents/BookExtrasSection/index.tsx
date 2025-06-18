@@ -1,12 +1,9 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Book } from '@/types/bookData';
-import { useNotes } from '@/hooks/useNotes';
+import { useNotes } from '@/hooks/notes/useNotes';
 import {
-  ChevronLeft,
-  ChevronRight,
   Plus,
   Edit3,
   Trash2,
@@ -20,9 +17,9 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import BooksCarousel from '@/components/BooksCarousel';
 import { Note } from '@/types/noteData';
 import SimilarBooksCarousel from '@/components/carousel/SimilarBooksCarousel';
+import { useNotesByBook } from '@/hooks/notes/useNotesByBook';
 
 interface BookExtrasSectionProps {
   allBooks: Book[];
@@ -30,16 +27,16 @@ interface BookExtrasSectionProps {
 }
 
 export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionProps) {
-  const { useNotesByBook, createNote, updateNote, deleteNote, isCreating, isUpdating, isDeleting } = useNotes();
+  const { createNote, updateNote, deleteNote, isCreating, isUpdating, isDeleting } = useNotes();
   const { data: notes = [], isLoading: notesLoading, refetch } = useNotesByBook(book.id);
 
-  const [newNote, setNewNote] = useState('');
+  const [newNote, setNewNote] = useState<string>('');
   const [editingNote, setEditingNote] = useState<string | null>(null);
-  const [editContent, setEditContent] = useState('');
-  const [isAddingNote, setIsAddingNote] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [editContent, setEditContent] = useState<string>('');
+  const [isAddingNote, setIsAddingNote] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState<boolean>(false)
 
   useEffect(() => {
     setMounted(true)
@@ -47,7 +44,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
 
   const newNoteRef = useRef<HTMLTextAreaElement>(null);
 
-  // Filtrar e ordenar notas
   const filteredNotes = notes
     .filter(note =>
       searchTerm === '' ||
@@ -124,9 +120,7 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
 
   return (
     <div className="mt-8 space-y-12 px-4 py-8 relative z-0">
-      {/* 📝 Seção de Anotações */}
       <section className="space-y-6">
-        {/* Header da seção */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
@@ -151,7 +145,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
           )}
         </div>
 
-        {/* Filtros e busca */}
         {notes.length > 0 && (
           <div className="flex flex-col sm:flex-row gap-4 p-4 bg-gray-900/50 rounded-xl border border-gray-800">
             <div className="flex-1 relative">
@@ -179,7 +172,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
           </div>
         )}
 
-        {/* Form para nova anotação */}
         {isAddingNote && (
           <div className="bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-xl border border-gray-700 p-6 space-y-4">
             <div className="flex items-center gap-2 text-white font-medium">
@@ -219,7 +211,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
           </div>
         )}
 
-        {/* Lista de anotações */}
         <div className="space-y-4">
           {notesLoading ? (
             <div className="flex items-center justify-center py-12">
@@ -247,7 +238,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
                 className="bg-gradient-to-r from-gray-900/60 to-gray-800/60 backdrop-blur-sm rounded-xl border border-gray-700 p-6 space-y-4 group hover:border-gray-600 transition-all duration-200"
               >
                 {editingNote === note.id ? (
-                  // Modo de edição
                   <div className="space-y-4">
                     <textarea
                       className="w-full h-32 bg-gray-800/50 border border-gray-600 rounded-lg p-4 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -275,7 +265,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
                     </div>
                   </div>
                 ) : (
-                  // Modo de visualização
                   <>
                     <div className="flex items-start justify-between gap-4">
                       <p className="text-gray-100 leading-relaxed flex-1 whitespace-pre-wrap">
@@ -316,7 +305,6 @@ export default function BookExtrasSection({ allBooks, book }: BookExtrasSectionP
         </div>
       </section>
 
-      {/* 📚 Leituras similares */}
       <SimilarBooksCarousel allBooks={allBooks} currentBook={book} />
     </div>
   );

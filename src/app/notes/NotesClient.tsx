@@ -2,14 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useNotes } from '@/hooks/useNotes';
+import { useNotes } from '@/hooks/notes/useNotes';
 import {
     Search,
     Filter,
-    Calendar,
     BookOpen,
     Edit3,
-    Trash2,
     MessageSquare,
     ChevronDown,
     Plus,
@@ -102,17 +100,17 @@ export default function NotesClient() {
 
     return (
         <>
-        <div className="mb-10">
-  <div className="flex items-center gap-4">
-    <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
-      <Edit3 size={24} className="text-white" />
-    </div>
-    <div>
-      <h1 className="text-2xl sm:text-3xl font-bold text-white">Minhas Anotações</h1>
-      <p className="text-gray-400 text-sm">Gerencie e visualize suas anotações por conteúdo ou ordem</p>
-    </div>
-  </div>
-</div>
+            <div className="mb-10">
+                <div className="flex items-center gap-4">
+                    <div className="p-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+                        <Edit3 size={24} className="text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-white">Minhas Anotações</h1>
+                        <p className="text-gray-400 text-sm">Gerencie e visualize suas anotações por conteúdo ou ordem</p>
+                    </div>
+                </div>
+            </div>
             {/* Filters and Search */}
             <div className="mb-6 sm:mb-10 bg-gradient-to-br from-gray-800/70 to-gray-900/50 border border-gray-700/50 rounded-xl p-4 sm:p-6 shadow-md backdrop-blur-md">
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
@@ -164,7 +162,7 @@ export default function NotesClient() {
             {/* Notes List */}
             {filteredNotes.length === 0 ? (
                 <div className="text-center py-20 text-gray-400">
-                   <MessageSquare className="w-20 h-20 mx-auto mb-6 text-purple-500/70" />
+                    <MessageSquare className="w-20 h-20 mx-auto mb-6 text-purple-500/70" />
                     <h3 className="text-2xl font-semibold mb-2">
                         {searchTerm || selectedBook !== 'all'
                             ? 'Nenhuma anotação encontrada'
@@ -190,15 +188,15 @@ export default function NotesClient() {
                     {sortBy === 'book' && groupedNotes ? (
                         Object.values(groupedNotes).map(({ book, notes: bookNotes }) => (
                             <div
-  key={book.id}
-  className="rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700/60 shadow-md"
->
+                                key={book.id}
+                                className="rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700/60 shadow-md"
+                            >
                                 <div className="bg-gray-700 px-6 py-4 border-b border-gray-600">
                                     <div className="bg-gray-700/70 px-6 py-4 border-b border-gray-700/50 flex items-center space-x-3">
-  <BookOpen className="w-5 h-5 text-purple-500" />
-  <h2 className="text-lg font-semibold text-white">{book.title}</h2>
-  <span className="text-sm text-gray-400">({bookNotes.length} anotações)</span>
-</div>
+                                        <BookOpen className="w-5 h-5 text-purple-500" />
+                                        <h2 className="text-lg font-semibold text-white">{book.title}</h2>
+                                        <span className="text-sm text-gray-400">({bookNotes.length} anotações)</span>
+                                    </div>
                                 </div>
                                 <div className="divide-y divide-gray-700">
                                     {bookNotes.map(note => (
@@ -217,18 +215,18 @@ export default function NotesClient() {
                         ))
                     ) : (
                         <div className="space-y-4 bg-gradient-to-br from-gray-800/60 to-gray-900/60 border border-gray-700/40 rounded-xl p-4">
-  {filteredNotes.map(note => (
-    <NoteCard
-      key={note.id}
-      note={note}
-      isExpanded={expandedNotes.has(note.id)}
-      onToggleExpansion={() => toggleNoteExpansion(note.id)}
-      onDelete={() => handleDeleteNote(note.id)}
-      isDeleting={isDeleting}
-      truncateText={truncateText}
-    />
-  ))}
-</div>
+                            {filteredNotes.map(note => (
+                                <NoteCard
+                                    key={note.id}
+                                    note={note}
+                                    isExpanded={expandedNotes.has(note.id)}
+                                    onToggleExpansion={() => toggleNoteExpansion(note.id)}
+                                    onDelete={() => handleDeleteNote(note.id)}
+                                    isDeleting={isDeleting}
+                                    truncateText={truncateText}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             )}

@@ -7,19 +7,15 @@ import {
     Heart,
     Clock,
     Check,
-    Star,
-    MessageCircle,
 } from 'lucide-react';
 import { Book } from '@/types/bookData';
-import { useRouter } from 'next/navigation';
-import { useBooks } from '@/hooks/useBooks'; // Ajuste o path se necessário
+import { useBooks } from '@/hooks/books/useBooks';
 
 interface BookActionButtonsProps {
     book: Book;
 }
 
 export function BookActionButtons({ book: initialBook }: BookActionButtonsProps) {
-    const router = useRouter();
     const [showShareMenu, setShowShareMenu] = useState(false);
     const [book, setBook] = useState<Book>(initialBook);
 
@@ -37,7 +33,6 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
         setLocalLoading(prev => ({ ...prev, markAsRead: true }));
         try {
             const updated = await markAsRead({ book });
-            console.log(updated);
             setBook(updated)
         } catch (error) {
             console.error('Erro ao marcar como lido/não lido', error);
@@ -50,7 +45,7 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
         setLocalLoading(prev => ({ ...prev, favorite: true }));
         try {
             const updated = await toggleFavorite({ book });
-            setBook(updated); // atualiza visualmente
+            setBook(updated);
         } catch (error) {
             console.error('Erro ao favoritar', error);
         } finally {
@@ -80,7 +75,6 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
 
     return (
         <div className="flex flex-wrap gap-4 mb-6">
-            {/* Marcar como Lido */}
             <button
                 onClick={handleMarkAsRead}
                 disabled={localLoading.markAsRead}
@@ -97,7 +91,6 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
                 {book.finishDate ? 'Finalizado' : 'Marcar como Finalizado'}
             </button>
 
-            {/* Favoritar */}
             <button
                 onClick={handleToggleFavorite}
                 disabled={localLoading.favorite}
@@ -114,7 +107,6 @@ export function BookActionButtons({ book: initialBook }: BookActionButtonsProps)
                 {book.isFavorite ? 'Remover dos Favoritos' : 'Favoritar'}
             </button>
 
-            {/* Compartilhar */}
             <div className="relative">
                 <button
                     onClick={() => handleShare()}

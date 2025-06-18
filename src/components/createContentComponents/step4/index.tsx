@@ -1,11 +1,10 @@
 import { Controller, Control, UseFormRegister, FieldErrors } from 'react-hook-form';
 import { CreateBookFormData } from '@/types/bookData';
 import { Category } from '@/types/categoryData';
-import CategorySelector from '@/components/CategorySelector';
+import CategorySelector from '@/components/categoryActions/CategorySelector';
 
 
 import { UseFormWatch } from 'react-hook-form';
-import OptionalInfoBox from '@/components/ui/InfoBox';
 import InfoBox from '@/components/ui/InfoBox';
 
 interface Step4DetailsProps {

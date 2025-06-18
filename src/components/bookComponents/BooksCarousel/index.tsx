@@ -1,9 +1,9 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, BookOpen, Popcorn } from "lucide-react";
+import { getToken } from "@/hooks/useApi";
+import { ChevronLeft, ChevronRight, Popcorn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { parseCookies } from "nookies";
 import { useEffect, useRef } from "react";
 
 interface Book {
@@ -30,7 +30,7 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
     }
   }
   useEffect(() => {
-      const { 'books-register.token': token } = parseCookies();
+      const token = getToken()
       if (!token) router.push('/login');
   }, []);
 
@@ -53,7 +53,6 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
    </div>
       ) : (
         <div className="relative">
-          {/* Left button */}
           <button
             onClick={() => scroll("left")}
             className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full hidden md:flex cursor-pointer transition-all duration-200 backdrop-blur-sm border border-gray-700"
@@ -62,7 +61,6 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
             <ChevronLeft size={20} />
           </button>
 
-          {/* Scroll container */}
           <div
             ref={carouselRef}
             className="flex overflow-x-auto scrollbar-hide scroll-smooth gap-4 px-1 max-w-full"
@@ -86,7 +84,6 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
                     </div>
                   )}
 
-                  {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                     <div className="p-4 w-full">
                       <h3 className="text-white font-medium text-sm line-clamp-2">
@@ -99,7 +96,6 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
             ))}
           </div>
 
-          {/* Right button */}
           <button
             onClick={() => scroll("right")}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 text-white p-3 rounded-full hidden md:flex cursor-pointer transition-all duration-200 backdrop-blur-sm border border-gray-700"

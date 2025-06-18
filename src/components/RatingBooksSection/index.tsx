@@ -1,6 +1,6 @@
 'use client'
 
-import BooksCarousel from '@/components/BooksCarousel'
+import BooksCarousel from '@/components/bookComponents/BooksCarousel'
 import { Star } from 'lucide-react'
 import { Book } from '@/types/bookData'
 

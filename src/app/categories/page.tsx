@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { parseCookies } from 'nookies'
-import api from '@/services/api'
 import {
   ArrowRight,
   BookOpen,
 } from 'lucide-react'
+import { useApi } from '@/hooks/useApi'
 
 interface Category {
   id: string
@@ -20,6 +20,7 @@ export default function CategoriesPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
+  const api = useApi()
 
   useEffect(() => {
     const fetchCategories = async () => {
