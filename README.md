@@ -1,4 +1,4 @@
-# 📚 BooksRegister
+# 📚 Watchlist
 
 ![Next.js](https://img.shields.io/badge/Next.js-13+-000?style=for-the-badge&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -11,7 +11,7 @@
 
 ## ✨ Visão Geral
 
-**BooksRegister** é uma aplicação full stack onde você pode registrar obras que já leu/assistiu ou deseja consumir futuramente. Funciona como uma **galeria multimídia pessoal**, com recursos de autenticação, organização por categorias e uma interface moderna.
+**Watchlist** é uma aplicação full stack onde você pode registrar obras que já leu/assistiu ou deseja consumir futuramente. Funciona como uma **galeria multimídia pessoal**, com recursos de autenticação, organização por categorias e uma interface moderna.
 
 Ideal para quem gosta de manter um histórico cultural organizado.
 
