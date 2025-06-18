@@ -9,7 +9,7 @@ import {
 import Link from 'next/link';
 import { useBooks } from '@/hooks/books/useBooks';
 import { BookRating } from '@/components/BookRating';
-import { CategoriesEditor } from '@/components/CategoryEditor';
+import { CategoriesEditor } from '@/components/categoryActions/CategoryEditor';
 import BookExtrasSection from '../BookExtrasSection';
 import { BookActionButtons } from '../BookActionsComponent';
 import { BookDetailHeroSkeleton } from '@/components/loaders/BookDetailedHeroSkeleton';

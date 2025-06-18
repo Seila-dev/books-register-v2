@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useContext } from "react"
 import { AuthContext } from "@/contexts/AuthContext"
-import api from "../../services/api"
 import Link from 'next/link'
 import { GoogleLoginButton } from "@/components/GoogleLoginButton";
 import { Metadata } from "next";

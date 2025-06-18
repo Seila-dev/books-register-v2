@@ -8,10 +8,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import ComponentArrowBack from '@/components/ui/ArrowBack';
-import CategorySelector from '@/components/CategorySelector';
+import CategorySelector from '@/components/categoryActions/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book } from '@/types/bookData';
-import api from '@/services/api';
+import { useApi } from '@/hooks/useApi';
 
 const editBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
@@ -33,6 +33,7 @@ export default function EditBookPage({ params }: Props) {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const api = useApi();
 
   const {
     register,
@@ -59,14 +60,9 @@ export default function EditBookPage({ params }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { 'books-register.token': token } = parseCookies();
         const [bookRes, catRes] = await Promise.all([
-          api.get<Book>(`/books/${id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          api.get<Category[]>('/categories', {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
+          api.get<Book>(`/books/${id}`),
+          api.get<Category[]>('/categories'),
         ]);
 
         const book = bookRes.data;
@@ -87,7 +83,6 @@ export default function EditBookPage({ params }: Props) {
 
   const onSubmit = async (data: EditBookFormData) => {
     try {
-      const { 'books-register.token': token } = parseCookies();
       const formData = new FormData();
       formData.append('title', data.title);
       if (data.description) formData.append('description', data.description);
@@ -98,7 +93,6 @@ export default function EditBookPage({ params }: Props) {
 
       await api.patch(`/books/${id}`, formData, {
         headers: {
-          Authorization: `Bearer ${parseCookies()['books-register.token']}`,
           'Content-Type': 'multipart/form-data',
         },
       });

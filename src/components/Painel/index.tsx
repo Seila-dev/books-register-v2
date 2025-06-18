@@ -21,19 +21,11 @@ interface Activity {
 
 interface DashboardPanelProps {
   userName: string | undefined;
-  booksRead: number;
-  monthlyGoal: number;
-  currentStreak: number;
-  readingNow: number;
   recentActivities: Activity[];
 }
 
 export default function DashboardPanel({
   userName,
-  booksRead,
-  monthlyGoal,
-  currentStreak,
-  readingNow,
   recentActivities,
 }: DashboardPanelProps) {
   const { deleteNote, isDeleting, notes } = useNotes();
@@ -69,8 +61,6 @@ export default function DashboardPanel({
 
   return (
     <div className="space-y-6 w-full mb-12 mt-6">
-
-      {/* Header */}
       <div className="flex items-center gap-4">
         <div className="p-2 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg">
           <LucideWallpaper size={24} className="text-white" />
@@ -84,8 +74,6 @@ export default function DashboardPanel({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-        {/* Últimas Anotações */}
         <div className=" text-white rounded-xl shadow flex flex-col">
           <h3 className="text-lg font-semibold mb-4">Últimas Anotações</h3>
 
@@ -113,8 +101,7 @@ export default function DashboardPanel({
             </Link>
           </div>
         </div>
-
-        {/* Atividades Recentes */}
+        
         <div className=" text-white rounded-xl shadow flex flex-col">
           <h3 className="text-lg font-semibold mb-4">Atividade Recente</h3>
           <ul className="space-y-4">

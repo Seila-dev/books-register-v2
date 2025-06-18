@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useCallback } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { User } from "@/types/userData";
 import { useRouter } from "next/navigation";
+import { getToken } from "@/hooks/useApi";
 
 type FormData = {
   email: string;
@@ -105,7 +106,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const loadUserFromCookies = async () => {
-    const { 'books-register.token': token } = parseCookies();
+    const token = getToken()
     if (!token) {
       setLoading(false);
       return;

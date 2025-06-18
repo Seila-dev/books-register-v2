@@ -90,3 +90,17 @@ export function useAuthenticatedRequest() {
 
   return makeRequest;
 }
+
+export function getServerApi(token?: string): AxiosInstance {
+  const api = axios.create({
+    baseURL: 'https://books-register-api-production.up.railway.app/',
+    timeout: 10000,
+    headers: token
+      ? {
+          Authorization: `Bearer ${token}`,
+        }
+      : {},
+  });
+
+  return api;
+}

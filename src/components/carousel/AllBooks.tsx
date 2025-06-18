@@ -2,7 +2,7 @@
 
 import BooksCarousel from '@/components/BooksCarousel'
 import { Book } from '@/types/bookData'
-import { Library, Star } from 'lucide-react'
+import { Library } from 'lucide-react'
 
 interface FavoriteBooksCarouselProps {
   allBooks: Book[]

@@ -21,7 +21,6 @@ export default function CategorySelector({
 }: CategorySelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [tempSelected, setTempSelected] = useState<string[]>(selectedCategoryIds);
-  const router = useRouter()
 
   const toggleCategory = (id: string) => {
     const newSelected = tempSelected.includes(id)
@@ -33,7 +32,6 @@ export default function CategorySelector({
   const handleConfirm = () => {
     onChange?.(tempSelected);
     setIsOpen(false);
-    // router.refresh()
   };
 
   const openModal = () => {
@@ -46,7 +44,6 @@ export default function CategorySelector({
       <button
         type="button"
         onClick={openModal}
-        // className="px-4 py-1.5 text-white bg-gray-700 hover:bg-gray-800 cursor-pointer rounded-md transition flex items-center gap-1 text-xs w-fit"
         className="bg-gray-700 hover:bg-gray-800 flex items-center text-white text-sm gap-1 transition px-4 py-2 rounded-lg font-medium cursor-pointer"
       >
         <Plus size={14} />
@@ -57,8 +54,6 @@ export default function CategorySelector({
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center"
   style={{ zIndex: 999999, position: 'fixed' }}>
           <div className="bg-[#1a1a1a] text-white w-full max-w-md rounded-lg shadow-lg flex flex-col max-h-[80vh]">
-            
-            {/* Header fixo */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700 sticky top-0 bg-[#1a1a1a] z-10">
               <h2 className="text-lg font-semibold">Selecionar Categorias</h2>
               <button
@@ -70,9 +65,7 @@ export default function CategorySelector({
               </button>
             </div>
 
-            {/* Scroll da lista de categorias */}
             <div className="overflow-y-auto px-4 py-3 space-y-2 flex-1">
-                            {/* Modal de criação dentro da área scrollável */}
               <div className="pb-2 w-full">
                 <CreateCategoryModal onCategoryCreated={onCategoryCreated} />
               </div>
@@ -96,7 +89,6 @@ export default function CategorySelector({
               })}
             </div>
 
-            {/* Rodapé fixo */}
             <div className="border-t border-gray-700 px-4 py-3 flex justify-end gap-2 sticky bottom-0 bg-[#1a1a1a]">
               <button
                 type="button"

@@ -2,14 +2,13 @@
 
 import { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useSearch } from '@/contexts/SearchContext';
 import { ButtonSkeleton } from '../loaders/ButtonSkeleton';
 import { MobileMenu } from '../mobile/MobileMenu';
 import { Book } from '@/types/bookData';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
+import { getToken } from '@/hooks/useApi';
 
 export const Header = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
@@ -40,7 +39,7 @@ export const Header = () => {
       }
 
       try {
-        const { 'books-register.token': token } = parseCookies()
+        const token = getToken()
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books?search=${debouncedSearchTerm}`, {
           headers: {
             Authorization: `Bearer ${token}`
@@ -78,7 +77,6 @@ export const Header = () => {
             <h1 className="ml-2 font-semibold text-base text-white">Watchlist</h1>
           </Link>
 
-          {/* Search input + resultados */}
           <div className="relative px-2.5 mx-3 md:mx-4 rounded-2xl md:rounded-md bg-gray-800 flex items-center text-white w-full max-w-[25rem]">
             <span className="material-symbols-outlined mr-2 text-gray-400 !text-[14px] !md:text-base">search</span>
             <input
@@ -89,7 +87,6 @@ export const Header = () => {
               className="w-full bg-transparent p-2 md:p-2 text-xs md:text-sm text-white placeholder-gray-400 focus:outline-none"
             />
 
-            {/* Dropdown resultados */}
             {searchResults.length > 0 && (
               <ul className="absolute top-full left-0 w-full bg-gray-800 border border-gray-700 rounded-md mt-1 max-h-64 overflow-y-auto shadow-lg z-50">
                 {searchResults.map((book) => (
@@ -111,7 +108,6 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* MENU DESKTOP */}
         <nav className="flex gap-6 items-center">
           {loading ? (
             <ButtonSkeleton />

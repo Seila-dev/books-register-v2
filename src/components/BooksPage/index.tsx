@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Book } from '@/types/bookData';
-import api from '@/services/api';
-import { parseCookies } from 'nookies';
 import { useRouter } from 'next/navigation';
 import { StarRating } from '../StarRating';
 import { useBooks } from '@/hooks/books/useBooks';
@@ -15,6 +13,7 @@ import { QuickAddCard } from '../QuickAddComponent';
 import {
   BookOpen,
 } from 'lucide-react'
+import { getToken } from '@/hooks/useApi';
 
 export default function BooksPage() {
   const [mounted, setMounted] = useState(false);
@@ -40,7 +39,7 @@ export default function BooksPage() {
 
   // Verificação de autenticação
   useEffect(() => {
-    const { 'books-register.token': token } = parseCookies();
+    const token = getToken()
     if (!token) router.push('/login');
   }, [router]);
 

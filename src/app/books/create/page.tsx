@@ -18,11 +18,11 @@ import { createBookSchema, CreateBookFormData } from '@/types/bookData';
 import { Category } from '@/types/categoryData';
 
 import { useBooks } from '@/hooks/books/useBooks';
-import api from '@/services/api';
+import { useApi } from '@/hooks/useApi';
 
 export default function CreateBookPage() {
-  const router = useRouter();
   const { createBook, books } = useBooks();
+  const api = useApi()
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -65,10 +65,7 @@ useEffect(() => {
 
   const fetchCategories = async () => {
     try {
-      const { 'books-register.token': token } = parseCookies();
-      const res = await api.get<Category[]>('/categories', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get<Category[]>('/categories');
       setCategories(res.data);
     } catch (error) {
       toast.error('Error loading categories');

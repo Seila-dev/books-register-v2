@@ -11,10 +11,8 @@ export function CategoriesEditor({ book, onCategoriesUpdated }: { book: Book; on
   const { updateBook } = useBooks();
   const [allCategories, setAllCategories] = useState<Category[]>([]);
   const [selected, setSelected] = useState<string[]>(book.categories.map(c => c.categoryId));
-  const router = useRouter();
 
   useEffect(() => {
-    // Buscar todas categorias da API
     async function fetchCategories() {
       const token = document.cookie
         .split('; ')
@@ -36,17 +34,15 @@ export function CategoriesEditor({ book, onCategoriesUpdated }: { book: Book; on
     setSelected(newIds);
     await updateBook({ id: book.id, categoryIds: newIds });
 
-    // Atualiza localmente as categorias
-
-const updatedCategories: BookCategory[] = allCategories
-  .filter(cat => newIds.includes(cat.id))
-  .map(cat => ({
-    bookId: book.id,
-    categoryId: cat.id,
-    category: cat,
-    assignedAt: cat.createdAt,
-    book: book
-  }));
+    const updatedCategories: BookCategory[] = allCategories
+      .filter(cat => newIds.includes(cat.id))
+      .map(cat => ({
+        bookId: book.id,
+        categoryId: cat.id,
+        category: cat,
+        assignedAt: cat.createdAt,
+        book: book
+      }));
 
     onCategoriesUpdated?.(updatedCategories);
   };
@@ -67,7 +63,7 @@ const updatedCategories: BookCategory[] = allCategories
 
         if (res.ok) {
           const data = await res.json();
-          setAllCategories(data); // ✅ atualiza categorias
+          setAllCategories(data)
         }
       }}
     />

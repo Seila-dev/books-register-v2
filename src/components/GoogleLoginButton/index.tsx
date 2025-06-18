@@ -2,14 +2,14 @@
 
 import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { useRouter } from 'next/navigation';
-import { parseCookies, setCookie } from 'nookies';
+import { setCookie } from 'nookies';
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 export function GoogleLoginButton() {
   const router = useRouter();
-  const { user, reloadUser } = useContext(AuthContext);
+  const { reloadUser } = useContext(AuthContext);
 
   const handleSuccess = async (credentialResponse: CredentialResponse) => {
     try {

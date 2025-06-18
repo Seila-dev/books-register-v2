@@ -3,21 +3,13 @@ import { headers } from 'next/headers'
 import Link from 'next/link'
 import { BookOpen } from 'lucide-react'
 import { Book } from '@/types/bookData'
-import ComponentArrowBack from '@/components/ui/ArrowBack'
 import { Metadata } from 'next';
-import api from '@/services/api';
-import { parseCookies } from 'nookies';
-import { cookies } from 'next/headers';
+import { getServerApi } from '@/hooks/useApi'
 
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('books-register.token')?.value;
-    const res = await api.get(`/categories/${params.id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const api = getServerApi();
+    const res = await api.get(`/categories/${params.id}`);
     const category = res.data;
 
     return {

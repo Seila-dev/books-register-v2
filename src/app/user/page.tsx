@@ -3,7 +3,7 @@
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import UserSettingsSkeleton from '@/components/loaders/UserSettingsSkeleton';
 import ComponentArrowBack from '@/components/ui/ArrowBack';
 
@@ -21,7 +21,6 @@ export default function UserSettings() {
 
   return (
       <div className='w-full px-4 py-8'>
-        {/* Top Bar */}
         <div className="flex items-center justify-between mb-6">
           <ComponentArrowBack />
           <button
@@ -32,9 +31,7 @@ export default function UserSettings() {
             Sair
           </button>
         </div>
-        {/* Título */}
         <h1 className="lg:text-3xl md:text-2xl text-lg font-bold mb-4">Minha Conta</h1>
-        {/* Cartões de informação */}
         <div className="space-y-4">
           <section className="rounded-xl">
             <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Perfil</h2>
@@ -58,7 +55,6 @@ export default function UserSettings() {
               </div>
             </div>
           </section>
-          {/* Espaço reservado para futuras configurações */}
           <section className="rounded-xl">
             <h2 className="lg:text-2xl md:text-lg text-base font-semibold text-white mb-2">Notificações</h2>
             <p className="text-sm text-gray-400">Funcionalidade em desenvolvimento</p>

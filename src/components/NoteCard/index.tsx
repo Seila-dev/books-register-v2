@@ -25,7 +25,6 @@ export default function NoteCard({
 }: NoteCardProps) {
   return (
     <div className="flex gap-4 bg-gray-900 p-4 rounded-lg border border-gray-700">
-      {/* Capa do Livro */}
       {note.book?.coverImage ? (
         <img
           src={note.book.coverImage}
@@ -38,7 +37,6 @@ export default function NoteCard({
         </div>
       )}
 
-      {/* Conteúdo da anotação */}
       <div className="flex-1 flex flex-col justify-between">
         <div>
           <div className="flex items-center space-x-2 mb-1 text-sm text-blue-400 font-semibold">
@@ -65,7 +63,6 @@ export default function NoteCard({
         </div>
       </div>
 
-      {/* Ações */}
       <div className="flex flex-col space-y-2">
         <Link
           href={`/books/${note.bookId}`}

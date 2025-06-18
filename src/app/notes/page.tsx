@@ -1,5 +1,3 @@
-// app/notes/page.tsx
-
 import NotesClient from './NotesClient';
 
 export default function NotesPage() {

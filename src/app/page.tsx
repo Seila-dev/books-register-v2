@@ -119,10 +119,6 @@ export default function Home() {
             
             <DashboardPanel
               userName={user?.username}
-              booksRead={books.filter(book => book.finishDate).length}
-              monthlyGoal={10}
-              currentStreak={3}
-              readingNow={books.filter(book => book.startDate && !book.finishDate).length}
               recentActivities={recentActivities}
             />
             

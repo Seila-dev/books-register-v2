@@ -2,18 +2,17 @@
 
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { parseCookies } from 'nookies';
 import { toast } from 'sonner';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 import ComponentArrowBack from '@/components/ui/ArrowBack';
-import CategorySelector from '@/components/CategorySelector';
+import CategorySelector from '@/components/categoryActions/CategorySelector';
 import { Category } from '@/types/categoryData';
 import { Book, UpdateBookData } from '@/types/bookData';
-import api from '@/services/api';
 import { useBooks } from '@/hooks/books/useBooks';
+import { getToken, useApi } from '@/hooks/useApi';
 
 const editBookSchema = z.object({
   title: z.string().min(1, 'Título é obrigatório').max(50, 'Máximo de 50 caracteres'),
@@ -38,6 +37,7 @@ export default function EditBookPage({ params }: Props) {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [initialBook, setInitialBook] = useState<Book | null>(null);
   const { updateBook, deleteBook } = useBooks();
+  const api = useApi()
 
   const {
     register,
@@ -77,10 +77,7 @@ export default function EditBookPage({ params }: Props) {
 
   const fetchCategories = async () => {
     try {
-      const { 'books-register.token': token } = parseCookies();
-      const response = await api.get<Category[]>('/categories', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get<Category[]>('/categories');
       setCategories(response.data);
     } catch (error) {
       toast.error('Erro ao carregar categorias.');
@@ -91,7 +88,7 @@ export default function EditBookPage({ params }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { 'books-register.token': token } = parseCookies();
+        const token = getToken()
 
         if (!token) {
           toast.error('Token de autenticação não encontrado.');
@@ -100,12 +97,8 @@ export default function EditBookPage({ params }: Props) {
         }
 
         const [bookRes, catRes] = await Promise.all([
-          api.get<Book>(`/books/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
-          api.get<Category[]>('/categories', {
-            headers: { Authorization: `Bearer ${token}` }
-          }),
+          api.get<Book>(`/books/${id}`),
+          api.get<Category[]>('/categories'),
         ]);
 
         const book = bookRes.data;

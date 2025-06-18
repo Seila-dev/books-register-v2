@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Plus, Sparkles, ArrowRight, X, Users, TrendingUp, Heart } from 'lucide-react';
+import { BookOpen, Plus, Sparkles, X, Users, TrendingUp, Heart } from 'lucide-react';
 
 interface WelcomeModalProps {
     isOpen: boolean;
@@ -14,10 +14,10 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({
     onClose,
     onCreateBook,
     onExplore,
-    userName = "Leitor"
+    userName = "Usuário"
 }) => {
-    const [currentStep, setCurrentStep] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
+    const [currentStep, setCurrentStep] = useState<number>(0);
+    const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
     const steps = [
         {
