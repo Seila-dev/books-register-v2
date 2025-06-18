@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { Book } from '@/types/bookData';
 import { useRouter } from 'next/navigation';
-import { StarRating } from '../StarRating';
+import { StarRating } from '../../StarRating';
 import { useBooks } from '@/hooks/books/useBooks';
 import { useSearch } from '@/contexts/SearchContext';
 import { BookSkeleton } from '@/components/loaders/BookSkeleton'
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { QuickAddCard } from '../QuickAddComponent';
+import { QuickAddCard } from '../../QuickAddComponent';
 import {
   BookOpen,
 } from 'lucide-react'

@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale"
 import Link from "next/link"
 import { Plus } from "lucide-react"
 
-import BooksPage from "@/components/BooksPage"
+import BooksPage from "@/components/bookComponents/BooksPage"
 import DashboardPanel from "@/components/Painel"
 import TopCategories from "@/components/TopCategories"
 import PainelHeader from "@/components/PainelHeader"

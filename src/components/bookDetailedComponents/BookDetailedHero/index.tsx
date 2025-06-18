@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useBooks } from '@/hooks/books/useBooks';
-import { BookRating } from '@/components/BookRating';
+import { BookRating } from '@/components/bookComponents/BookRating';
 import { CategoriesEditor } from '@/components/categoryActions/CategoryEditor';
 import BookExtrasSection from '../BookExtrasSection';
 import { BookActionButtons } from '../BookActionsComponent';
