@@ -804,12 +804,12 @@ export default function AllCategoriesPage() {
   const GridView = () => (
     <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
       {filteredAndSortedCategories.map((category, index) => {
-        const coverImage = category.books[0]?.book?.coverImage || 'https://placehold.co/600x400'
+        const coverImage = category.books[0]?.book?.coverImage 
 
         return (
           <div
             key={category.id}
-            className={`group relative overflow-hidden rounded-3xl cursor-pointer bg-gray-800 border border-white/5 hover:bg-gray-700 md:h-[300px] shadow-xl hover:shadow-2xl`}
+            className={`group relative overflow-hidden rounded-3xl cursor-pointer bg-gray-800 border border-white/5 hover:bg-gray-700 md:h-[300px] shadow-xl transition-colors duration-200 hover:shadow-2xl`}
             style={{
               animationDelay: `${index * 50}ms`,
               animation: 'fadeInUp 0.6s ease-out forwards',
