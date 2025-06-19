@@ -4,7 +4,7 @@ import Link from "next/link";
 export const QuickAddCard = () => {
   return (
     <Link
-      href="/books/create"
+      href="/home/books/create"
       className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800 hover:scale-[1.03] hover:shadow-blue-400/30 transition-all duration-300 ease-in-out flex items-center justify-center"
     >
       <div className="text-center cursor-pointer group-hover:scale-105 transition-transform duration-300">

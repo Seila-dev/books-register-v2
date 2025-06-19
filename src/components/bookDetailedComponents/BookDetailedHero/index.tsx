@@ -83,7 +83,7 @@ export default function BookDetailHero({ bookId }: BookDetailHeroProps) {
               {book.title}
             </h1>
             <Link
-              href={`/books/${book.id}/edit`}
+              href={`/home/books/${book.id}/edit`}
               title="Editar conteúdo"
               className="text-gray-300 hover:text-blue-500 transition"
             >

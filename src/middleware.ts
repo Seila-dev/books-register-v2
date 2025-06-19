@@ -4,14 +4,12 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('books-register.token')?.value;
   
   const protectedPaths = [
-    '/',         
-    '/books',    
-    '/categories',  
+    '/home',
   ];
   
   const isProtectedRoute = protectedPaths.some(path => {
-    if (path === '/') {
-      return request.nextUrl.pathname === '/';
+    if (path === '/home') {
+      return request.nextUrl.pathname === '/home';
     }
     return request.nextUrl.pathname.startsWith(path);
   });

@@ -41,7 +41,7 @@ export default function NoteCard({
         <div>
           <div className="flex items-center space-x-2 mb-1 text-sm text-blue-400 font-semibold">
             <BookOpen className="w-4 h-4" />
-            <Link href={`/books/${note.book.id}`}>{note.book.title}</Link>
+            <Link href={`/home/books/${note.book.id}`}>{note.book.title}</Link>
           </div>
           <p className="text-gray-200 whitespace-pre-wrap text-xs sm:text-base">
             {isExpanded ? note.content : truncateText(note.content, 150)}
@@ -65,7 +65,7 @@ export default function NoteCard({
 
       <div className="flex flex-col space-y-2">
         <Link
-          href={`/books/${note.bookId}`}
+          href={`/home/books/${note.bookId}`}
           className="p-1 rounded hover:bg-blue-600 transition-colors"
           onClick={e => e.stopPropagation()}
           aria-label="Editar anotação"

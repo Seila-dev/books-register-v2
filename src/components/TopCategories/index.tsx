@@ -107,7 +107,7 @@ export default function TopCategories() {
         </div>
 
         <Link
-          href="/categories"
+          href="/home/categories"
           className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg border border-gray-700/50 hover:border-purple-500/50 transition-all duration-200 text-sm cursor-pointer">
           Ver todos
           <ArrowRight size={16} />
@@ -155,7 +155,7 @@ export default function TopCategories() {
             return (
               <div
                 key={category.id}
-                onClick={() => router.push(`/categories/${category.id}`)}
+                onClick={() => router.push(`/home/categories/${category.id}`)}
                 onMouseEnter={() => setHoveredCard(category.id)}
                 onMouseLeave={() => setHoveredCard(null)}
                 onFocus={() => setHoveredCard(category.id)}  // acessibilidade: foco tbm ativa
@@ -234,7 +234,7 @@ export default function TopCategories() {
 
       <div className="lg:hidden mt-8 text-center">
         <button
-          onClick={() => router.push('/categories')}
+          onClick={() => router.push('/home/categories')}
           className="inline-flex items-center gap-3 px-8 py-4 bg-gray-800 hover:bg-gray-700 backdrop-blur-xl rounded-full border border-white/10 hover:border-white/20 transition-all duration-300 font-medium shadow-lg hover:shadow-xl group"
         >
           <span>Ver todas as categorias</span>

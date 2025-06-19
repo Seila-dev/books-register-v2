@@ -61,7 +61,7 @@ export const Header = () => {
   const handleSelectBook = (bookId: string) => {
     setSearchTerm('');
     setSearchResults([]);
-    router.push(`/books/${bookId}`);
+    router.push(`/home/books/${bookId}`);
   };
 
   return (
@@ -72,7 +72,7 @@ export const Header = () => {
             <span className="material-symbols-outlined text-xs text-white">menu</span>
           </button>
 
-          <Link href="/" className="hidden md:flex items-center w-fit">
+          <Link href="/home" className="hidden md:flex items-center w-fit">
             <span className="material-symbols-outlined text-xs text-blue-400">menu_book</span>
             <h1 className="ml-2 font-semibold text-base text-white">Watchlist</h1>
           </Link>
@@ -128,7 +128,7 @@ export const Header = () => {
                     <hr className="text-gray-500" />
                     <li>
                       <Link
-                        href="/user"
+                        href="/home/user"
                         className="block px-2 py-2 rounded-md my-2 hover:bg-gray-700 transition"
                         onClick={() => setShowMenu(false)}
                       >

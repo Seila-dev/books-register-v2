@@ -55,11 +55,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCookie(null, 'books-register.token', response.token, {
         maxAge: 60 * 60 * 12, // 12h
         path: '/',
+        sameSite: 'lax',
       });
 
       setUser(response.user);
 
-      router.push('/');
+      router.push('/home');
 
     } catch (error: any) {
       console.error('Something went wrong on sign in', error);
@@ -89,6 +90,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCookie(null, 'books-register.token', response.token, {
         maxAge: 60 * 60 * 4,
         path: '/',
+        sameSite: 'lax',
       });
 
       setUser(response.user);

@@ -152,7 +152,7 @@ export default function BooksPage() {
                 }`}
               >
                 <Link
-                  href={`/books/${book.id}`}
+                  href={`/home/books/${book.id}`}
                   onClick={handleBookClick}
                   className="w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-gray-900"
                   aria-label={`Ver detalhes de ${book.title}`}

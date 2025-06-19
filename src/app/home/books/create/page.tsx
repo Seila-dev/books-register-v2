@@ -194,8 +194,8 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className=" rounded-xl shadow-2xl overflow-hidden">
-          <div className=" rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row lg:h-[590px]">
+        <div className=" rounded-xl overflow-hidden">
+          <div className=" rounded-xl overflow-hidden flex flex-col lg:flex-row lg:h-[590px]">
             {/* Form Section */}
             <div className="w-full lg:w-1/2 py-4 sm:p-6 flex flex-col justify-between">
               <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col justify-between">

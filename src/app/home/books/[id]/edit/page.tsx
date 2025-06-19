@@ -127,12 +127,12 @@ export default function EditBookPage({ params }: Props) {
           router.push('/login');
         } else if (error.response?.status === 403) {
           toast.error('Você não tem permissão para editar este conteúdo.');
-          router.push('/');
+          router.push('/home');
         } else {
           toast.error('Erro ao carregar dados do conteúdo.');
         }
 
-        router.push('/');
+        router.push('/home');
       }
     };
 
@@ -158,7 +158,7 @@ export default function EditBookPage({ params }: Props) {
       await updateBook(updateData);
 
       toast.success('Conteúdo atualizado com sucesso!');
-      router.push(`/books/${id}`);
+      router.push(`/home/books/${id}`);
     } catch (error: any) {
       console.error('Error updating content:', error);
 
@@ -190,14 +190,14 @@ export default function EditBookPage({ params }: Props) {
       await deleteBook(id);
 
       toast.success('Conteúdo deletado com sucesso!');
-      router.push('/');
+      router.push('/home');
     } catch (error: any) {
       console.error('Error deleting content:', error);
 
       // Specific error handling for delete
       if (error.response?.status === 404) {
         toast.error('Conteúdo não encontrado.');
-        router.push('/');
+        router.push('/home');
       } else if (error.response?.status === 401) {
         toast.error('Sessão expirada. Faça login novamente.');
         router.push('/login');

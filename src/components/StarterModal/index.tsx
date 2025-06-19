@@ -133,7 +133,7 @@ const WelcomeModal: React.FC<WelcomeModalProps> = ({
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors cursor-pointer"
                             >
                                 <Plus className="w-4 h-4" />
-                                <span>Criar meu primeiro livro</span>
+                                <span>Criar meu primeiro conteúdo</span>
                             </button>
 
                             <button

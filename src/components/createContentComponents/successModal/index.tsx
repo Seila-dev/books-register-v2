@@ -16,7 +16,7 @@ export default function SuccessModal({
   if (!isOpen) return null;
 
   const handleGoHome = () => {
-    router.push('/');
+    router.push('/home');
   };
 
   return (

@@ -66,9 +66,8 @@ export default function RootLayout({
       >
         <ClientAuthProvider>
           <Providers>
-            <Header />
             <Toaster />
-            <div className=" text-white flex flex-col items-center min-h-full w-full justify-center m-auto gap-8 transation duration-200">{children}</div>
+            <div>{children}</div>
           </Providers>
         </ClientAuthProvider>
       </body>
