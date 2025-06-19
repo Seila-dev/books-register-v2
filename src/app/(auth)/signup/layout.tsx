@@ -1,3 +1,4 @@
+import { Header } from '@/components/Header';
 import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,5 +31,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function SignupLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      <Header />
+      <div>{children}</div>
+    </>
+  );
 }

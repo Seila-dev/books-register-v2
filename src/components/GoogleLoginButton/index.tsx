@@ -36,7 +36,7 @@ export function GoogleLoginButton() {
 
       await reloadUser()
 
-      router.push('/');
+      router.push('/home');
       toast.success('Usuário logado com sucesso')
 
     } catch (err) {
@@ -45,5 +45,5 @@ export function GoogleLoginButton() {
     }
   };
 
-  return <GoogleLogin useOneTap={true} onSuccess={handleSuccess} onError={() => console.log('Login Failed')} />;
+  return <GoogleLogin onSuccess={handleSuccess} onError={() => console.log('Login Failed')} />;
 }
