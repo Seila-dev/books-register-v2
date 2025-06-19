@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Play, Star, Users, Shield, Smartphone, ChevronDown, Menu, X, Check, Clock, Heart, Zap, Database, Palette, Settings, ArrowRight, Eye, Film, Book, Gamepad2, Tv, MonitorPlay } from 'lucide-react';
+import Link from 'next/link';
 
 export default function WatchlistLanding() {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -136,18 +137,16 @@ export default function WatchlistLanding() {
             <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-slate-900/80 backdrop-blur-md shadow-sm border-b border-slate-800'
+          ? 'bg-slate-900/80 backdrop-blur-md shadow-sm'
           : 'bg-transparent'
       }`}
     >
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex items-center justify-between h-16">
       {/* Logo / Marca */}
       <div className="flex items-center space-x-3">
-        <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-inner">
-          <Eye className="w-5 h-5 text-slate-900" />
-        </div>
-        <span className="text-xl font-extrabold text-white tracking-tight">
+
+        <span className="text-2xl font-bold text-white tracking-tight">
           Watchlist<span className="text-blue-500">.</span>
         </span>
       </div>
@@ -161,9 +160,9 @@ export default function WatchlistLanding() {
 
       {/* Botões desktop */}
       <div className="hidden md:flex items-center space-x-4">
-        <button className="text-gray-300 hover:text-blue-400 transition">Entrar</button>
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md shadow-md transition-transform hover:scale-105">
-          Criar Lista
+        <Link href='/login' className="text-gray-300 hover:text-blue-400 transition">Entrar</Link>
+        <button className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-md shadow-md transition-transform hover:scale-105 cursor-pointer">
+          Demo
         </button>
       </div>
 
@@ -183,8 +182,8 @@ export default function WatchlistLanding() {
         <a href="#faq" className="block text-gray-200 hover:text-white">FAQ</a>
         <div className="pt-4 border-t border-slate-700 space-y-2">
           <button className="block w-full text-left text-gray-200">Entrar</button>
-          <button className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
-            Criar Lista
+          <button className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition cursor-pointer">
+            Demo
           </button>
         </div>
       </div>
@@ -193,13 +192,18 @@ export default function WatchlistLanding() {
 </header>
 
             {/* Hero Section */}
-<section className="pt-24 w-full bg-slate-900 pb-16 px-6">
-  <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative">
+<section className="w-full min-h-screen bg-transparent px-6 relative flex flex-wrap justify-center items-center overflow-hidden ">
+  {/* Luz branca central suave */}
+  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+    <div className="w-[600px] h-[600px] bg-purple-600 opacity-25 blur-[150px] rounded-full" />
+  </div>
+
+  <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
     {/* Texto principal */}
     <div className="space-y-8">
       <div className="space-y-4">
         <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-          Organize sua <span className="text-blue-500">biblioteca multimídia</span> em minutos
+          Organize sua <span className="text-purple-500">biblioteca multimídia</span> em minutos
         </h1>
         <p className="text-lg text-gray-400">
           Gerencie filmes, séries, animes, mangás e jogos de forma fácil. Adicione capas, anotações e acompanhe seu progresso com segurança.
@@ -207,10 +211,10 @@ export default function WatchlistLanding() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-base font-medium transition-all">
+        <Link href='/login' className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md text-base font-medium transition-all cursor-pointer">
           Começar Agora
-        </button>
-        <button className="border border-gray-500 text-gray-300 hover:border-blue-500 hover:text-blue-500 px-6 py-3 rounded-md text-base font-medium transition-all">
+        </Link>
+        <button className="border border-gray-500 text-gray-300 hover:border-purple-500 hover:text-blue-500 px-6 py-3 rounded-md text-base font-medium transition-all">
           Ver Demonstração
         </button>
       </div>
@@ -231,7 +235,7 @@ export default function WatchlistLanding() {
       </div>
     </div>
 
-    {/* Imagem principal (desktop) com mobile overlay */}
+    {/* Imagem principal */}
     <div className="relative w-full">
       {/* Desktop Image */}
       <div className="rounded-lg overflow-hidden shadow-md">
@@ -242,7 +246,7 @@ export default function WatchlistLanding() {
         />
       </div>
 
-      {/* Mobile Image Overlay (visível apenas em telas grandes) */}
+      {/* Mobile Image Overlay */}
       <div className="block absolute -right-5 bottom-0 overflow-hidden max-w-[30%] shadow-lg">
         <img
           src="/mobile-lp.webp"
@@ -255,7 +259,7 @@ export default function WatchlistLanding() {
 </section>
 
             {/* Content Types Section */}
-            <section className="py-16 bg-slate-900">
+            <section className="py-16 bg-transparent">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold mb-4">Todos os tipos de conteúdo em um só lugar</h2>

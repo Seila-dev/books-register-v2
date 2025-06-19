@@ -94,7 +94,7 @@ export default async function CategoryPage({ params }: any) {
         <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredBooks.map((book) => (
             <li key={book.id} className="bg-gray-800 p-4 rounded-xl shadow-md">
-              <Link href={`/books/${book.id}`} className="flex items-center gap-4">
+              <Link href={`/home/books/${book.id}`} className="flex items-center gap-4">
                 {book.coverImage ? (
                   <img src={book.coverImage} alt={book.title} className="w-16 h-24 object-cover rounded" />
                 ) : (

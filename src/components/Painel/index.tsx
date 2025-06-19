@@ -96,7 +96,7 @@ export default function DashboardPanel({
           )}
 
           <div className="text-right pt-4 mt-auto">
-            <Link href="/notes" className="text-sm text-purple-400 hover:underline">
+            <Link href="/home/notes" className="text-sm text-purple-400 hover:underline">
               Ver todas as anotações &rarr;
             </Link>
           </div>

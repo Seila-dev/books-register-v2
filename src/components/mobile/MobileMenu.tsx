@@ -106,19 +106,19 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
 
             <nav className="flex flex-col gap-2 mb-3">
               <Link
-                href="/"
+                href="/home"
                 onClick={onClose}
                 className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
-                ${pathname === '/' ? 'font-bold bg-purple-500' : ''}`}
+                ${pathname === '/home' ? 'font-bold bg-purple-500' : ''}`}
               >
                 <Book size={16} />
                 Biblioteca
               </Link>
               <Link
-                href="/categories"
+                href="/home/categories"
                 onClick={onClose}
                 className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-2 
-                ${pathname === '/categories' ? 'font-bold bg-purple-500' : ''}`}
+                ${pathname === '/home/categories' ? 'font-bold bg-purple-500' : ''}`}
               >
                 <LayoutGrid size={16} />
                 Categorias
@@ -127,10 +127,10 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
               {categories.map(category => (
                 <Link
                   key={category.id}
-                  href={`/categories/${category.id}`}
+                  href={`/home/categories/${category.id}`}
                   onClick={onClose}
                   className={`py-2 rounded-md text-white hover:bg-purple-600 transition flex items-center gap-3 text-xs px-4  
-                  ${pathname === `/categories/${category.id}` ? 'font-bold bg-purple-500' : ''}`}
+                  ${pathname === `/home/categories/${category.id}` ? 'font-bold bg-purple-500' : ''}`}
                 >
                   <Tag size={16} />
                   {category.name}
@@ -141,7 +141,7 @@ export const MobileMenu = ({ isOpen, onClose }: MobileMenuProps) => {
             <div className="border-t border-gray-700 mt-auto pt-4">
               {isAuthenticated ? (
                 <Link
-                  href="/user"
+                  href="/home/user"
                   onClick={onClose}
                   className="flex items-center gap-3 px-4 py-2 text-white font-bold hover:text-white hover:bg-purple-600 rounded-lg transition"
                 >

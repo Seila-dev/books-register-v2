@@ -53,7 +53,7 @@ export default function Home() {
 
   const handleCreateFirstBook = () => {
     handleCloseWelcome()
-    router.push('/books/create')
+    router.push('/home/books/create')
   }
 
   const handleExploreWebsite = () => {
@@ -135,7 +135,7 @@ export default function Home() {
         )}
        
         <Link
-          href={`/books/create`}
+          href={`/home/books/create`}
           className={`
             fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg hover:shadow-xl 
             bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700

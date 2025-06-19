@@ -45,7 +45,7 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
        Adicione filmes, séries, livros ou mangás para começar sua jornada. Tudo organizado em um só lugar.
      </p>
      <button
-        onClick={() => router.push("/books/create")}
+        onClick={() => router.push("/home/books/create")}
        className="bg-purple-600 hover:bg-purple-700 text-white font-medium px-5 py-2 rounded-md cursor-pointer shadow-lg transition"
      >
        + Adicionar conteúdo
@@ -68,7 +68,7 @@ export default function BooksCarousel({ books }: BooksCarouselProps) {
             {books.map((item) => (
               <div key={item.id} className="flex-shrink-0 w-44 md:w-52 group">
                 <Link
-                  href={`/books/${item.id}`}
+                  href={`/home/books/${item.id}`}
                   className="block w-full aspect-[2/3] relative rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105"
                 >
                   {item.coverImage ? (

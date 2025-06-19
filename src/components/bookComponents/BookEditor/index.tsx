@@ -75,7 +75,7 @@ export default function EditBookPage({ params }: Props) {
         setPreviewUrl(book.coverImage || null);
       } catch (err) {
         toast.error('Erro ao carregar dados do livro.');
-        router.push('/');
+        router.push('/home');
       }
     };
     fetchData();
@@ -98,7 +98,7 @@ export default function EditBookPage({ params }: Props) {
       });
 
       toast.success('Livro atualizado com sucesso!');
-      router.push(`/book/${id}`);
+      router.push(`/home/book/${id}`);
     } catch (err) {
       toast.error('Erro ao atualizar o livro.');
     }
