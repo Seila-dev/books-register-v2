@@ -60,7 +60,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(response.user);
 
-      router.replace('/home');
+      setTimeout(() => {
+        router.replace('/home');
+      }, 200);
 
     } catch (error: any) {
       console.error('Something went wrong on sign in', error);
