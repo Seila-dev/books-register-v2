@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from "react";
-import { setCookie, parseCookies, destroyCookie } from "nookies";
+import { setCookie, destroyCookie } from "nookies";
 import { User } from "@/types/userData";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { getToken } from "@/hooks/useApi";
 
 type FormData = {
@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const isAuthenticated = !!user;
 
@@ -60,8 +61,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(response.user);
 
+      const redirectTo = searchParams.get('redirect') || '/home';
+      
       setTimeout(() => {
-        router.replace('/home');
+        router.replace(redirectTo);
       }, 200);
 
     } catch (error: any) {
@@ -107,10 +110,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     destroyCookie(null, 'books-register.token');
     setUser(null);
     router.push("/login");
-  }, []);
+  }, [router]);
 
   const loadUserFromCookies = async () => {
-    const token = getToken()
+    const token = getToken();
     if (!token) {
       setLoading(false);
       return;
@@ -127,22 +130,39 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
+        
+        if (window.location.pathname === '/login') {
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectTo = urlParams.get('redirect');
+          if (redirectTo) {
+            router.replace(redirectTo);
+          }
+        }
       } else {
         destroyCookie(null, 'books-register.token');
       }
     } catch (err) {
       console.error('Erro ao carregar usuário', err);
+      destroyCookie(null, 'books-register.token');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadUserFromCookies()
-  }, [])
+    loadUserFromCookies();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated, signIn, registerAccount, signOut, reloadUser: loadUserFromCookies, }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      isAuthenticated, 
+      signIn, 
+      registerAccount, 
+      signOut, 
+      reloadUser: loadUserFromCookies 
+    }}>
       {children}
     </AuthContext.Provider>
   );
