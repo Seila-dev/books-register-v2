@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const isAuthenticated = !!user;
 
@@ -61,7 +60,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setUser(response.user);
 
-      const redirectTo = searchParams.get('redirect') || '/home';
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectTo = urlParams.get('redirect') || '/home';
       
       setTimeout(() => {
         router.replace(redirectTo);
