@@ -2,14 +2,18 @@ import { useRouter } from 'next/navigation';
 
 interface SuccessModalProps {
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
   isFirstContent: boolean;
   contentTitle: string;
+  onCreateAnother?: () => void
 }
 
 export default function SuccessModal({ 
   isOpen, 
+  setIsOpen,
   isFirstContent, 
-  contentTitle 
+  contentTitle,
+  onCreateAnother 
 }: SuccessModalProps) {
   const router = useRouter();
 
@@ -18,6 +22,11 @@ export default function SuccessModal({
   const handleGoHome = () => {
     router.push('/home');
   };
+
+  const createAnotherContent = () => {
+    onCreateAnother?.();
+    setIsOpen(false) 
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50 p-4">
@@ -68,13 +77,13 @@ export default function SuccessModal({
               Ver na minha biblioteca
             </button>
             
-            {/* <button
-              onClick={handleCreateAnother}
+            <button
+              onClick={createAnotherContent}
               className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 px-6 rounded-lg transition-colors flex items-center justify-center font-medium cursor-pointer"
             >
               <span className="material-symbols-outlined mr-2">add_circle</span>
               Adicionar outro conteúdo
-            </button> */}
+            </button>
           </div>
 
           {isFirstContent && (

@@ -35,6 +35,7 @@ export default function CreateBookPage() {
     register,
     handleSubmit,
     control,
+    reset,
     watch,
     formState: { errors, isSubmitting },
     trigger,
@@ -44,6 +45,12 @@ export default function CreateBookPage() {
   });
 
   const watchAllFields = watch();
+
+  const resetFormAndFlow = () => {
+  reset();
+  setStep(1); 
+  setPreviewUrl(null); 
+};
 
 useEffect(() => {
   fetchCategories();
@@ -376,6 +383,8 @@ useEffect(() => {
         isOpen={isSuccessOpen}
         isFirstContent={isFirstContent}
         contentTitle={watchAllFields.title || 'Your Content'}
+        setIsOpen={setIsSuccessOpen}
+        onCreateAnother={resetFormAndFlow}
       />
     </div>
   );
