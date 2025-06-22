@@ -804,11 +804,12 @@ export default function AllCategoriesPage() {
   const GridView = () => (
     <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
       {filteredAndSortedCategories.map((category, index) => {
-        const coverImage = category.books[0]?.book?.coverImage 
+        const coverImage = category.books[0]?.book?.coverImage
 
         return (
           <div
             key={category.id}
+            onClick={() => handleCategoryClick(category.id)}
             className={`group relative overflow-hidden rounded-3xl cursor-pointer bg-gray-800 border border-white/5 hover:bg-gray-700 md:h-[300px] shadow-xl transition-colors duration-200 hover:shadow-2xl`}
             style={{
               animationDelay: `${index * 50}ms`,
@@ -853,13 +854,20 @@ export default function AllCategoriesPage() {
                   />
                   <div className="flex gap-2">
                     <button
-                      onClick={() => handleSave(category.id)}
+                      onClick={(e) => 
+                        {
+                          handleSave(category.id);
+                          e.stopPropagation()
+                        }}
                       className="flex items-center gap-1 px-3 py-1 bg-green-600/80 hover:bg-green-600 rounded-lg text-sm transition-colors cursor-pointer"
                     >
                       <Check size={14} /> Salvar
                     </button>
                     <button
-                      onClick={handleCancel}
+                      onClick={(e) => {
+                        handleCancel;
+                        e.stopPropagation()
+                      }}
                       className="flex items-center gap-1 px-3 py-1 bg-gray-600/80 hover:bg-gray-600 rounded-lg text-sm transition-colors cursor-pointer"
                     >
                       <X size={14} /> Cancelar
@@ -919,7 +927,8 @@ export default function AllCategoriesPage() {
         return (
           <div
             key={category.id}
-            className={`group flex items-center justify-between p-6 rounded-2xl bg-gray-800/50  border border-white/5 hover:bg-gray-700/50 transition-all duration-300`}
+            onClick={() => handleCategoryClick(category.id)}
+            className={`group flex items-center justify-between p-6 rounded-2xl bg-gray-800/50  border border-white/5 hover:bg-gray-700/50 transition-all cursor-pointer duration-300`}
             style={{
               animationDelay: `${index * 50}ms`,
               animation: 'fadeInUp 0.6s ease-out forwards',
@@ -936,13 +945,19 @@ export default function AllCategoriesPage() {
                     autoFocus
                   />
                   <button
-                    onClick={() => handleSave(category.id)}
+                    onClick={(e) => {
+                      handleSave(category.id)
+                      e.stopPropagation()
+                    }}
                     className="flex items-center gap-1 px-3 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm transition-colors cursor-pointer"
                   >
                     <Check size={14} /> Salvar
                   </button>
                   <button
-                    onClick={handleCancel}
+                    onClick={(e) => {
+                      handleCancel
+                      e.stopPropagation()
+                    }}
                     className="flex items-center gap-1 px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors cursor-pointer"
                   >
                     <X size={14} /> Cancelar
@@ -1139,13 +1154,19 @@ function DropdownMenu({
   onDelete: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
+    const handleWrapperClick = (e: React.MouseEvent) => {
+    e.stopPropagation() // <-- Isso impede o clique de "vazar" para o card
+  }
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-      >
+    <div className="relative" onClick={handleWrapperClick}>
+<button
+  onClick={(e) => {
+    e.stopPropagation(); // <-- ISSO aqui é o que você precisa
+    setIsOpen(!isOpen);
+  }}
+  className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+>
         <MoreVertical size={22} className="text-gray-400" />
       </button>
 
@@ -1157,7 +1178,8 @@ function DropdownMenu({
           />
           <div className="absolute right-0 mt-2 w-40 bg-gray-800 border border-gray-700 rounded-xl shadow-xl z-20 overflow-hidden">
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsOpen(false)
                 onEdit()
               }}
@@ -1167,7 +1189,8 @@ function DropdownMenu({
               Editar
             </button>
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setIsOpen(false)
                 onDelete()
               }}
