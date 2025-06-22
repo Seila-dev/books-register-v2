@@ -17,7 +17,6 @@ import { AuthContext } from "@/contexts/AuthContext"
 import { useBooks } from "@/hooks/books/useBooks"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import AllBooksCarrousel from "@/components/carousel/AllBooks"
-import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function Home() {
   const { user } = useContext(AuthContext)
@@ -87,7 +86,7 @@ export default function Home() {
   // if (error) router.push('/login')
 
   return (
-    <ProtectedRoute>
+    <>
       {/* Modal de boas-vindas */}
       <WelcomeModal
         isOpen={showWelcomeModal}
@@ -147,6 +146,6 @@ export default function Home() {
           <Plus className={`h-6 w-6 transition-transform duration-300`} />
         </Link>
       </div>
-    </ProtectedRoute>
+      </>
   )
 }
