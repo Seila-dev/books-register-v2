@@ -175,7 +175,7 @@ export default function NotesClient() {
                     </p>
                     {!searchTerm && selectedBook === 'all' && (
                         <Link
-                            href="/home/notes/new"
+                            href="/home/notes"
                             className="inline-flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 transition-colors rounded-lg px-6 py-3 text-white font-semibold"
                         >
                             <Plus className="w-5 h-5" />
