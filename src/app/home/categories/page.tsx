@@ -276,9 +276,9 @@ export default function AllCategoriesPage() {
               animation: 'fadeInUp 0.6s ease-out forwards',
             }}
           >
-            <div className="flex items-center gap-4 flex-1">
+            <div className="flex items-start md:items-center gap-4 flex-1 flex-col md:flex-row w-full">
               {editingId === category.id ? (
-                <div className="flex items-center gap-3 flex-1 mx-4">
+                <div className="flex items-start w-full md:items-start flex-col md:flex-row gap-3 flex-1 mx-4">
                   <input
                     type="text"
                     value={newName}
@@ -286,7 +286,7 @@ export default function AllCategoriesPage() {
                       setNewName(e.target.value)
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                    className="flex-1 bg-gray-900 border border-gray-600 outline-0 rounded-lg px-3 py-2 text-white"
                     autoFocus
                   />
                   <button
@@ -318,9 +318,9 @@ export default function AllCategoriesPage() {
               )}
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="w-32">
-                <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+            <div className="flex items-center md:flex-wrap gap-4">
+              <div className="w-32 hidden md:block">
+                <div className="w-full hidden md:block bg-white/5 rounded-full h-2 overflow-hidden">
                   <div
                     className="bg-gradient-to-r from-blue-500 to-purple-500 h-full rounded-full transition-all duration-700"
                     style={{
