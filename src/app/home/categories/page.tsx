@@ -236,7 +236,7 @@ const handleCategoryClick = (categoryId: string | null | undefined) => {
                     </button>
                     <button
                       onClick={(e) => {
-                        handleCancel;
+                        handleCancel();
                         e.stopPropagation()
                       }}
                       className="flex items-center gap-1 px-3 py-1 bg-gray-600/80 hover:bg-gray-600 rounded-lg text-sm transition-colors cursor-pointer"
@@ -329,7 +329,7 @@ const handleCategoryClick = (categoryId: string | null | undefined) => {
                   </button>
                   <button
                     onClick={(e) => {
-                      handleCancel
+                      handleCancel()
                       e.stopPropagation()
                     }}
                     className="flex items-center gap-1 px-3 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-sm transition-colors cursor-pointer"
