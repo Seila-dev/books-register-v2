@@ -23,6 +23,7 @@ import { getToken, useApi } from '@/hooks/useApi'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { CreateCategoryModal } from '@/components/categoryActions/CreateCategoryModal'
+import { EditCategoryName } from '@/components/EditCategoryName'
 
 export default function AllCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
@@ -119,24 +120,22 @@ export default function AllCategoriesPage() {
 
   const handleEdit = (category: Category) => {
     setEditingId(category.id)
-    setNewName(category.name)
     setOpenDropdown(null)
   }
 
-  const handleSave = async (id: string) => {
-    if (newName.trim() === '') {
+  const handleSave = async (id: string, name: string) => {
+    if (name.trim() === '') {
       toast.error('Nome da categoria não pode estar vazio.')
       return
     }
 
     try {
-      await api.put(`/categories/${id}`, { name: newName })
+      await api.put(`/categories/${id}`, { name })
       setCategories(prev =>
-        prev.map(c => (c.id === id ? { ...c, name: newName } : c))
+        prev.map(c => (c.id === id ? { ...c, name } : c))
       )
       toast.success('Categoria atualizada.')
       setEditingId(null)
-      setNewName('')
     } catch (error) {
       toast.error('Erro ao atualizar categoria.')
       console.error(error)
@@ -145,13 +144,12 @@ export default function AllCategoriesPage() {
 
   const handleCancel = () => {
     setEditingId(null)
-    setNewName('')
   }
 
-const handleCategoryClick = (categoryId: string | null | undefined) => {
-  if (!categoryId) return
-  router.push(`/home/categories/${categoryId}`)
-}
+  const handleCategoryClick = (categoryId: string | null | undefined) => {
+    if (!categoryId) return
+    router.push(`/home/categories/${categoryId}`)
+  }
 
   const handleDropdownToggle = (e: React.MouseEvent, categoryId: string) => {
     e.stopPropagation()
@@ -212,38 +210,11 @@ const handleCategoryClick = (categoryId: string | null | undefined) => {
             <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[240px]">
               {editingId === category.id ? (
                 <div className="space-y-4">
-                  <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => {
-                      setNewName(e.target.value)
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400"
-                    placeholder="Nome da categoria"
-                    autoFocus
+                  <EditCategoryName
+                    initialName={category.name}
+                    onSave={(newName) => handleSave(category.id, newName)}
+                    onCancel={handleCancel}
                   />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={(e) => 
-                        {
-                          handleSave(category.id);
-                          e.stopPropagation()
-                        }}
-                      className="flex items-center gap-1 px-3 py-1 bg-green-600/80 hover:bg-green-600 rounded-lg text-sm transition-colors cursor-pointer"
-                    >
-                      <Check size={14} /> Salvar
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        handleCancel();
-                        e.stopPropagation()
-                      }}
-                      className="flex items-center gap-1 px-3 py-1 bg-gray-600/80 hover:bg-gray-600 rounded-lg text-sm transition-colors cursor-pointer"
-                    >
-                      <X size={14} /> Cancelar
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <>
@@ -311,7 +282,7 @@ const handleCategoryClick = (categoryId: string | null | undefined) => {
                   <input
                     type="text"
                     value={newName}
-                    onChange={(e) => { 
+                    onChange={(e) => {
                       setNewName(e.target.value)
                     }}
                     onClick={(e) => e.stopPropagation()}
@@ -320,7 +291,7 @@ const handleCategoryClick = (categoryId: string | null | undefined) => {
                   />
                   <button
                     onClick={(e) => {
-                      handleSave(category.id)
+                      handleSave(category.id, newName)
                       e.stopPropagation()
                     }}
                     className="flex items-center gap-1 px-3 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-sm transition-colors cursor-pointer"
@@ -528,19 +499,19 @@ function DropdownMenu({
   onDelete: () => void
 }) {
   const [isOpen, setIsOpen] = useState(false)
-    const handleWrapperClick = (e: React.MouseEvent) => {
+  const handleWrapperClick = (e: React.MouseEvent) => {
     e.stopPropagation() // <-- Isso impede o clique de "vazar" para o card
   }
 
   return (
     <div className="relative" onClick={handleWrapperClick}>
-<button
-  onClick={(e) => {
-    e.stopPropagation(); // <-- ISSO aqui é o que você precisa
-    setIsOpen(!isOpen);
-  }}
-  className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
->
+      <button
+        onClick={(e) => {
+          e.stopPropagation(); // <-- ISSO aqui é o que você precisa
+          setIsOpen(!isOpen);
+        }}
+        className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+      >
         <MoreVertical size={22} className="text-gray-400" />
       </button>
 
