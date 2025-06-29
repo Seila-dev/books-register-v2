@@ -780,10 +780,10 @@ export default function AllCategoriesPage() {
     setNewName('')
   }
 
-  const handleCategoryClick = (categoryId: string) => {
-    // Navigate to category page
-    router.push(`/home/categories/${categoryId}`)
-  }
+const handleCategoryClick = (categoryId: string | null | undefined) => {
+  if (!categoryId) return
+  router.push(`/home/categories/${categoryId}`)
+}
 
   const handleDropdownToggle = (e: React.MouseEvent, categoryId: string) => {
     e.stopPropagation()
@@ -849,8 +849,8 @@ export default function AllCategoriesPage() {
                     value={newName}
                     onChange={(e) => {
                       setNewName(e.target.value)
-                      e.stopPropagation()
                     }}
+                    onClick={(e) => e.stopPropagation()}
                     className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400"
                     placeholder="Nome da categoria"
                     autoFocus
@@ -945,8 +945,8 @@ export default function AllCategoriesPage() {
                     value={newName}
                     onChange={(e) => { 
                       setNewName(e.target.value)
-                      e.stopPropagation()
                     }}
+                    onClick={(e) => e.stopPropagation()}
                     className="flex-1 bg-gray-900 border border-gray-600 rounded-lg px-3 py-2 text-white"
                     autoFocus
                   />
