@@ -847,7 +847,10 @@ export default function AllCategoriesPage() {
                   <input
                     type="text"
                     value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
+                    onChange={(e) => {
+                      setNewName(e.target.value)
+                      e.stopPropagation()
+                    }}
                     className="w-full bg-black/40 backdrop-blur-sm border border-white/20 rounded-lg px-3 py-2 text-white placeholder-gray-400"
                     placeholder="Nome da categoria"
                     autoFocus
